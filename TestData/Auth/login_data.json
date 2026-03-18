@@ -1,0 +1,44 @@
+[
+  {
+    "testCase": "TC_LOGIN_01",
+    "description": "Đăng nhập thành công với tài khoản hợp lệ",
+    "email": "testuser_jetski_888@example.com",
+    "password": "Password123!",
+    "expectedResult": "success"
+  },
+  {
+    "testCase": "TC_LOGIN_02",
+    "description": "Đăng nhập thất bại với mật khẩu sai",
+    "email": "testuser_jetski_888@example.com",
+    "password": "SaiMatKhau999",
+    "expectedResult": "fail"
+  },
+  {
+    "testCase": "TC_LOGIN_03",
+    "description": "Đăng nhập thất bại với email không tồn tại",
+    "email": "khongtontai@example.com",
+    "password": "Password123!",
+    "expectedResult": "fail"
+  },
+  {
+    "testCase": "TC_LOGIN_04",
+    "description": "Đăng nhập thất bại khi để trống email",
+    "email": "",
+    "password": "Password123!",
+    "expectedResult": "fail"
+  },
+  {
+    "testCase": "TC_LOGIN_05",
+    "description": "Đăng nhập thất bại khi để trống mật khẩu",
+    "email": "testuser_jetski_888@example.com",
+    "password": "",
+    "expectedResult": "fail"
+  },
+  {
+    "testCase": "TC_LOGIN_06",
+    "description": "Đăng nhập thất bại khi email sai định dạng",
+    "email": "khong-phai-email",
+    "password": "Password123!",
+    "expectedResult": "fail"
+  }
+]
