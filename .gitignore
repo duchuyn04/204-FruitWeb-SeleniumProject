@@ -6,6 +6,15 @@
 # dotenv files
 .env
 
+# Config local của từng thành viên — không commit lên Git
+appsettings.local.json
+
+# Ghi chú cá nhân — không commit lên Git
+NOTES.md
+
+# Ảnh chụp màn hình khi test lỗi
+Reports/Screenshots/
+
 # User-specific files
 *.rsuser
 *.suo
