@@ -2,8 +2,8 @@
   {
     "testCase": "TC_LOGIN_01",
     "description": "Đăng nhập thành công với tài khoản hợp lệ",
-    "email": "testuser_jetski_888@example.com",
-    "password": "Password123!",
+    "email": "duchuy2004@gmail.com",
+    "password": "Duchuy2004",
     "expectedResult": "success"
   },
   {

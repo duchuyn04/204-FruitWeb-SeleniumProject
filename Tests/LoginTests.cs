@@ -33,8 +33,13 @@ namespace SeleniumProject.Tests.Auth
 
             _loginPage.Login(data["email"], data["password"]);
 
+            // Check URL redirect về trang chủ
             Assert.That(_loginPage.IsLoginSuccessful(), Is.True,
-                "Kỳ vọng: chuyển về trang chủ sau khi đăng nhập thành công");
+                "Kỳ vọng: redirect về trang chủ sau khi đăng nhập thành công");
+
+            // Check toast chào mừng — xác nhận login thực sự thành công, không phải false positive
+            Assert.That(_loginPage.GetToastMessage(), Does.Contain("Chào mừng"),
+                "Kỳ vọng: hiện toast chào mừng tên người dùng");
         }
 
         // TC_LOGIN_02, 03 - Nhóm: đăng nhập lỗi → hiện toast
