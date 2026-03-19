@@ -1,70 +1,94 @@
-# Selenium NUnit Test Project
+# Selenium NUnit Test Project — Fruitables
 
-Repository này chứa framework kiểm thử tự động UI cho ứng dụng FruitWeb.
-Nó sử dụng **Selenium WebDriver** để tự động hóa trình duyệt và **NUnit** để chạy test và kiểm tra kết quả (assertions). Project được cấu trúc theo design pattern **Page Object Model (POM)** kết hợp với **Data-Driven Testing (Kiểm thử hướng dữ liệu)**.
+Framework kiểm thử tự động UI cho website [vuatraicay.site](https://vuatraicay.site).
+Sử dụng **Selenium WebDriver** + **NUnit** + **Page Object Model (POM)** + **Data-Driven Testing**.
+
+---
 
 ## Cấu trúc Project
 
-Project được tổ chức một cách rõ ràng để đảm bảo tính dễ bảo trì và khả năng tái sử dụng cao:
+```
+SeleniumProject/
+├── Pages/                    ← Page Object Model
+│   ├── LoginPage.cs
+│   └── RegisterPage.cs
+├── Tests/                    ← Test cases chia theo module
+│   ├── LoginTests.cs
+│   └── TransferTests.cs
+├── TestData/                 ← Dữ liệu test (JSON)
+│   └── Auth/
+│       └── login_data.json
+├── Utilities/                ← Dùng chung
+│   ├── DriverFactory.cs      ← Khởi tạo browser
+│   ├── WaitHelper.cs         ← Chờ element
+│   ├── TestBase.cs           ← Setup/Teardown + chụp ảnh khi lỗi
+│   └── ExcelHelper.cs        ← Đọc/ghi Excel
+└── Reports/
+    └── Screenshots/          ← Ảnh chụp tự động khi test fail
+```
 
-- `Tests/`: Chứa các kịch bản kiểm thử (test scripts) thực tế. Các class trong này sử dụng các attribute của NUnit (như `[TestFixture]`, `[Test]`, `[SetUp]`).
-  - *Ví dụ: `LoginTests.cs`, `TransferTests.cs`*
-- `Pages/`: Chứa các class Page Object đại diện cho các trang khác nhau của ứng dụng web. Mỗi class đóng gói các locators (cách tìm phần tử) và actions (hành động, thao tác) tương ứng với trang đó.
-  - *Ví dụ: `LoginPage.cs`, `RegisterPage.cs`, `TransferFundsPage.cs`*
-- `Utilities/`: Chứa các class hỗ trợ (helper classes), cấu hình, và logic thiết lập cốt lõi (ví dụ: khởi tạo WebDriver, đọc file cấu hình).
-  - *Ví dụ: `DriverFactory.cs`*
-- `TestData/`: Chứa các file dữ liệu bên ngoài dùng cho Data-Driven Testing. Việc tách biệt dữ liệu giúp các kịch bản test linh hoạt hơn.
-  - *Ví dụ: `users.json`*
+---
 
 ## Yêu cầu hệ thống
 
-Để chạy project này, hãy đảm bảo bạn đã cài đặt:
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
+- Google Chrome (phiên bản mới nhất)
+- VS Code hoặc Visual Studio 2022
 
-1.  [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (hoặc phiên bản được chỉ định trong file project của bạn).
-2.  Một IDE hỗ trợ như [Visual Studio 2022](https://visualstudio.microsoft.com/) hoặc [VS Code](https://code.visualstudio.com/) với các extension cho C#.
-3.  Trình duyệt web (ví dụ: Google Chrome, Mozilla Firefox) đã được cài đặt trên máy.
-    *   *Lưu ý: Việc sử dụng `Selenium.WebDriver` ở các phiên bản gần đây thường tự động quản lý driver của trình duyệt, nhưng hãy đảm bảo trình duyệt của bạn được cập nhật mới nhất.*
+---
 
-## Cài đặt và Thiết lập
+## Cài đặt
 
-1.  Clone repository về máy:
-    ```bash
-    git clone https://github.com/duchuy19012004/204-FruitWeb-SeleniumProject.git
-    ```
-2.  Di chuyển vào thư mục project:
-    ```bash
-    cd SeleniumProject
-    ```
-3.  Khôi phục (restore) các package NuGet:
-    ```bash
-    dotnet restore
-    ```
+```bash
+# 1. Clone project
+git clone https://github.com/duchuy19012004/204-FruitWeb-SeleniumProject.git
+
+# 2. Vào thư mục project
+cd 204-FruitWeb-SeleniumProject/SeleniumProject
+
+# 3. Restore NuGet packages
+dotnet restore
+```
+
+---
+
+## Chạy Test
+
+```bash
+# Chạy tất cả test
+dotnet test SeleniumProject.csproj
+
+# Chạy 1 test case cụ thể
+dotnet test SeleniumProject.csproj --filter "FullyQualifiedName~TC_LOGIN_01"
+
+# Chạy toàn bộ 1 module
+dotnet test SeleniumProject.csproj --filter "ClassName~LoginTests"
+```
+
+---
 
 ## Thêm Test Mới
 
-1.  **Tạo / Cập nhật Page Objects:**
-    Nếu bạn đang viết test cho một trang mới, hãy tạo một class mới trong thư mục `Pages`. Thêm các biến `By` locator cho các phần tử bạn cần tương tác và các phương thức `public` để thực hiện hành động.
-2.  **Thêm Dữ liệu Test:**
-    Nếu bài test của bạn cần dữ liệu đầu vào, hãy thêm nó vào `TestData/users.json` hoặc tạo một file dữ liệu mới.
-3.  **Tạo Test Class:**
-    Tạo một class mới trong thư mục `Tests`. Thêm attribute `[TestFixture]` cho class. Khởi tạo các Page Object liên quan và viết các phương thức `[Test]` gọi đến các hành động đó. Sử dụng class `Assert` của NUnit để xác minh kết quả.
+1. **Phân tích trang** — dùng DevTools (F12) để lấy CSS selector / ID của các element
+2. **Tạo Page Object** trong `Pages/` — locators + actions
+3. **Thêm test data** vào `TestData/<module>/<module>_data.json`
+4. **Viết test case** trong `Tests/` kế thừa `TestBase`
 
-## Cách chạy Test
+---
 
-### Từ Visual Studio
-1.  Mở cửa sổ **Test Explorer** (`Test > Test Explorer`).
-2.  Build (F6 hoặc Ctrl+Shift+B) lại solution.
-3.  Click vào nút "Run All Tests" (Chạy tất cả) hoặc chọn các test cụ thể để chạy.
+## Tài liệu team
 
-### Dùng Command Line / Terminal
-Để chạy tất cả các test trong project, hãy thực thi lệnh sau trong thư mục chứa file `.csproj` (thư mục `SeleniumProject`):
-```bash
-dotnet test
-```
+| File | Nội dung |
+|---|---|
+| `howtocommit.md` | Quy ước đặt tên commit message |
+---
 
 ## Công nghệ sử dụng
 
-- **C#**: Ngôn ngữ lập trình chính
-- **Selenium WebDriver**: Tự động hóa thao tác trình duyệt
-- **NUnit**: Framework viết và chạy test
-- **Selenium Support**: Các công cụ hỗ trợ thêm của Selenium (ví dụ: `WebDriverWait`)
+| Package | Mục đích |
+|---|---|
+| `Selenium.WebDriver` 4.41 | Tự động hóa trình duyệt |
+| `NUnit` 4.3 | Framework viết và chạy test |
+| `WebDriverManager` | Tự động tải ChromeDriver |
+| `DotNetSeleniumExtras.WaitHelpers` | Explicit wait conditions |
+| `ClosedXML` | Đọc file Excel |
