@@ -17,10 +17,16 @@ namespace SeleniumProject.Utilities
         // Chờ cho đến khi element xuất hiện và hiển thị trên trang
         public IWebElement WaitForVisible(By locator)
         {
+            // d là IWebDriver được truyền vào tự động bởi WebDriverWait
+            // Hàm này chạy lặp lại cho đến khi element hiển thị hoặc hết timeout
             return _wait.Until(d =>
             {
-                var el = d.FindElement(locator);
-                return el.Displayed ? el : null;
+                IWebElement el = d.FindElement(locator);
+                if (el.Displayed)
+                {
+                    return el;
+                }
+                return null;
             });
         }
 

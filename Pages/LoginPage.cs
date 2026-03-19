@@ -11,14 +11,14 @@ namespace SeleniumProject.Pages
         // URL trang đăng nhập
         private const string LoginUrl = "https://vuatraicay.site/Account/Login";
 
-        // Locators
-        private By EmailInput => By.Id("Email");
-        private By PasswordInput => By.Id("Password");
-        private By LoginButton => By.CssSelector(".btn-auth-primary");
-        private By RememberMeCheckbox => By.Id("RememberMe");
-        private By ForgotPasswordLink => By.CssSelector("a[href='/Account/ForgotPassword']");
-        private By RegisterLink => By.CssSelector("a[href='/Account/Register']");
-        private By ToastMessage => By.CssSelector(".toast-body");
+        // Locators — khai báo cách tìm từng element trên trang
+        private readonly By EmailInput = By.Id("Email");
+        private readonly By PasswordInput = By.Id("Password");
+        private readonly By LoginButton = By.CssSelector(".btn-auth-primary");
+        private readonly By RememberMeCheckbox = By.Id("RememberMe");
+        private readonly By ForgotPasswordLink = By.CssSelector("a[href='/Account/ForgotPassword']");
+        private readonly By RegisterLink = By.CssSelector("a[href='/Account/Register']");
+        private readonly By ToastMessage = By.CssSelector(".toast-body");
 
         public LoginPage(IWebDriver driver)
         {
