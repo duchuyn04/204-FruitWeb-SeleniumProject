@@ -72,27 +72,63 @@ namespace SeleniumProject.Utilities
             Driver?.Dispose();
         }
 
-        // Chụp và lưu ảnh màn hình vào thư mục Reports/Screenshots
+        // Chụp và lưu ảnh màn hình vào thư mục Reports/Screenshots/{Module}/
+        // Module được tự động lấy từ namespace của test class (phần ngay trước tên class)
+        // VD: "SeleniumProject.Tests.Auth.LoginTests" -> module = "Auth"
         private void ChupManHinhKhiLoi()
         {
             try
             {
-                Directory.CreateDirectory(ScreenshotDir);
+                // Bước 1: Lấy tên đầy đủ của class đang chạy test
+                // VD: "SeleniumProject.Tests.Auth.LoginTests"
+                string fullClassName = TestContext.CurrentContext.Test.ClassName;
+                if (fullClassName == null)
+                {
+                    fullClassName = "";
+                }
 
-                var tenTest = TestContext.CurrentContext.Test.Name;
-                var thoiGian = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                var tenFile = $"{tenTest}_{thoiGian}.png";
-                var duongDan = Path.Combine(ScreenshotDir, tenFile);
+                // Bước 2: Tách thành mảng theo dấu chấm
+                // VD: ["SeleniumProject", "Tests", "Auth", "LoginTests"]
+                string[] parts = fullClassName.Split('.');
 
+                // Bước 3: Lấy phần tử áp cuối làm tên module
+                // Mảng 4 phần tử: index 0,1,2,3 → áp cuối là index 2 = "Auth"
+                string module;
+                if (parts.Length >= 2)
+                {
+                    module = parts[parts.Length - 2]; // lấy phần tử áp cuối
+                }
+                else
+                {
+                    module = "Unknown";
+                }
+
+                // Bước 4: Tạo thư mục con theo module (tự tạo nếu chưa có)
+                // VD: Reports/Screenshots/Auth/
+                string moduleDir = Path.Combine(ScreenshotDir, module);
+                Directory.CreateDirectory(moduleDir);
+
+                // Bước 5: Tạo tên file theo tên test + thời gian
+                string tenTest = TestContext.CurrentContext.Test.MethodName;
+                if (tenTest == null)
+                {
+                    tenTest = "UnknownTest";
+                }
+
+                string thoiGian = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string tenFile = tenTest + "_" + thoiGian + ".png";
+                string duongDan = Path.Combine(moduleDir, tenFile);
+
+                // Bước 6: Chụp và lưu ảnh
                 var screenshot = ((ITakesScreenshot)Driver).GetScreenshot();
                 screenshot.SaveAsFile(duongDan);
 
                 TestContext.AddTestAttachment(duongDan, "Screenshot khi lỗi");
-                TestContext.WriteLine($"Screenshot đã lưu: {duongDan}");
+                TestContext.WriteLine("Screenshot đã lưu: " + duongDan);
             }
             catch (Exception ex)
             {
-                TestContext.WriteLine($"Không thể chụp màn hình: {ex.Message}");
+                TestContext.WriteLine("Không thể chụp màn hình: " + ex.Message);
             }
         }
     }
