@@ -11,6 +11,7 @@ appsettings.local.json
 
 # Ghi chú cá nhân — không commit lên Git
 NOTES.md
+explain-prompt.md
 
 # Ảnh chụp màn hình khi test lỗi
 Reports/Screenshots/
