@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using SeleniumProject.Pages;
+using SeleniumProject.Pages.Auth;
 using SeleniumProject.Utilities;
 using System.Text.Json;
 

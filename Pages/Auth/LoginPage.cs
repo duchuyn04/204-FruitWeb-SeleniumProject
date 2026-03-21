@@ -1,7 +1,7 @@
 using OpenQA.Selenium;
 using SeleniumProject.Utilities;
 
-namespace SeleniumProject.Pages
+namespace SeleniumProject.Pages.Auth
 {
     public class LoginPage
     {
