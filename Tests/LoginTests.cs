@@ -21,7 +21,7 @@ namespace SeleniumProject.Tests.Auth
         {
             // TestBase.SetUp() tự chạy trước (mở Chrome)
             // Sau đó method này chạy tiếp để mở trang login
-            _loginPage = new LoginPage(Driver);
+            _loginPage = new LoginPage(Driver, BaseUrl);
             _loginPage.Open();
         }
 

@@ -8,8 +8,8 @@ namespace SeleniumProject.Pages
         private readonly IWebDriver _driver;
         private readonly WaitHelper _wait;
 
-        // URL trang đăng nhập
-        private const string LoginUrl = "https://vuatraicay.site/Account/Login";
+        // URL trang đăng nhập — xây từ BaseUrl trong appsettings.json
+        private readonly string LoginUrl;
 
         // Locators — khai báo cách tìm từng element trên trang
         private readonly By EmailInput = By.Id("Email");
@@ -20,10 +20,11 @@ namespace SeleniumProject.Pages
         private readonly By RegisterLink = By.CssSelector("a[href='/Account/Register']");
         private readonly By ToastMessage = By.CssSelector(".toast-body");
 
-        public LoginPage(IWebDriver driver)
+        public LoginPage(IWebDriver driver, string baseUrl)
         {
             _driver = driver;
             _wait = new WaitHelper(driver);
+            LoginUrl = baseUrl.TrimEnd('/') + "/Account/Login";
         }
 
         // Mở trang đăng nhập
