@@ -8,6 +8,7 @@
 
 # Config local của từng thành viên — không commit lên Git
 appsettings.local.json
+appsettings.json
 
 # Ghi chú cá nhân — không commit lên Git
 NOTES.md
