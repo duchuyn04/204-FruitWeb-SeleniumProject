@@ -20,6 +20,11 @@ namespace SeleniumProject.Utilities
         //     CurrentActualResult = "Vẫn ở trang Create, không redirect"
         protected string CurrentActualResult { get; set; } = "";
 
+        // Tên sheet Excel tương ứng với module đang test
+        // Mỗi test class tự set trong SetUpPages() — ví dụ: "TC_Auth", "TC_Product Management"
+        // Không set → TearDown sẽ bỏ qua việc ghi Excel
+        protected string CurrentSheetName { get; set; } = "";
+
         // Đọc config từ appsettings.json
         private static readonly IConfiguration Config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -175,7 +180,8 @@ namespace SeleniumProject.Utilities
                         tenMethod:           tenTest,
                         isPassed:            !loi,
                         actualResult:        CurrentActualResult,
-                        duongDanScreenshot:  duongDanScreenshot
+                        duongDanScreenshot:  duongDanScreenshot,
+                        sheetName:           CurrentSheetName
                     );
                 }
                 catch (Exception excelEx)

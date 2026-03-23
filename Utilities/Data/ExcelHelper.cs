@@ -153,10 +153,13 @@ namespace SeleniumProject.Utilities
             bool isPassed,
             string actualResult,
             string duongDanScreenshot = "",
-            string sheetName = "TC_Product Management")
+            string sheetName = "")
         {
             if (!File.Exists(_filePath)) return;
             if (string.IsNullOrEmpty(testCaseId)) return;
+
+            // Nếu không chỉ định sheet → bỏ qua (test class chưa set CurrentSheetName)
+            if (string.IsNullOrEmpty(sheetName)) return;
 
             lock (_lock)
             {

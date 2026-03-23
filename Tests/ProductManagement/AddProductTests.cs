@@ -18,6 +18,10 @@ namespace SeleniumProject.Tests.ProductManagement
         [SetUp]
         public void SetUpPages()
         {
+            // Khai báo sheet Excel tương ứng với module này
+            // TearDown dùng để tìm đúng hàng và ghi kết quả
+            CurrentSheetName = "TC_Product Management";
+
             // Đăng nhập admin (dùng chung từ TestBase)
             LoginAsAdmin();
 
