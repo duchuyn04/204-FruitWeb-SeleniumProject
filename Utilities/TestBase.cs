@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using SeleniumProject.Pages.Auth;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
@@ -10,11 +11,19 @@ namespace SeleniumProject.Utilities
         protected IWebDriver Driver { get; private set; } = null!;
         protected WaitHelper Wait { get; private set; } = null!;
 
-        // Đọc config từ appsettings.json, ưu tiên appsettings.local.json nếu có
+        // Mỗi test method tự gán vào đầu hàm để TearDown biết đang chạy TC nào
+        // Ví dụ: CurrentTestCaseId = "TC_F2.5_01";
+        protected string CurrentTestCaseId { get; set; } = "";
+
+        // Kết quả thực tế quan sát được từ trình duyệt — gán TRƯỚC khi Assert
+        // VD: CurrentActualResult = "Redirect về /Admin/Product thành công"
+        //     CurrentActualResult = "Vẫn ở trang Create, không redirect"
+        protected string CurrentActualResult { get; set; } = "";
+
+        // Đọc config từ appsettings.json
         private static readonly IConfiguration Config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json")
-            .AddJsonFile("appsettings.local.json", optional: true) // ghi đè local nếu có
             .Build();
 
         protected static string BaseUrl
@@ -45,6 +54,78 @@ namespace SeleniumProject.Utilities
             }
         }
 
+        // Tài khoản admin dùng trong các test cần đăng nhập admin
+        protected static string AdminEmail
+        {
+            get
+            {
+                string email = Config["AdminEmail"];
+                if (email == null)
+                {
+                    return "";
+                }
+                return email;
+            }
+        }
+
+        protected static string AdminPassword
+        {
+            get
+            {
+                string password = Config["AdminPassword"];
+                if (password == null)
+                {
+                    return "";
+                }
+                return password;
+            }
+        }
+
+        // Đăng nhập bằng tài khoản admin — dùng chung cho mọi test cần quyền admin
+        // Gọi trong [SetUp] của từng test class thay vì lặp lại login code
+        protected void LoginAsAdmin()
+        {
+            LoginPage loginPage = new LoginPage(Driver, BaseUrl);
+            loginPage.Open();
+            loginPage.Login(AdminEmail, AdminPassword);
+
+            // Chờ đến khi URL không còn ở trang login — tức là redirect đã hoàn tất
+            // Nếu không chờ, test tiếp theo gọi Page.Open() ngay khi browser vẫn đang redirect
+            // gây ra race condition và browser bị treo ở dashboard
+            Wait.WaitForUrlNotContains("/Account/Login");
+        }
+
+        // True = Chrome chạy ẩn (headless), tốc độ nhanh hơn, không hiện cửa sổ
+        // False = Chrome hiện cửa sổ (dùng khi debug muốn nhìn thấy)
+        protected static bool Headless
+        {
+            get
+            {
+                string value = Config["Headless"];
+                bool result;
+                bool ok = bool.TryParse(value, out result);
+                if (ok)
+                {
+                    return result;
+                }
+                return false;
+            }
+        }
+
+        // Đường dẫn file Excel để ghi kết quả test
+        protected static string ReportExcelPath
+        {
+            get
+            {
+                string path = Config["ReportExcelPath"];
+                if (path == null)
+                {
+                    return "";
+                }
+                return path;
+            }
+        }
+
         // Đường dẫn lưu ảnh chụp màn hình khi test lỗi
         private static readonly string ScreenshotDir = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
@@ -54,7 +135,7 @@ namespace SeleniumProject.Utilities
         [SetUp]
         public void SetUp()
         {
-            Driver = DriverFactory.InitializeDriver();
+            Driver = DriverFactory.InitializeDriver(Headless);
             Wait = new WaitHelper(Driver, Timeout);
             // Không navigate ở đây — mỗi test class tự gọi Page.Open()
         }
@@ -62,10 +143,47 @@ namespace SeleniumProject.Utilities
         [TearDown]
         public void TearDown()
         {
-            // Chụp màn hình nếu test vừa bị lỗi
-            if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+            var ketQua = TestContext.CurrentContext.Result;
+            bool loi   = ketQua.Outcome.Status == TestStatus.Failed;
+
+            // Chụp màn hình nếu test vừa bị lỗi — lưu đường dẫn để ghi vào Excel
+            string duongDanScreenshot = "";
+            if (loi)
             {
-                ChupManHinhKhiLoi();
+                duongDanScreenshot = ChupManHinhKhiLoi();
+            }
+
+            // Ghi kết quả vào file Excel
+            if (!string.IsNullOrEmpty(ReportExcelPath))
+            {
+                try
+                {
+                    string tenTest = TestContext.CurrentContext.Test.MethodName ?? "";
+                    string ghiChu  = ketQua.Message ?? "";
+
+                    // Xóa stack trace khỏi ghi chú — chỉ lấy dòng đầu
+                    if (ghiChu.Contains("\n"))
+                    {
+                        ghiChu = ghiChu.Split('\n')[0].Trim();
+                    }
+
+                    ExcelHelper excel = new ExcelHelper(ReportExcelPath);
+
+                    // Ghi vào sheet TC_Product Management theo đúng hàng Test Case ID
+                    excel.GhiKetQuaVaoSheet(
+                        testCaseId:          CurrentTestCaseId,
+                        tenMethod:           tenTest,
+                        isPassed:            !loi,
+                        actualResult:        CurrentActualResult,
+                        duongDanScreenshot:  duongDanScreenshot
+                    );
+                }
+                catch (Exception excelEx)
+                {
+                    // Ghi lỗi ra output của test — để biết nguyên nhân mà vẫn không fail test
+                    TestContext.WriteLine("[EXCEL ERROR] GhiKetQuaVaoSheet thất bại: " + excelEx.Message);
+                    TestContext.WriteLine("[EXCEL ERROR] Chi tiết: " + excelEx.GetType().Name);
+                }
             }
 
             Driver?.Quit();
@@ -75,7 +193,8 @@ namespace SeleniumProject.Utilities
         // Chụp và lưu ảnh màn hình vào thư mục Reports/Screenshots/{Module}/
         // Module được tự động lấy từ namespace của test class (phần ngay trước tên class)
         // VD: "SeleniumProject.Tests.Auth.LoginTests" -> module = "Auth"
-        private void ChupManHinhKhiLoi()
+        // Trả về đường dẫn file đã lưu, hoặc chuỗi rỗng nếu không chụp được
+        private string ChupManHinhKhiLoi()
         {
             try
             {
@@ -125,10 +244,16 @@ namespace SeleniumProject.Utilities
 
                 TestContext.AddTestAttachment(duongDan, "Screenshot khi lỗi");
                 TestContext.WriteLine("Screenshot đã lưu: " + duongDan);
+
+                // Trả về đường dẫn để TearDown dùng khi ghi vào Excel
+                return duongDan;
             }
             catch (Exception ex)
             {
                 TestContext.WriteLine("Không thể chụp màn hình: " + ex.Message);
+
+                // Trả về rỗng nếu chụp thất bại
+                return "";
             }
         }
     }
