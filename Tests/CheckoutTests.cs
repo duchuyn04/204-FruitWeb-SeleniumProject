@@ -39,11 +39,10 @@ namespace SeleniumProject.Tests.Checkout
         {
             var data = DocDuLieu("TC_CHECKOUT_01");
 
-            // Pre-condition: đăng nhập, thêm sản phẩm vào giỏ
+            // Setup: Đăng nhập
             _checkoutPage.Login(data["email"], data["password"]);
 
-            // Bước 1: Thêm sản phẩm → vào Cart
-            // Bước 2: Click THANH TOÁN → sang Checkout
+            // Bước 1 & 2: Thêm sản phẩm vào giỏ → vào Cart → click THANH TOÁN
             _checkoutPage.GoToCheckoutViaCart(data["productUrl"]);
 
             // Kiểm tra trang Checkout hiển thị đủ 3 phần:
@@ -86,10 +85,12 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption(); // Hiện form nhập địa chỉ mới
 
-            // Để trống Họ tên
             _checkoutPage.EnterFullName("");
             _checkoutPage.EnterPhone(data["phone"]);
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            _checkoutPage.SelectDistrict("Quận Ba Đình");
+            _checkoutPage.SelectWard("Phường Phúc Xá");
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
@@ -117,12 +118,20 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(""); // bỏ trống
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            _checkoutPage.SelectDistrict("Quận Ba Đình");
+            _checkoutPage.SelectWard("Phường Phúc Xá");
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any()
                 || _checkoutPage.IsFieldInvalid(By.Id("Mobile"));
+
+            if (!hasError)
+            {
+                System.IO.File.WriteAllText("TC04_DOM.html", _checkoutPage.GetCurrentUrl() + "\n" + _checkoutPage.GetDriver().PageSource);
+            }
 
             Assert.That(hasError, Is.True,
                 $"Kỳ vọng [F5.5_02]: Hệ thống phải báo lỗi khi để trống Số điện thoại.\nMessages: {string.Join(", ", messages)}");
@@ -142,8 +151,11 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectNewAddressOption();
 
             _checkoutPage.EnterFullName(data["fullName"]);
-            _checkoutPage.EnterPhone(data["phone"]); // 12 ký tự: "12345678909"
+            _checkoutPage.EnterPhone(data["phone"]); // Sai độ dài
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            _checkoutPage.SelectDistrict("Quận Ba Đình");
+            _checkoutPage.SelectWard("Phường Phúc Xá");
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 

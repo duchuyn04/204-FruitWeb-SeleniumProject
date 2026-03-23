@@ -22,8 +22,10 @@ namespace SeleniumProject.Pages
 
         // ===== LOCATORS – Product detail =====
         // class thật từ DOM: "btn-buy-now" và "btn-add-cart"
-        private By BuyNowButton    => By.CssSelector("button.btn-buy-now");
-        private By AddToCartButton => By.CssSelector("button.btn-add-cart");
+        private By AddToCartButton    => By.CssSelector("button.btn-add-cart");
+        private By BuyNowButton       => By.CssSelector("button.btn-buy-now");
+        // Update selector to handle /Checkout and avoid matching the hidden header dropdown link
+        private By CartCheckoutButton => By.CssSelector("aside a[href*='/Checkout']");
 
         // ===== LOCATORS – Shipping form =====
         // Dropdown địa chỉ đã lưu (có khi user đã có địa chỉ mặc định)
@@ -40,11 +42,6 @@ namespace SeleniumProject.Pages
         private By WardSelect     => By.Id("wardSelect");
 
         // ===== LOCATORS – Payment =====
-        // ===== LOCATORS – Cart =====
-        // Nút THANH TOÁN trên trang giỏ hàng
-        private By CartCheckoutButton => By.CssSelector("a[href='/Checkout']");
-
-        // ===== LOCATORS – Payment =====
         private By PaymentCod      => By.Id("Delivery-1");
         private By PaymentTransfer => By.Id("Transfer-1");
 
@@ -52,13 +49,12 @@ namespace SeleniumProject.Pages
         // Không có ID → dùng XPath theo text
         private By PlaceOrderButton => By.XPath("//button[@type='submit' and contains(normalize-space(),'Đặt hàng')]");
 
-        // ===== LOCATORS – Validation errors =====
-        // class thật từ DOM: "invalid-feedback"
-        private By ValidationErrors => By.CssSelector(".invalid-feedback");
+        // class thật từ DOM: "invalid-feedback", ".field-validation-error" (ASP.NET), ".toast-body" (JS), ".validation-summary li" (JS tập trung lỗi)
+        private By ValidationErrors => By.CssSelector(".invalid-feedback, .field-validation-error, .toast-body, .validation-summary li");
 
         // ===== LOCATORS – Confirmation page =====
-        private By ConfirmationHeading => By.CssSelector("h1, h2, .thank-you, .confirmation-title");
-        private By OrderNumberEl       => By.CssSelector("[class*='order-number'], [class*='orderNumber'], .order-code");
+        private By ConfirmationHeading => By.XPath("//h1[contains(., 'Cảm ơn')] | //h2[contains(., 'Cảm ơn')] | //*[contains(@class, 'thank-you')]");
+        private By OrderNumberEl       => By.XPath("//*[contains(., 'Mã đơn hàng:')]//strong | //*[contains(@class, 'order-number')]");
 
         // ===== LOCATORS – Toast =====
         private By ToastBody => By.CssSelector(".toast-body");
@@ -100,31 +96,7 @@ namespace SeleniumProject.Pages
         }
 
         /// <summary>
-        /// Pre-condition cho TC_CHECKOUT_01 (F5.1_01) – KHÔNG cần đăng nhập:
-        /// Bước 1 – Thêm sản phẩm vào giỏ hàng (từ trang sản phẩm).
-        /// Bước 2 – Vào trang Giỏ hàng (/Cart).
-        /// Bước 3 – Click nút "THANH TOÁN" để sang trang Checkout.
-        /// </summary>
-        public void GoToCheckoutViaCartAsGuest(string productUrl)
-        {
-            // Bước 1: Vào trang sản phẩm và click "Thêm vào giỏ"
-            _driver.Navigate().GoToUrl(productUrl);
-            Thread.Sleep(1000);
-
-            _wait.WaitForClickable(AddToCartButton).Click();
-            Thread.Sleep(1000);
-
-            // Bước 2: Vào trang Giỏ hàng
-            _driver.Navigate().GoToUrl(CartUrl);
-            Thread.Sleep(800);
-
-            // Bước 3: Click nút THANH TOÁN trên trang Cart
-            _wait.WaitForClickable(CartCheckoutButton).Click();
-            Thread.Sleep(800);
-        }
-
-        /// <summary>
-        /// Pre-condition cho TC_CHECKOUT_01 (F5.1_01) – có đăng nhập:
+        /// Pre-condition cho TC_CHECKOUT_01 (F5.1_01):
         /// Bước 1 – Thêm sản phẩm vào giỏ hàng (từ trang sản phẩm).
         /// Bước 2 – Vào trang Giỏ hàng (/Cart).
         /// Bước 3 – Click nút "THANH TOÁN" để sang trang Checkout.
@@ -153,7 +125,13 @@ namespace SeleniumProject.Pages
             Thread.Sleep(800);
 
             // Bước 3: Click nút THANH TOÁN trên trang Cart
-            _wait.WaitForClickable(CartCheckoutButton).Click();
+            var cartBtn = _wait.WaitForClickable(CartCheckoutButton);
+            ((IJavaScriptExecutor)_driver).ExecuteScript(
+                "var els = document.querySelectorAll('.back-to-top, footer, header, .sticky-header');" +
+                "els.forEach(e => e.style.display = 'none');" +
+                "arguments[0].scrollIntoView({block: 'center'});", cartBtn);
+            Thread.Sleep(500);
+            cartBtn.Click();
             Thread.Sleep(800);
         }
 
@@ -312,20 +290,32 @@ namespace SeleniumProject.Pages
         public void SelectPaymentCod()
         {
             var radio = _wait.WaitForClickable(PaymentCod);
-            if (!radio.Selected) radio.Click();
+            if (!radio.Selected)
+            {
+                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", radio);
+            }
         }
 
         /// <summary>Chọn phương thức thanh toán Chuyển khoản</summary>
         public void SelectPaymentTransfer()
         {
             var radio = _wait.WaitForClickable(PaymentTransfer);
-            if (!radio.Selected) radio.Click();
+            if (!radio.Selected)
+            {
+                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", radio);
+            }
         }
 
         /// <summary>Click nút Đặt hàng</summary>
         public void ClickPlaceOrder()
         {
-            _wait.WaitForClickable(PlaceOrderButton).Click();
+            var btn = _wait.WaitForClickable(PlaceOrderButton);
+            ((IJavaScriptExecutor)_driver).ExecuteScript(
+                "var els = document.querySelectorAll('.back-to-top, footer, header, .sticky-header');" +
+                "els.forEach(e => e.style.display = 'none');" +
+                "arguments[0].scrollIntoView({block: 'center'});", btn);
+            Thread.Sleep(500);
+            btn.Click();
         }
 
         // =====================================================================
@@ -362,12 +352,13 @@ namespace SeleniumProject.Pages
         }
 
         /// <summary>Lấy tất cả thông báo lỗi validation (class invalid-feedback)</summary>
-        public IList<string> GetValidationMessages()
+        public List<string> GetValidationMessages()
         {
-            Thread.Sleep(500);
+            Thread.Sleep(2000); // Đợi Toast, Validation, và Scroll animation hoàn tất
             try
             {
-                return _driver.FindElements(ValidationErrors)
+                var els = _driver.FindElements(ValidationErrors);
+                return els
                     .Where(m => m.Displayed && !string.IsNullOrWhiteSpace(m.Text))
                     .Select(m => m.Text.Trim())
                     .ToList();
@@ -486,6 +477,8 @@ namespace SeleniumProject.Pages
 
         /// <summary>Lấy URL hiện tại</summary>
         public string GetCurrentUrl() => _driver.Url;
+
+        public IWebDriver GetDriver() => _driver;
 
         /// <summary>Lấy text của element theo locator</summary>
         public string GetElementText(By locator)
