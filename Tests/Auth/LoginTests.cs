@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using SeleniumProject.Pages.Auth;
 using SeleniumProject.Utilities;
-using System.Text.Json;
 
 namespace SeleniumProject.Tests.Auth
 {
@@ -29,7 +28,7 @@ namespace SeleniumProject.Tests.Auth
         [Test]
         public void TC_LOGIN_01_DangNhapThanhCong()
         {
-            var data = DocDuLieu("TC_LOGIN_01");
+            var data = JsonHelper.DocDuLieu(DataPath, "TC_LOGIN_01");
 
             _loginPage.Login(data["email"], data["password"]);
 
@@ -56,7 +55,7 @@ namespace SeleniumProject.Tests.Auth
         [TestCaseSource(nameof(DuLieuDangNhapToastLoi))]
         public void TC_LOGIN_DangNhapThatBai_ToastLoi(string testCaseId)
         {
-            var data = DocDuLieu(testCaseId);
+            var data = JsonHelper.DocDuLieu(DataPath, testCaseId);
 
             _loginPage.Login(data["email"], data["password"]);
 
@@ -82,7 +81,7 @@ namespace SeleniumProject.Tests.Auth
         [TestCaseSource(nameof(DuLieuDangNhapVanOrTrang))]
         public void TC_LOGIN_DangNhapThatBai_VanOrTrang(string testCaseId)
         {
-            var data = DocDuLieu(testCaseId);
+            var data = JsonHelper.DocDuLieu(DataPath, testCaseId);
 
             _loginPage.Login(data["email"], data["password"]);
 
@@ -90,25 +89,5 @@ namespace SeleniumProject.Tests.Auth
                 $"Kỳ vọng [{testCaseId}]: vẫn ở trang đăng nhập");
         }
 
-        // Hàm đọc dữ liệu từ JSON theo testCase ID
-        private Dictionary<string, string> DocDuLieu(string testCaseId)
-        {
-            string json = File.ReadAllText(DataPath);
-            List<Dictionary<string, string>> danhSach = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json)!;
-
-            // Duyệt qua từng phần tử trong danh sách, tìm đúng testCase
-            Dictionary<string, string> duLieu = null;
-            foreach (Dictionary<string, string> item in danhSach)
-            {
-                if (item["testCase"] == testCaseId)
-                {
-                    duLieu = item;
-                    break;
-                }
-            }
-
-            Assert.That(duLieu, Is.Not.Null, $"Không tìm thấy test case '{testCaseId}' trong file JSON");
-            return duLieu!;
-        }
     }
 }

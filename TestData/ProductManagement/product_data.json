@@ -1,9 +1,9 @@
 [
   {
     "no": 1,
-    "testCase": "TC-AP-P01",
+    "testCase": "TC_F2.5_01",
     "description": "Thêm sản phẩm thành công với đầy đủ thông tin hợp lệ",
-    "productName": "Táo New Zealand Envy",
+    "productName": "Táo Braeburn Úc",
     "shortDescription": "Táo nhập khẩu tươi ngon từ New Zealand",
     "category": "Trái cây nhập khẩu",
     "slug": "",
@@ -18,9 +18,9 @@
   },
   {
     "no": 2,
-    "testCase": "TC-AP-P02",
+    "testCase": "TC_F2.5_02",
     "description": "Thêm sản phẩm thành công chỉ với các trường bắt buộc",
-    "productName": "Xoài Cát Hòa Lộc",
+    "productName": "Dưa Hấu Hắt Mỹ Nhân",
     "shortDescription": "",
     "category": "Trái cây nội địa",
     "slug": "",
@@ -35,9 +35,9 @@
   },
   {
     "no": 3,
-    "testCase": "TC-AP-P03",
+    "testCase": "TC_F2.5_03",
     "description": "Slug tự động sinh từ tên sản phẩm khi để trống",
-    "productName": "Táo New Zealand",
+    "productName": "Bưởi Năm Roi Vĩnh Long",
     "shortDescription": "",
     "category": "Trái cây nhập khẩu",
     "slug": "",
@@ -53,12 +53,12 @@
   },
   {
     "no": 4,
-    "testCase": "TC-AP-P04",
+    "testCase": "TC_F2.5_04",
     "description": "Nhập Slug tùy chỉnh hợp lệ",
-    "productName": "Táo New Zealand",
+    "productName": "Bưởi Năm Roi Vĩnh Long",
     "shortDescription": "",
     "category": "Trái cây nhập khẩu",
-    "slug": "tao-new-zealand-2026",
+    "slug": "buoi-nam-roi-2026",
     "price": "150000",
     "discountPrice": "",
     "stock": "",
@@ -70,9 +70,9 @@
   },
   {
     "no": 5,
-    "testCase": "TC-AP-P05",
+    "testCase": "TC_F2.5_05",
     "description": "Thêm Tags và hiển thị dạng badge",
-    "productName": "Táo Fuji",
+    "productName": "Nho Mẫu Đơn Nhật",
     "shortDescription": "",
     "category": "Trái cây nhập khẩu",
     "slug": "",
@@ -87,7 +87,7 @@
   },
   {
     "no": 6,
-    "testCase": "TC-AP-P06",
+    "testCase": "TC_F2.5_06",
     "description": "Upload nhiều ảnh và ảnh đầu tiên là ảnh chính",
     "productName": "Cam Sành Miền Tây",
     "shortDescription": "",
@@ -104,7 +104,7 @@
   },
   {
     "no": 7,
-    "testCase": "TC-AP-P07",
+    "testCase": "TC_F2.5_07",
     "description": "Live preview giá VND cập nhật ngay khi nhập",
     "productName": "",
     "shortDescription": "",
@@ -122,7 +122,7 @@
   },
   {
     "no": 8,
-    "testCase": "TC-AP-N01",
+    "testCase": "TC_F2.5_08",
     "description": "Submit form rỗng hoàn toàn",
     "productName": "",
     "shortDescription": "",
@@ -139,7 +139,7 @@
   },
   {
     "no": 9,
-    "testCase": "TC-AP-N02",
+    "testCase": "TC_F2.5_09",
     "description": "Để trống Tên sản phẩm",
     "productName": "",
     "shortDescription": "",
@@ -156,7 +156,7 @@
   },
   {
     "no": 10,
-    "testCase": "TC-AP-N03",
+    "testCase": "TC_F2.5_10",
     "description": "Không chọn Danh mục",
     "productName": "Bưởi Da Xanh",
     "shortDescription": "",
@@ -173,7 +173,7 @@
   },
   {
     "no": 11,
-    "testCase": "TC-AP-N04",
+    "testCase": "TC_F2.5_11",
     "description": "Để trống Giá gốc",
     "productName": "Dứa Mật",
     "shortDescription": "",
@@ -190,7 +190,7 @@
   },
   {
     "no": 12,
-    "testCase": "TC-AP-N05",
+    "testCase": "TC_F2.5_12",
     "description": "Giá khuyến mãi lớn hơn Giá gốc",
     "productName": "Nho Đen Úc",
     "shortDescription": "",
@@ -207,7 +207,7 @@
   },
   {
     "no": 13,
-    "testCase": "TC-AP-N06",
+    "testCase": "TC_F2.5_13",
     "description": "Nhập Giá gốc âm",
     "productName": "Lê Hàn Quốc",
     "shortDescription": "",
@@ -224,7 +224,7 @@
   },
   {
     "no": 14,
-    "testCase": "TC-AP-N07",
+    "testCase": "TC_F2.5_14",
     "description": "Upload file không phải ảnh (PDF)",
     "productName": "",
     "shortDescription": "",
@@ -241,7 +241,7 @@
   },
   {
     "no": 15,
-    "testCase": "TC-AP-N08",
+    "testCase": "TC_F2.5_15",
     "description": "Upload ảnh vượt 5MB",
     "productName": "",
     "shortDescription": "",
@@ -258,7 +258,7 @@
   },
   {
     "no": 16,
-    "testCase": "TC-AP-N09",
+    "testCase": "TC_F2.5_16",
     "description": "Truy cập khi chưa đăng nhập",
     "productName": "",
     "shortDescription": "",
@@ -275,7 +275,7 @@
   },
   {
     "no": 17,
-    "testCase": "TC-AP-N10",
+    "testCase": "TC_F2.5_17",
     "description": "Tài khoản Customer truy cập Admin",
     "productName": "",
     "shortDescription": "",
@@ -292,9 +292,9 @@
   },
   {
     "no": 18,
-    "testCase": "TC-AP-B01",
+    "testCase": "TC_F2.5_18",
     "description": "Tên sản phẩm 1 ký tự (min)",
-    "productName": "A",
+    "productName": "B",
     "shortDescription": "",
     "category": "Trái cây nội địa",
     "slug": "",
@@ -309,7 +309,7 @@
   },
   {
     "no": 19,
-    "testCase": "TC-AP-B02",
+    "testCase": "TC_F2.5_19",
     "description": "Tên sản phẩm vượt max length (max+1)",
     "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     "shortDescription": "",
@@ -326,9 +326,9 @@
   },
   {
     "no": 20,
-    "testCase": "TC-AP-B03",
+    "testCase": "TC_F2.5_20",
     "description": "Giá gốc = 1 (min hợp lệ)",
-    "productName": "Sản phẩm Test Giá Min",
+    "productName": "Sản Phẩm Giá Min 2",
     "shortDescription": "",
     "category": "Trái cây nội địa",
     "slug": "",
@@ -343,7 +343,7 @@
   },
   {
     "no": 21,
-    "testCase": "TC-AP-B04",
+    "testCase": "TC_F2.5_21",
     "description": "Số lượng tồn kho = 0",
     "productName": "Sầu Riêng Musang King",
     "shortDescription": "",
@@ -360,7 +360,7 @@
   },
   {
     "no": 22,
-    "testCase": "TC-AP-B05",
+    "testCase": "TC_F2.5_22",
     "description": "Upload ảnh đúng 5MB (max)",
     "productName": "Kiwi Xanh New Zealand",
     "shortDescription": "",
@@ -377,7 +377,7 @@
   },
   {
     "no": 23,
-    "testCase": "TC-AP-LF01",
+    "testCase": "TC_F2.5_23",
     "description": "Checkbox Kích hoạt mặc định được tích khi load trang",
     "productName": "",
     "shortDescription": "",
@@ -396,7 +396,7 @@
   },
   {
     "no": 24,
-    "testCase": "TC-AP-LF02",
+    "testCase": "TC_F2.5_24",
     "description": "Checkbox Nổi bật mặc định không được tích",
     "productName": "",
     "shortDescription": "",
@@ -415,7 +415,7 @@
   },
   {
     "no": 25,
-    "testCase": "TC-AP-LF03",
+    "testCase": "TC_F2.5_25",
     "description": "Dropdown Danh mục hiển thị giá trị mặc định",
     "productName": "",
     "shortDescription": "",
@@ -434,7 +434,7 @@
   },
   {
     "no": 26,
-    "testCase": "TC-AP-LF04",
+    "testCase": "TC_F2.5_26",
     "description": "Preview ảnh hiển thị ngay sau khi upload",
     "productName": "",
     "shortDescription": "",
@@ -453,7 +453,7 @@
   },
   {
     "no": 27,
-    "testCase": "TC-AP-LF05",
+    "testCase": "TC_F2.5_27",
     "description": "Nút Lưu sản phẩm hiển thị đúng màu Primary",
     "productName": "",
     "shortDescription": "",
@@ -472,7 +472,7 @@
   },
   {
     "no": 28,
-    "testCase": "TC-AP-EP01",
+    "testCase": "TC_F2.5_28",
     "description": "Upload ảnh định dạng PNG hợp lệ",
     "productName": "Dâu Tây Đà Lạt",
     "shortDescription": "",
@@ -489,7 +489,7 @@
   },
   {
     "no": 29,
-    "testCase": "TC-AP-EP02",
+    "testCase": "TC_F2.5_29",
     "description": "Upload ảnh định dạng WEBP hợp lệ",
     "productName": "Thanh Long Ruột Đỏ",
     "shortDescription": "",
@@ -506,7 +506,7 @@
   },
   {
     "no": 30,
-    "testCase": "TC-AP-EP03",
+    "testCase": "TC_F2.5_30",
     "description": "Upload file EXE (định dạng không hợp lệ)",
     "productName": "",
     "shortDescription": "",
@@ -523,7 +523,7 @@
   },
   {
     "no": 31,
-    "testCase": "TC-AP-DT01",
+    "testCase": "TC_F2.5_31",
     "description": "Tên có giá trị + Danh mục có giá trị + Giá gốc > 0",
     "productName": "Mận Hậu Sơn La",
     "shortDescription": "",
@@ -540,7 +540,7 @@
   },
   {
     "no": 32,
-    "testCase": "TC-AP-DT02",
+    "testCase": "TC_F2.5_32",
     "description": "Tên có giá trị + Danh mục có giá trị + Giá gốc = 0",
     "productName": "Mận Hậu Sơn La",
     "shortDescription": "",
@@ -557,7 +557,7 @@
   },
   {
     "no": 33,
-    "testCase": "TC-AP-DT03",
+    "testCase": "TC_F2.5_33",
     "description": "Tên có giá trị + Danh mục trống + Giá gốc > 0",
     "productName": "Ổi Lê Đài Loan",
     "shortDescription": "",
@@ -574,7 +574,7 @@
   },
   {
     "no": 34,
-    "testCase": "TC-AP-DT04",
+    "testCase": "TC_F2.5_34",
     "description": "Tên trống + Danh mục có giá trị + Giá gốc > 0",
     "productName": "",
     "shortDescription": "",
@@ -591,7 +591,7 @@
   },
   {
     "no": 35,
-    "testCase": "TC-AP-ST01",
+    "testCase": "TC_F2.5_35",
     "description": "Kích hoạt = true → hiển thị ngoài shop",
     "productName": "Chanh Vàng Nhập Khẩu",
     "shortDescription": "",
@@ -608,7 +608,7 @@
   },
   {
     "no": 36,
-    "testCase": "TC-AP-ST02",
+    "testCase": "TC_F2.5_36",
     "description": "Kích hoạt = false → không hiển thị ngoài shop",
     "productName": "Măng Cụt Thái Lan",
     "shortDescription": "",
@@ -625,7 +625,7 @@
   },
   {
     "no": 37,
-    "testCase": "TC-AP-ST03",
+    "testCase": "TC_F2.5_37",
     "description": "Tồn kho = 0 → hiển thị trạng thái Hết hàng",
     "productName": "Vải Thiều Lục Ngạn",
     "shortDescription": "",
@@ -642,7 +642,7 @@
   },
   {
     "no": 38,
-    "testCase": "TC-AP-UC01",
+    "testCase": "TC_F2.5_38",
     "description": "Luồng đầy đủ: danh sách → thêm → xác nhận",
     "productName": "Bơ Booth Đắk Lắk",
     "shortDescription": "",
@@ -659,7 +659,7 @@
   },
   {
     "no": 39,
-    "testCase": "TC-AP-UC02",
+    "testCase": "TC_F2.5_39",
     "description": "Click Quay lại → không lưu và về danh sách",
     "productName": "Xoài Keo Miền Tây",
     "shortDescription": "",
@@ -676,7 +676,7 @@
   },
   {
     "no": 40,
-    "testCase": "TC-AP-EG01",
+    "testCase": "TC_F2.5_40",
     "description": "XSS trong Tên sản phẩm → không thực thi script",
     "productName": "<script>alert('xss')</script>",
     "shortDescription": "",
@@ -693,7 +693,7 @@
   },
   {
     "no": 41,
-    "testCase": "TC-AP-EG02",
+    "testCase": "TC_F2.5_41",
     "description": "SQL Injection trong Tên sản phẩm → không crash",
     "productName": "'; DROP TABLE Products;--",
     "shortDescription": "",
@@ -710,7 +710,7 @@
   },
   {
     "no": 42,
-    "testCase": "TC-AP-EG03",
+    "testCase": "TC_F2.5_42",
     "description": "Slug có ký tự đặc biệt không hợp lệ",
     "productName": "Bơ 034",
     "shortDescription": "",
@@ -727,7 +727,7 @@
   },
   {
     "no": 43,
-    "testCase": "TC-AP-EG04",
+    "testCase": "TC_F2.5_43",
     "description": "Upload ảnh 0 byte",
     "productName": "",
     "shortDescription": "",
@@ -744,7 +744,7 @@
   },
   {
     "no": 44,
-    "testCase": "TC-AP-RG01",
+    "testCase": "TC_F2.5_44",
     "description": "Thêm sản phẩm vẫn hoạt động sau khi cập nhật danh mục",
     "productName": "Roi Đỏ Bình Thuận",
     "shortDescription": "",
@@ -761,7 +761,7 @@
   },
   {
     "no": 45,
-    "testCase": "TC-AP-RG02",
+    "testCase": "TC_F2.5_45",
     "description": "Upload ảnh vẫn hoạt động sau khi thay đổi cấu hình",
     "productName": "Dừa Xiêm Bến Tre",
     "shortDescription": "",
@@ -778,7 +778,7 @@
   },
   {
     "no": 46,
-    "testCase": "TC-AP-B09",
+    "testCase": "TC_F2.5_46",
     "description": "Tên sản phẩm 0 ký tự (min - 1)",
     "productName": "",
     "shortDescription": "",
@@ -795,7 +795,7 @@
   },
   {
     "no": 47,
-    "testCase": "TC-AP-B10",
+    "testCase": "TC_F2.5_47",
     "description": "Tên sản phẩm 1 ký tự (min)",
     "productName": "A",
     "shortDescription": "",
@@ -812,7 +812,7 @@
   },
   {
     "no": 48,
-    "testCase": "TC-AP-B11",
+    "testCase": "TC_F2.5_48",
     "description": "Tên sản phẩm 2 ký tự (min + 1)",
     "productName": "AB",
     "shortDescription": "",
@@ -829,7 +829,7 @@
   },
   {
     "no": 49,
-    "testCase": "TC-AP-B12",
+    "testCase": "TC_F2.5_49",
     "description": "Tên sản phẩm 254 ký tự (max - 1)",
     "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     "shortDescription": "",
@@ -846,7 +846,7 @@
   },
   {
     "no": 50,
-    "testCase": "TC-AP-B13",
+    "testCase": "TC_F2.5_50",
     "description": "Tên sản phẩm 255 ký tự (max)",
     "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     "shortDescription": "",
@@ -863,7 +863,7 @@
   },
   {
     "no": 51,
-    "testCase": "TC-AP-B14",
+    "testCase": "TC_F2.5_51",
     "description": "Tên sản phẩm 256 ký tự (max + 1)",
     "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     "shortDescription": "",
@@ -880,7 +880,7 @@
   },
   {
     "no": 52,
-    "testCase": "TC-AP-B15",
+    "testCase": "TC_F2.5_52",
     "description": "Giá gốc = 0 (min - 1)",
     "productName": "Cóc Miền Tây",
     "shortDescription": "",
@@ -897,7 +897,7 @@
   },
   {
     "no": 53,
-    "testCase": "TC-AP-B16",
+    "testCase": "TC_F2.5_53",
     "description": "Giá gốc = 1 (min)",
     "productName": "Sung Đà Lạt",
     "shortDescription": "",
@@ -914,7 +914,7 @@
   },
   {
     "no": 54,
-    "testCase": "TC-AP-B17",
+    "testCase": "TC_F2.5_54",
     "description": "Giá gốc = 2 (min + 1)",
     "productName": "Khế Ngọt Bình Dương",
     "shortDescription": "",
@@ -931,7 +931,7 @@
   },
   {
     "no": 55,
-    "testCase": "TC-AP-B18",
+    "testCase": "TC_F2.5_55",
     "description": "Số lượng tồn kho âm (min - 1)",
     "productName": "Nhãn Lồng Hưng Yên",
     "shortDescription": "",
@@ -948,7 +948,7 @@
   },
   {
     "no": 56,
-    "testCase": "TC-AP-B19",
+    "testCase": "TC_F2.5_56",
     "description": "Số lượng tồn kho = 0 (min)",
     "productName": "Trứng Gà Ác",
     "shortDescription": "",
@@ -965,7 +965,7 @@
   },
   {
     "no": 57,
-    "testCase": "TC-AP-B20",
+    "testCase": "TC_F2.5_57",
     "description": "Số lượng tồn kho = 1 (min + 1)",
     "productName": "Me Chua Bình Phước",
     "shortDescription": "",
@@ -982,7 +982,7 @@
   },
   {
     "no": 58,
-    "testCase": "TC-AP-B21",
+    "testCase": "TC_F2.5_58",
     "description": "Số lượng đặt tối thiểu = 0 (min - 1)",
     "productName": "Quýt Hồng Lai Vung",
     "shortDescription": "",
@@ -999,7 +999,7 @@
   },
   {
     "no": 59,
-    "testCase": "TC-AP-B22",
+    "testCase": "TC_F2.5_59",
     "description": "Số lượng đặt tối thiểu = 1 (min)",
     "productName": "Bơ Booth Đắk Lắk",
     "shortDescription": "",
@@ -1016,7 +1016,7 @@
   },
   {
     "no": 60,
-    "testCase": "TC-AP-B23",
+    "testCase": "TC_F2.5_60",
     "description": "Số lượng đặt tối thiểu = 2 (min + 1)",
     "productName": "Mít Thái Siêu Ngọt",
     "shortDescription": "",
@@ -1033,7 +1033,7 @@
   },
   {
     "no": 61,
-    "testCase": "TC-AP-B24",
+    "testCase": "TC_F2.5_61",
     "description": "Upload ảnh 4.99MB (max - 1)",
     "productName": "Sapô Chocolate",
     "shortDescription": "",
@@ -1050,7 +1050,7 @@
   },
   {
     "no": 62,
-    "testCase": "TC-AP-B25",
+    "testCase": "TC_F2.5_62",
     "description": "Upload ảnh đúng 5MB (max)",
     "productName": "Hồng Xiêm Xuân Đỉnh",
     "shortDescription": "",
@@ -1067,7 +1067,7 @@
   },
   {
     "no": 63,
-    "testCase": "TC-AP-B26",
+    "testCase": "TC_F2.5_63",
     "description": "Upload ảnh 5.1MB (max + 1)",
     "productName": "Chôm Chôm Java",
     "shortDescription": "",

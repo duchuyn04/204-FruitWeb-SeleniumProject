@@ -48,22 +48,44 @@ namespace SeleniumProject.Utilities
             return _wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.UrlContains(urlPart));
         }
 
+        // Chờ cho đến khi URL KHÔNG CÒN chứa chuỗi ký tự chỉ định
+        // Dùng sau khi click login để chắc chắn browser đã redirect ra khỏi trang login
+        public bool WaitForUrlNotContains(string urlPart)
+        {
+            return _wait.Until(d =>
+            {
+                bool vanConUrlCu = d.Url.Contains(urlPart);
+                return !vanConUrlCu;
+            });
+        }
+
         // Chờ cho đến khi element biến mất hoặc ẩn đi khỏi trang
         public bool WaitForInvisible(By locator)
         {
             return _wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(locator));
         }
 
-        // Gõ chậm từng ký tự để có thể quan sát automation đang nhập gì
-        // delayMs: thời gian chờ giữa mỗi ký tự (mặc định 80ms)
-        public void SlowType(By locator, string text, int delayMs = 80)
+        // Nhập text vào ô input
+        // delayMs = 0  → nhập toàn bộ ngay lập tức (dùng khi chạy headless/nhanh)
+        // delayMs > 0  → gõ từng ký tự chậm (dùng khi debug, muốn nhìn thấy)
+        public void SlowType(By locator, string text, int delayMs = 0)
         {
-            var element = WaitForVisible(locator);
+            IWebElement element = WaitForVisible(locator);
             element.Clear();
-            foreach (char c in text)
+
+            if (delayMs == 0)
             {
-                element.SendKeys(c.ToString());
-                Thread.Sleep(delayMs);
+                // Nhập toàn bộ chuỗi 1 lần — nhanh nhất
+                element.SendKeys(text);
+            }
+            else
+            {
+                // Gõ từng ký tự với delay — dùng khi muốn nhìn thấy automation đang nhập
+                foreach (char c in text)
+                {
+                    element.SendKeys(c.ToString());
+                    Thread.Sleep(delayMs);
+                }
             }
         }
 
