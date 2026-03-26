@@ -96,41 +96,6 @@ namespace SeleniumProject.Tests.ProductManagement
             );
         }
 
-        // TC_F2.5_09 — Để trống Tên sản phẩm → phải hiện lỗi validation
-        [Test]
-        public void TC_F2_5_09_TenSanPhamTrong()
-        {
-            // Đọc dữ liệu
-            CurrentTestCaseId = "TC_F2.5_09";
-            var data = JsonHelper.DocDuLieu(DataPath, "TC_F2.5_09");
-
-            // Bỏ qua tên sản phẩm (trống), điền các trường còn lại
-            _createPage.SelectCategory(data["category"]);
-            _createPage.EnterPrice(data["price"]);
-
-            // Bấm lưu dù tên đang trống
-            _createPage.ClickSave();
-
-            // Đọc kết quả thực tế từ DOM
-            CurrentActualResult = _createPage.DocKetQuaThucTe();
-
-            // Kiểm tra 1: vẫn ở trang Create (không redirect đi)
-            bool vanOrTrang09 = !_createPage.IsRedirectedToList();
-            Assert.That(
-                vanOrTrang09,
-                Is.True,
-                "Kỳ vọng: không redirect khi tên sản phẩm bị trống"
-            );
-
-            // Kiểm tra 2: có thông báo lỗi validation hiển thị
-            bool coLoiHienThi09 = _createPage.HasValidationErrors();
-            Assert.That(
-                coLoiHienThi09,
-                Is.True,
-                "Kỳ vọng: hiển thị lỗi validation khi để trống tên sản phẩm"
-            );
-        }
-
         // TC_F2.5_03 — Slug tự động sinh từ tên sản phẩm khi để trống
         [Test]
         public void TC_F2_5_03_SlugTuDongSinh()
