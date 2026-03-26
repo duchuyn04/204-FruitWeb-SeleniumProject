@@ -33,6 +33,10 @@
     <None Update="TestData\**\*.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <!-- Copy file ảnh/test trong TestData/Images sang output khi build -->
+    <None Update="TestData\Images\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
