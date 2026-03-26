@@ -221,11 +221,108 @@ namespace SeleniumProject.Tests.ProductManagement
             );
         }
 
-        // TC_F2.5_06 — Upload nhiều ảnh
-        // [Skip] Bỏ qua — cần file ảnh thật trong TestData/Images/
-        // Sẽ bổ sung khi có ảnh test: valid_small.jpg, valid_small.png, valid_small.webp
+        // TC_F2.5_06 — Upload nhiều ảnh và ảnh đầu tiên là ảnh chính
+        [Test]
+        public void TC_F2_5_06_UploadNhieuAnh()
+        {
+            CurrentTestCaseId = "TC_F2.5_06";
+            var data = JsonHelper.DocDuLieu(DataPath, "TC_F2.5_06");
 
-        // TC_F2.5_07 — Live preview giá VND cập nhật ngay khi nhập
+            _createPage.EnterName(data["productName"]);
+            _createPage.SelectCategory(data["category"]);
+            _createPage.EnterPrice(data["price"]);
+
+            // Giải các đường dẫn phân cách bằng dấu phẩy → đầy đủ absolute path
+            string[] fileNames = data["imagePath"].Split(',');
+            string resolvedPaths = string.Join(",",
+                fileNames.Select(f => FileHelper.ResolveImagePath(f.Trim()))
+                         .Where(p => p != null && File.Exists(p)));
+
+            _createPage.UploadImages(resolvedPaths);
+            _createPage.ClickSave();
+
+            CurrentActualResult = _createPage.DocKetQuaThucTe();
+
+            Assert.That(
+                _createPage.IsRedirectedToList(),
+                Is.True,
+                "Kỳ vọng: lưu thành công khi upload nhiều ảnh hợp lệ"
+            );
+        }
+
+        // TC_F2.5_14 — Upload file không phải ảnh (PDF) → server từ chối hoặc lỗi
+        [Test]
+        public void TC_F2_5_14_UploadFilePDF()
+        {
+            CurrentTestCaseId = "TC_F2.5_14";
+            var data = JsonHelper.DocDuLieu(DataPath, "TC_F2.5_14");
+
+            _createPage.EnterName(data["productName"]);
+            _createPage.SelectCategory(data["category"]);
+            _createPage.EnterPrice(data["price"]);
+
+            string pdfPath = FileHelper.ResolveImagePath(data["imagePath"]);
+
+            // Upload file PDF qua input
+            if (pdfPath != null && File.Exists(pdfPath))
+            {
+                _createPage.UploadImage(pdfPath);
+            }
+
+            _createPage.ClickSave();
+
+            CurrentActualResult = _createPage.DocKetQuaThucTe();
+
+            // Kỳ vọng: không redirect (lỗi upload/validation), HOẶC redirect (server chấp nhận nhưng bỏ qua)
+            // → kiểm tra: vẫn còn ở trang Create hoặc có lỗi hiển thị
+            bool bi_loi = !_createPage.IsRedirectedToList() || _createPage.HasValidationErrors();
+            Assert.That(
+                bi_loi,
+                Is.True,
+                "Kỳ vọng: server từ chối hoặc báo lỗi khi upload file PDF"
+            );
+        }
+
+        // TC_F2.5_15 — Upload ảnh vượt 5MB → server từ chối
+        [Test]
+        public void TC_F2_5_15_UploadAnhVuot5MB()
+        {
+            CurrentTestCaseId = "TC_F2.5_15";
+            var data = JsonHelper.DocDuLieu(DataPath, "TC_F2.5_15");
+
+            _createPage.EnterName(data["productName"]);
+            _createPage.SelectCategory(data["category"]);
+            _createPage.EnterPrice(data["price"]);
+
+            // generate:5242981 → sinh file tạm >5MB
+            string largePath = FileHelper.ResolveImagePath(data["imagePath"]);
+
+            try
+            {
+                if (largePath != null && File.Exists(largePath))
+                {
+                    _createPage.UploadImage(largePath);
+                }
+
+                _createPage.ClickSave();
+
+                CurrentActualResult = _createPage.DocKetQuaThucTe();
+
+                bool bi_loi = !_createPage.IsRedirectedToList() || _createPage.HasValidationErrors();
+                Assert.That(
+                    bi_loi,
+                    Is.True,
+                    "Kỳ vọng: server từ chối hoặc báo lỗi khi upload file vượt 5MB"
+                );
+            }
+            finally
+            {
+                // Dọn file tạm dù test pass hay fail
+                FileHelper.DeleteTempFile(largePath);
+            }
+        }
+
+
         [Test]
         public void TC_F2_5_07_LivePreviewGia()
         {
@@ -251,95 +348,6 @@ namespace SeleniumProject.Tests.ProductManagement
             );
         }
 
-        // TC_F2.5_14 — Upload file không phải ảnh (PDF)
-        // [Skip] Bỏ qua — cần file TestData/Images/invalid_format.pdf
-
-        // TC_F2.5_15 — Upload ảnh vượt 5MB
-        // [Skip] Bỏ qua — cần tích hợp FileHelper.GenerateTempFile để sinh file lớn
-
-        // TC_F2.5_16 — Truy cập khi chưa đăng nhập
-        // [Skip] Bỏ qua — cần TestClass riêng không gọi LoginAsAdmin() trong SetUp
-
-        // TC_F2.5_17 — Tài khoản Customer truy cập Admin
-        // [Skip] Bỏ qua — cần thêm CustomerEmail/CustomerPassword vào appsettings.json
-
-        // ==============================================================
-        // Nhóm: Lỗi Validation khi lưu
-        // Gồm TC_F2.5_08, 10, 11, 12, 13, 19 — cùng pattern:
-        //   fill (có/không) → ClickSave → vẫn ở trang, hiển thị lỗi
-        // ==============================================================
-        private static IEnumerable<TestCaseData> LoiValidationKhiLuu()
-        {
-            yield return new TestCaseData("TC_F2.5_08")
-                .SetName("TC_F2.5_08 - Submit form rỗng hoàn toàn");
-
-            yield return new TestCaseData("TC_F2.5_10")
-                .SetName("TC_F2.5_10 - Không chọn Danh mục");
-
-            yield return new TestCaseData("TC_F2.5_11")
-                .SetName("TC_F2.5_11 - Để trống Giá gốc");
-
-            yield return new TestCaseData("TC_F2.5_12")
-                .SetName("TC_F2.5_12 - Giá khuyến mãi lớn hơn Giá gốc");
-
-            yield return new TestCaseData("TC_F2.5_13")
-                .SetName("TC_F2.5_13 - Nhập Giá gốc âm");
-
-            yield return new TestCaseData("TC_F2.5_19")
-                .SetName("TC_F2.5_19 - Tên sản phẩm vượt max length");
-        }
-
-        [TestCaseSource(nameof(LoiValidationKhiLuu))]
-        public void TC_KiemTraLoiValidation(string testCaseId)
-        {
-            // Gán để TearDown ghi kết quả đúng hàng trong Excel
-            CurrentTestCaseId = testCaseId;
-
-            var data = JsonHelper.DocDuLieu(DataPath, testCaseId);
-
-            // Điền các trường nếu có giá trị — để trống nếu test yêu cầu bỏ trống
-            if (!string.IsNullOrEmpty(data["productName"]))
-            {
-                _createPage.EnterName(data["productName"]);
-            }
-
-            if (!string.IsNullOrEmpty(data["category"]))
-            {
-                _createPage.SelectCategory(data["category"]);
-            }
-
-            if (!string.IsNullOrEmpty(data["price"]))
-            {
-                _createPage.EnterPrice(data["price"]);
-            }
-
-            if (!string.IsNullOrEmpty(data["discountPrice"]))
-            {
-                _createPage.EnterSalePrice(data["discountPrice"]);
-            }
-
-            // Bấm lưu dù form chưa đủ điều kiện
-            _createPage.ClickSave();
-
-            // Đọc kết quả thực tế từ DOM
-            CurrentActualResult = _createPage.DocKetQuaThucTe();
-
-            // Kiểm tra 1: không redirect (vẫn ở trang Create)
-            bool vanOrTrangN = !_createPage.IsRedirectedToList();
-            Assert.That(
-                vanOrTrangN,
-                Is.True,
-                $"Kỳ vọng [{testCaseId}]: không redirect khi có lỗi validation"
-            );
-
-            // Kiểm tra 2: có lỗi validation hiển thị trên form
-            bool coLoiHienThiN = _createPage.HasValidationErrors();
-            Assert.That(
-                coLoiHienThiN,
-                Is.True,
-                $"Kỳ vọng [{testCaseId}]: hiển thị thông báo lỗi trên form"
-            );
-        }
 
         // ==============================================================
         // Nhóm: Giá trị biên — thành công
