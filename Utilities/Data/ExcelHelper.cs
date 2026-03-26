@@ -223,7 +223,7 @@ namespace SeleniumProject.Utilities
                 cellResult.SetCellValue(isPassed ? "Passed" : "Failed");
                 cellResult.CellStyle = isPassed ? stylePass : styleFail;
 
-                // ── Nhúng ảnh vào cột M (index 12) ──────────────────────────────
+                // Nhúng ảnh vào cột M (index 12)
                 // Nếu chạy lại test nhiều lần: ảnh mới overlay lên ảnh cũ (ảnh mới hiển thị trên cùng)
                 if (!isPassed && !string.IsNullOrEmpty(duongDanScreenshot) && File.Exists(duongDanScreenshot))
                 {

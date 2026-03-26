@@ -9,11 +9,11 @@ namespace SeleniumProject.Pages
         private readonly IWebDriver _driver;
         private readonly WaitHelper _wait;
 
-        // URL
-        private const string CheckoutUrl = "https://vuatraicay.site/Checkout";
-        private const string CartUrl     = "https://vuatraicay.site/Cart";
-        private const string LoginUrl    = "https://vuatraicay.site/Account/Login";
-        private const string ShopUrl     = "https://vuatraicay.site/Shop";
+        // URL — lấy từ BaseUrl trong appsettings.json
+        private readonly string _checkoutUrl;
+        private readonly string _cartUrl;
+        private readonly string _loginUrl;
+        private readonly string _shopUrl;
 
         // ===== LOCATORS – Login =====
         private By EmailInput    => By.Id("Email");
@@ -60,10 +60,17 @@ namespace SeleniumProject.Pages
         private By ToastBody => By.CssSelector(".toast-body");
 
         // =====================================================================
-        public CheckoutPage(IWebDriver driver)
+        public CheckoutPage(IWebDriver driver, string baseUrl = "")
         {
-            _driver = driver;
-            _wait   = new WaitHelper(driver);
+            _driver      = driver;
+            _wait        = new WaitHelper(driver);
+
+            // Build URLs từ baseUrl (xóa dấu sàng cuối cho gọn)
+            var root     = baseUrl.TrimEnd('/');
+            _checkoutUrl = $"{root}/Checkout";
+            _cartUrl     = $"{root}/Cart";
+            _loginUrl    = $"{root}/Account/Login";
+            _shopUrl     = $"{root}/Shop";
         }
 
         // =====================================================================
@@ -73,25 +80,25 @@ namespace SeleniumProject.Pages
         /// <summary>Đăng nhập</summary>
         public void Login(string email, string password)
         {
-            _driver.Navigate().GoToUrl(LoginUrl);
+            _driver.Navigate().GoToUrl(_loginUrl);
             _wait.SlowType(EmailInput, email);
             _wait.SlowType(PasswordInput, password);
             _wait.WaitForClickable(LoginButton).Click();
-            _wait.WaitForUrlContains("vuatraicay.site");
-            Thread.Sleep(800);
+            _wait.WaitForUrlNotContains("/Account/Login");
+            Thread.Sleep(400);
         }
 
         /// <summary>Mở trang Checkout trực tiếp</summary>
         public void Open()
         {
-            _driver.Navigate().GoToUrl(CheckoutUrl);
+            _driver.Navigate().GoToUrl(_checkoutUrl);
             Thread.Sleep(600);
         }
 
         /// <summary>Mở giỏ hàng</summary>
         public void OpenCart()
         {
-            _driver.Navigate().GoToUrl(CartUrl);
+            _driver.Navigate().GoToUrl(_cartUrl);
             Thread.Sleep(600);
         }
 
@@ -121,7 +128,7 @@ namespace SeleniumProject.Pages
             Thread.Sleep(800);
 
             // Bước 2: Vào trang Giỏ hàng
-            _driver.Navigate().GoToUrl(CartUrl);
+            _driver.Navigate().GoToUrl(_cartUrl);
             Thread.Sleep(800);
 
             // Bước 3: Click nút THANH TOÁN trên trang Cart
@@ -149,7 +156,7 @@ namespace SeleniumProject.Pages
                 _wait.WaitForClickable(BuyNowButton).Click();
                 Thread.Sleep(1000);
                 if (!_driver.Url.Contains("/Checkout"))
-                    _driver.Navigate().GoToUrl(CheckoutUrl);
+                    _driver.Navigate().GoToUrl(_checkoutUrl);
             }
             catch
             {
@@ -159,7 +166,7 @@ namespace SeleniumProject.Pages
                     Thread.Sleep(800);
                 }
                 catch { }
-                _driver.Navigate().GoToUrl(CheckoutUrl);
+                _driver.Navigate().GoToUrl(_checkoutUrl);
             }
 
             Thread.Sleep(800);
