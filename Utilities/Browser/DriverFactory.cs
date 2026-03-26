@@ -10,7 +10,7 @@ namespace SeleniumProject.Utilities
     {
         public static IWebDriver InitializeDriver(bool headless = false)
         {
-            new DriverManager().SetUpDriver(new ChromeConfig());
+            new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
 
             var options = new ChromeOptions();
 
