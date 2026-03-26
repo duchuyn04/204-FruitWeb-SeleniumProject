@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using System.IO;
 using ClosedXML.Excel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace SeleniumProject.Utilities
 {
@@ -141,12 +141,13 @@ namespace SeleniumProject.Utilities
             }
         }
 
-        // Ghi kết quả vào đúng hàng trong sheet "TC_Product Management" của file 204.xlsx
-        // Tìm hàng có Test Case ID (cột C) khớp với testCaseId
-        // Sau đó ghi vào:
-        //   Cột J (10): Actual Result
-        //   Cột K (11): Testscripts (tên method)
-        //   Cột L (12): Result (Passed/Failed)
+        // Ghi kết quả vào đúng hàng trong sheet chỉ định của file Excel (dùng NPOI).
+        // Tìm hàng có Test Case ID (cột C = index 2) khớp với testCaseId.
+        // Ghi vào:
+        //   Cột J (index 9):  Actual Result
+        //   Cột K (index 10): Testscripts (tên method)
+        //   Cột L (index 11): Result (Passed/Failed)
+        //   Cột M (index 12): Screenshot — nhúng ảnh thật vào ô (NPOI)
         public void GhiKetQuaVaoSheet(
             string testCaseId,
             string tenMethod,
@@ -157,93 +158,100 @@ namespace SeleniumProject.Utilities
         {
             if (!File.Exists(_filePath)) return;
             if (string.IsNullOrEmpty(testCaseId)) return;
-
-            // Nếu không chỉ định sheet → bỏ qua (test class chưa set CurrentSheetName)
             if (string.IsNullOrEmpty(sheetName)) return;
 
             lock (_lock)
             {
-                XLWorkbook workbook = new XLWorkbook(_filePath);
+                // Đọc file vào bộ nhớ để NPOI có thể ghi đè 
+                XSSFWorkbook workbook;
+                using (var readStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read))
+                    workbook = new XSSFWorkbook(readStream);
 
-                // Kiểm tra sheet tồn tại không
-                bool sheetTonTai = workbook.Worksheets.Any(w => w.Name == sheetName);
-                if (!sheetTonTai)
+                var sheet = workbook.GetSheet(sheetName);
+                if (sheet == null)
                 {
-                    workbook.Dispose();
+                    workbook.Close();
                     return;
                 }
 
-                IXLWorksheet sheet = workbook.Worksheet(sheetName);
-
-                // Tìm hàng có Test Case ID trong cột C (3)
-                // Lưu ý: các hàng bị merge — chỉ hàng đầu của nhóm có giá trị
+                // Tìm hàng có TestCase ID trong cột C (index 2)
                 int dongTimThay = -1;
-
-                foreach (IXLCell cell in sheet.Column(3).CellsUsed())
+                for (int i = 0; i <= sheet.LastRowNum; i++)
                 {
-                    if (cell.GetString().Trim() == testCaseId)
+                    var r = sheet.GetRow(i);
+                    if (r == null) continue;
+                    var c = r.GetCell(2); // cột C
+                    if (c == null) continue;
+                    if (c.ToString()?.Trim() == testCaseId)
                     {
-                        dongTimThay = cell.Address.RowNumber;
+                        dongTimThay = i; // 0-based
                         break;
                     }
                 }
 
-                // Không tìm thấy testCaseId trong sheet — bỏ qua
                 if (dongTimThay == -1)
                 {
-                    workbook.Dispose();
+                    workbook.Close();
                     return;
                 }
 
-                // Đọc Expected Result từ cột I (9) để điền vào Actual Result khi Pass
-                string expectedResult = sheet.Cell(dongTimThay, 9).GetString().Trim();
+                var dongGhi = sheet.GetRow(dongTimThay) ?? sheet.CreateRow(dongTimThay);
 
-                // Ghi Actual Result (cột J = 10)
-                // Ghi đúng kết quả thực tế quan sát từ trình duyệt
-                IXLCell cellActual = sheet.Cell(dongTimThay, 10);
-                cellActual.Value = actualResult;
+                // Tạo style chung
+                ICellStyle stylePass = workbook.CreateCellStyle();
+                stylePass.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+                stylePass.FillPattern = FillPattern.SolidForeground;
+                IFont fontBold = workbook.CreateFont();
+                fontBold.IsBold = true;
+                stylePass.SetFont(fontBold);
 
-                // Ghi Testscripts — tên method tương ứng (cột K = 11)
-                sheet.Cell(dongTimThay, 11).Value = tenMethod;
+                ICellStyle styleFail = workbook.CreateCellStyle();
+                styleFail.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+                styleFail.FillPattern = FillPattern.SolidForeground;
+                styleFail.SetFont(fontBold);
 
-                // Ghi Result: Passed hoặc Failed (cột L = 12)
-                IXLCell cellResult = sheet.Cell(dongTimThay, 12);
-                cellResult.Value = isPassed ? "Passed" : "Failed";
-                cellResult.Style.Font.Bold = true;
+                // Ghi Actual Result (cột J = index 9)
+                var cellActual = dongGhi.GetCell(9) ?? dongGhi.CreateCell(9);
+                cellActual.SetCellValue(actualResult);
 
-                // Tô màu ô Result
-                if (isPassed)
-                {
-                    cellResult.Style.Fill.BackgroundColor = XLColor.LightGreen;
-                }
-                else
-                {
-                    cellResult.Style.Fill.BackgroundColor = XLColor.LightSalmon;
-                }
-                
-                // Cột M (13): Screenshot — ghi đường dẫn ảnh thay vì nhúng ảnh trực tiếp
-                // Lý do: ClosedXML.Drawings có bug với picture.Delete() và workbook.Save()
-                // khi file đã có ảnh nhúng sẵn → dùng hyperlink đơn giản và ổn định hơn
-                IXLCell cellScreenshot = sheet.Cell(dongTimThay, 13);
+                // Ghi Testscripts — tên method (cột K = index 10)
+                var cellScript = dongGhi.GetCell(10) ?? dongGhi.CreateCell(10);
+                cellScript.SetCellValue(tenMethod);
+
+                // Ghi Result (cột L = index 11)
+                var cellResult = dongGhi.GetCell(11) ?? dongGhi.CreateCell(11);
+                cellResult.SetCellValue(isPassed ? "Passed" : "Failed");
+                cellResult.CellStyle = isPassed ? stylePass : styleFail;
+
+                // ── Nhúng ảnh vào cột M (index 12) ──────────────────────────────
+                // Nếu chạy lại test nhiều lần: ảnh mới overlay lên ảnh cũ (ảnh mới hiển thị trên cùng)
                 if (!isPassed && !string.IsNullOrEmpty(duongDanScreenshot) && File.Exists(duongDanScreenshot))
                 {
-                    // Test FAIL: ghi đường dẫn ảnh dưới dạng hyperlink có thể click
-                    string tenFile = Path.GetFileName(duongDanScreenshot);
-                    cellScreenshot.Value = tenFile;
-                    cellScreenshot.SetHyperlink(new XLHyperlink(duongDanScreenshot));
-                    cellScreenshot.Style.Font.FontColor   = XLColor.Blue;
-                    cellScreenshot.Style.Font.Underline   = XLFontUnderlineValues.Single;
-                }
-                else
-                {
-                    // Test PASS: xóa link cũ (nếu có từ lần fail trước)
-                    cellScreenshot.Value = "";
-                    cellScreenshot.SetHyperlink(null);
-                    cellScreenshot.Style.Font.FontColor = XLColor.Black;
+                    // Đặt chiều cao hàng đủ lớn để thấy ảnh (~120px)
+                    dongGhi.HeightInPoints = 90;
+
+                    // Load ảnh PNG vào workbook
+                    byte[] anhBytes = File.ReadAllBytes(duongDanScreenshot);
+                    int pictureIdx = workbook.AddPicture(anhBytes, PictureType.PNG);
+
+                    // Tạo anchor: Col1=12(M), Row1=dongTimThay → Col2=13(N), Row2=dongTimThay+1
+                    IDrawing drawing = sheet.CreateDrawingPatriarch();
+                    ICreationHelper helper = workbook.GetCreationHelper();
+                    IClientAnchor anchor = helper.CreateClientAnchor();
+                    anchor.Col1 = 12;
+                    anchor.Row1 = dongTimThay;
+                    anchor.Col2 = 13;
+                    anchor.Row2 = dongTimThay + 1;
+                    anchor.AnchorType = AnchorType.MoveAndResize;
+
+                    drawing.CreatePicture(anchor, pictureIdx);
                 }
 
-                workbook.Save();
-                workbook.Dispose();
+                // Lưu file
+                using (var writeStream = new FileStream(_filePath, FileMode.Create, FileAccess.Write))
+                    workbook.Write(writeStream);
+
+                workbook.Close();
             }
         }
     }
