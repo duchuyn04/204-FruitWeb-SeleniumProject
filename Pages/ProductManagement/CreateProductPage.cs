@@ -179,6 +179,21 @@ namespace SeleniumProject.Pages.ProductManagement
             _wait.UploadFile(ImageFileInput, absoluteFilePath);
         }
 
+        // Upload nhiều ảnh — nhận danh sách đường dẫn phân cách bằng dấu phẩy
+        // Ví dụ: "C:\img1.jpg,C:\img2.png" → upload lần lượt từng file
+        public void UploadImages(string commaSeparatedPaths)
+        {
+            string[] paths = commaSeparatedPaths.Split(',');
+            foreach (string path in paths)
+            {
+                string trimmed = path.Trim();
+                if (!string.IsNullOrEmpty(trimmed))
+                {
+                    UploadImage(trimmed);
+                }
+            }
+        }
+
         // --- Tags ---
 
         // Nhập 1 tag rồi nhấn Enter để thêm thành badge
