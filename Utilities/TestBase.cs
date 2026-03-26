@@ -11,6 +11,16 @@ namespace SeleniumProject.Utilities
         protected IWebDriver Driver { get; private set; } = null!;
         protected WaitHelper Wait { get; private set; } = null!;
 
+        // Đặt true trong subclass muốn dùng [OneTimeSetUp] — driver sẽ không bị tạo mới / quit mỗi test
+        protected bool UseSharedDriver { get; set; } = false;
+
+        // Gọi từ [OneTimeSetUp] của subclass dùng shared driver — khởi tạo driver và login
+        protected void InitSharedDriver()
+        {
+            Driver = DriverFactory.InitializeDriver(Headless);
+            Wait = new WaitHelper(Driver, Timeout);
+        }
+
         // Mỗi test method tự gán vào đầu hàm để TearDown biết đang chạy TC nào
         // Ví dụ: CurrentTestCaseId = "TC_F2.5_01";
         protected string CurrentTestCaseId { get; set; } = "";
@@ -86,6 +96,17 @@ namespace SeleniumProject.Utilities
             }
         }
 
+        // Tài khoản Customer — dùng trong TC_F2.5_17 (Customer truy cập Admin)
+        protected static string CustomerEmail
+        {
+            get { return Config["CustomerEmail"] ?? ""; }
+        }
+
+        protected static string CustomerPassword
+        {
+            get { return Config["CustomerPassword"] ?? ""; }
+        }
+
         // Đăng nhập bằng tài khoản admin — dùng chung cho mọi test cần quyền admin
         // Gọi trong [SetUp] của từng test class thay vì lặp lại login code
         protected void LoginAsAdmin()
@@ -97,6 +118,15 @@ namespace SeleniumProject.Utilities
             // Chờ đến khi URL không còn ở trang login — tức là redirect đã hoàn tất
             // Nếu không chờ, test tiếp theo gọi Page.Open() ngay khi browser vẫn đang redirect
             // gây ra race condition và browser bị treo ở dashboard
+            Wait.WaitForUrlNotContains("/Account/Login");
+        }
+
+        // Đăng nhập bằng tài khoản Customer
+        protected void LoginAsCustomer()
+        {
+            LoginPage loginPage = new LoginPage(Driver, BaseUrl);
+            loginPage.Open();
+            loginPage.Login(CustomerEmail, CustomerPassword);
             Wait.WaitForUrlNotContains("/Account/Login");
         }
 
@@ -140,9 +170,12 @@ namespace SeleniumProject.Utilities
         [SetUp]
         public void SetUp()
         {
-            Driver = DriverFactory.InitializeDriver(Headless);
-            Wait = new WaitHelper(Driver, Timeout);
-            // Không navigate ở đây — mỗi test class tự gọi Page.Open()
+            // UseSharedDriver = true → driver được tạo ở [OneTimeSetUp] của subclass, không tạo lại
+            if (!UseSharedDriver)
+            {
+                Driver = DriverFactory.InitializeDriver(Headless);
+                Wait = new WaitHelper(Driver, Timeout);
+            }
         }
 
         [TearDown]
@@ -192,8 +225,12 @@ namespace SeleniumProject.Utilities
                 }
             }
 
-            Driver?.Quit();
-            Driver?.Dispose();
+            // UseSharedDriver = true → driver giữ sống cho test tiếp theo, chỉ quit ở [OneTimeTearDown]
+            if (!UseSharedDriver)
+            {
+                Driver?.Quit();
+                Driver?.Dispose();
+            }
         }
 
         // Chụp và lưu ảnh màn hình vào thư mục Reports/Screenshots/{Module}/
