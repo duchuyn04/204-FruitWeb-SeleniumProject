@@ -88,7 +88,7 @@ namespace SeleniumProject.Pages.Auth
         // Kiểm tra đã đăng nhập thành công chưa (dựa vào URL redirect về trang chủ)
         public bool IsLoginSuccessful()
         {
-            return _driver.Url.Contains("/Home") || _driver.Url.Contains("vuatraicay.site/");
+            return _driver.Url.Contains("/Home") || _driver.Url.Contains("localhost:5270/");
         }
 
         // Lấy URL hiện tại

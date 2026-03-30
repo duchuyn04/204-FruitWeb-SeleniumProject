@@ -1,181 +1,292 @@
-﻿[
+[
   {
-    "testCase": "TC_CHECKOUT_01",
+    "testCase": "TC_CHECKOUT_F5_1_01",
     "testCaseId": "F5.1_01",
     "description": "Kiểm tra hiển thị trang Checkout",
-    "preCondition": "Người dùng đã thêm ít nhất 1 sản phẩm vào giỏ hàng",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
-    "expectedResult": "checkout_displayed"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
   },
   {
-    "testCase": "TC_CHECKOUT_02",
+    "testCase": "TC_CHECKOUT_F5_2_01",
     "testCaseId": "F5.2_01",
     "description": "Kiểm tra không cho thanh toán khi giỏ hàng rỗng",
-    "preCondition": "Cart rỗng",
-    "checkoutUrl": "https://vuatraicay.site/Checkout",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "expectedResult": "redirect_or_empty_message"
+    "checkoutUrl": "http://localhost:5270/Checkout"
   },
   {
-    "testCase": "TC_CHECKOUT_03",
+    "testCase": "TC_CHECKOUT_F5_4_01",
+    "testCaseId": "F5.4_01",
+    "description": "Khách vãng lai điền thủ công form địa chỉ giao hàng",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "0901234567",
+    "streetAddress": "123 Đường ABC"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_01",
     "testCaseId": "F5.5_01",
     "description": "Kiểm tra bắt buộc nhập Họ tên",
-    "preCondition": "Người dùng đang ở trang Checkout",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "",
     "phone": "0901234567",
-    "streetAddress": "123 Đường ABC",
-    "expectedResult": "error_fullname_required",
-    "expectedErrorMessage": "The First Name field is required"
+    "streetAddress": "123 Đường ABC"
   },
   {
-    "testCase": "TC_CHECKOUT_04",
+    "testCase": "TC_CHECKOUT_F5_5_02",
     "testCaseId": "F5.5_02",
     "description": "Kiểm tra bắt buộc nhập số điện thoại",
-    "preCondition": "Người dùng đang ở trang Checkout",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "",
-    "streetAddress": "123 Đường ABC",
-    "expectedResult": "error_phone_required",
-    "expectedErrorMessage": "The Mobile field is required"
+    "streetAddress": "123 Đường ABC"
   },
   {
-    "testCase": "TC_CHECKOUT_05",
+    "testCase": "TC_CHECKOUT_F5_5_03",
     "testCaseId": "F5.5_03",
-    "description": "Kiểm tra số điện thoại phải đủ 10-11 số",
-    "preCondition": "Người dùng đang ở trang Checkout",
+    "description": "Kiểm tra SĐT phải đủ 10-11 số (nhập 12 số)",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
-    "phone": "12345678909",
-    "streetAddress": "123 Đường ABC",
-    "expectedResult": "error_phone_length",
-    "expectedErrorMessage": "10-11"
+    "phone": "081208302044",
+    "streetAddress": "123 Đường ABC"
   },
   {
-    "testCase": "TC_CHECKOUT_06",
+    "testCase": "TC_CHECKOUT_F5_5_04",
     "testCaseId": "F5.5_04",
     "description": "Kiểm tra bắt buộc nhập địa chỉ",
-    "preCondition": "Người dùng đang ở trang Checkout",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
-    "streetAddress": "",
-    "expectedResult": "error_address_required",
-    "expectedErrorMessage": "số nhà, tên đường"
+    "streetAddress": ""
   },
   {
-    "testCase": "TC_CHECKOUT_07",
+    "testCase": "TC_CHECKOUT_F5_5_05",
     "testCaseId": "F5.5_05",
     "description": "Kiểm tra bắt buộc chọn Tỉnh/Thành phố",
-    "preCondition": "Người dùng đang ở trang Checkout",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
     "streetAddress": "123 Đường ABC",
-    "province": "",
-    "expectedResult": "error_province_required",
-    "expectedErrorMessage": "Tỉnh/Thành phố"
+    "province": ""
   },
   {
-    "testCase": "TC_CHECKOUT_08",
+    "testCase": "TC_CHECKOUT_F5_5_06",
     "testCaseId": "F5.5_06",
     "description": "Kiểm tra bắt buộc chọn Quận/Huyện",
-    "preCondition": "Người dùng đã chọn Tỉnh/Thành phố",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
     "streetAddress": "123 Đường ABC",
     "province": "Thành phố Hồ Chí Minh",
-    "district": "",
-    "expectedResult": "error_district_required",
-    "expectedErrorMessage": "Quận/Huyện"
+    "district": ""
   },
   {
-    "testCase": "TC_CHECKOUT_09",
+    "testCase": "TC_CHECKOUT_F5_5_07",
     "testCaseId": "F5.5_07",
     "description": "Kiểm tra bắt buộc chọn Phường/Xã",
-    "preCondition": "Người dùng đã chọn Quận/Huyện",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
     "streetAddress": "123 Đường ABC",
     "province": "Thành phố Hồ Chí Minh",
     "district": "Quận 1",
-    "ward": "",
-    "expectedResult": "error_ward_required",
-    "expectedErrorMessage": "Phường/Xã"
+    "ward": ""
   },
   {
-    "testCase": "TC_CHECKOUT_10",
-    "testCaseId": "F5.6_01",
-    "description": "Kiểm tra danh sách Quận/Huyện thay đổi theo Tỉnh",
-    "preCondition": "Người dùng đang ở trang Checkout",
+    "testCase": "TC_CHECKOUT_F5_5_08",
+    "testCaseId": "F5.5_08",
+    "description": "Kiểm tra SĐT chứa chữ cái bị từ chối",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
-    "province": "Thành phố Hồ Chí Minh",
-    "expectedResult": "districts_loaded"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "abcd123456",
+    "streetAddress": "123 Đường ABC"
   },
   {
-    "testCase": "TC_CHECKOUT_11",
-    "testCaseId": "F5.6_02",
-    "description": "Kiểm tra danh sách Phường/Xã thay đổi theo Quận",
-    "preCondition": "Người dùng đã chọn Tỉnh/TP",
+    "testCase": "TC_CHECKOUT_F5_5_09",
+    "testCaseId": "F5.5_09",
+    "description": "Kiểm tra SĐT chứa ký tự đặc biệt bị từ chối",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
-    "province": "Thành phố Hồ Chí Minh",
-    "district": "Quận 1",
-    "expectedResult": "wards_loaded"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "090-123-4567",
+    "streetAddress": "123 Đường ABC"
   },
   {
-    "testCase": "TC_CHECKOUT_12",
+    "testCase": "TC_CHECKOUT_F5_5_10",
+    "testCaseId": "F5.5_10",
+    "description": "Kiểm tra họ tên quá 100 ký tự",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "phone": "0901234567",
+    "streetAddress": "123 Đường ABC"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_11",
+    "testCaseId": "F5.5_11",
+    "description": "Kiểm tra địa chỉ quá 200 ký tự",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "0901234567",
+    "streetAddress": "Số 1 Đường AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Phường 1"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_12",
+    "testCaseId": "F5.5_12",
+    "description": "Kiểm tra submit khi tất cả trường bắt buộc bỏ trống",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_13",
+    "testCaseId": "F5.5_13",
+    "description": "Kiểm tra họ tên chỉ toàn khoảng trắng bị từ chối",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "phone": "0901234567",
+    "streetAddress": "123 Đường ABC"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_14",
+    "testCaseId": "F5.5_14",
+    "description": "Kiểm tra SĐT 10 số hợp lệ được chấp nhận (positive)",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "0901234567",
+    "streetAddress": "123 Đường ABC"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_5_15",
+    "testCaseId": "F5.5_15",
+    "description": "Kiểm tra SĐT 11 số hợp lệ được chấp nhận (positive)",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyễn Văn A",
+    "phone": "09012345678",
+    "streetAddress": "123 Đường ABC"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_7_01",
+    "testCaseId": "F5.7_01",
+    "description": "Kiểm tra tính toán Subtotal đúng theo sản phẩm trong đơn",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_7_02",
+    "testCaseId": "F5.7_02",
+    "description": "Kiểm tra tên sản phẩm hiển thị đúng trong Order Summary",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "expectedProductName": "Nho"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_7_03",
+    "testCaseId": "F5.7_03",
+    "description": "Kiểm tra giá và số lượng hiển thị đúng trong Order Summary",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_8_01",
+    "testCaseId": "F5.8_01",
+    "description": "Kiểm tra hiển thị phí vận chuyển trong Order Summary",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_8_02",
+    "testCaseId": "F5.8_02",
+    "description": "Kiểm tra phí ship khớp giữa Cart và Checkout",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_9_01",
+    "testCaseId": "F5.9_01",
+    "description": "Kiểm tra tổng tiền thanh toán hiển thị đúng",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_9_02",
+    "testCaseId": "F5.9_02",
+    "description": "Kiểm tra Tổng = Tạm tính + Phí ship",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_10_01",
     "testCaseId": "F5.10_01",
-    "description": "Kiểm tra chọn phương thức thanh toán khi nhận hàng (COD)",
-    "preCondition": "Người dùng đang ở trang Checkout",
+    "description": "Kiểm tra chọn phương thức thanh toán COD",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
-    "paymentMethod": "COD",
-    "expectedResult": "cod_selected"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
   },
   {
-    "testCase": "TC_CHECKOUT_13",
+    "testCase": "TC_CHECKOUT_F5_10_02",
+    "testCaseId": "F5.10_02",
+    "description": "Kiểm tra COD được chọn mặc định khi vào trang Checkout",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_11_01",
     "testCaseId": "F5.11_01",
-    "description": "Kiểm tra chọn phương thức thanh toán chuyển khoản",
-    "preCondition": "Người dùng đang ở trang Checkout",
+    "description": "Kiểm tra chọn phương thức chuyển khoản",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
-    "paymentMethod": "Transfer",
-    "expectedResult": "bank_info_displayed"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
   },
   {
-    "testCase": "TC_CHECKOUT_14",
+    "testCase": "TC_CHECKOUT_F5_11_02",
+    "testCaseId": "F5.11_02",
+    "description": "Kiểm tra thông tin NH ẩn khi đổi từ Chuyển khoản về COD",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_12_01",
     "testCaseId": "F5.12_01",
     "description": "Kiểm tra đặt hàng thành công",
-    "preCondition": "Người dùng đã nhập đầy đủ thông tin",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "https://vuatraicay.site/Shop/Detail/nho-xanh-khong-hat-my",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyen Van A",
     "phone": "0901234567",
     "streetAddress": "123 Duong ABC",
@@ -183,8 +294,94 @@
     "district": "Quận 1",
     "ward": "Phường Bến Nghé",
     "notes": "Giao giờ hành chính",
-    "paymentMethod": "COD",
-    "expectedResult": "order_confirmed",
     "expectedConfirmationText": "Cảm ơn"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_12_02",
+    "testCaseId": "F5.12_02",
+    "description": "Kiểm tra giỏ hàng trống sau khi đặt hàng thành công",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyen Van A",
+    "phone": "0901234567",
+    "streetAddress": "123 Duong ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_12_03",
+    "testCaseId": "F5.12_03",
+    "description": "Kiểm tra mã đơn hàng xuất hiện trên trang xác nhận",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyen Van A",
+    "phone": "0901234567",
+    "streetAddress": "123 Duong ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_13_01",
+    "testCaseId": "F5.13_01",
+    "description": "Kiểm tra giỏ hàng được xóa sau khi đặt hàng",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyen Van A",
+    "phone": "0901234567",
+    "streetAddress": "123 Duong ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_15_01",
+    "testCaseId": "F5.15_01",
+    "description": "Kiểm tra chức năng Mua Ngay bỏ qua Cart",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_16_01",
+    "testCaseId": "F5.16_01",
+    "description": "Kiểm tra trang xác nhận đơn hàng hiển thị đủ thông tin",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "fullName": "Nguyen Van A",
+    "phone": "0901234567",
+    "streetAddress": "123 Duong ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_19_01",
+    "testCaseId": "F5.19_01",
+    "description": "Kiểm tra redirect về Login khi chưa đăng nhập",
+    "checkoutUrl": "http://localhost:5270/Checkout"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_20_01",
+    "testCaseId": "F5.20_01",
+    "description": "Kiểm tra redirect về Checkout sau khi đăng nhập thành công",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "checkoutUrl": "http://localhost:5270/Checkout"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_24_01",
+    "testCaseId": "F5.24_01",
+    "description": "Kiểm tra phí ship hiển thị khi chọn tỉnh thành",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province1": "Thành phố Hồ Chí Minh",
+    "province2": "Thành phố Hà Nội"
   }
 ]

@@ -48,7 +48,7 @@ namespace SeleniumProject.Utilities
                 string url = Config["BaseUrl"];
                 if (url == null)
                 {
-                    return "https://vuatraicay.site";
+                    return "http://localhost:5270";
                 }
                 return url;
             }

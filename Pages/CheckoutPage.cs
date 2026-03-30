@@ -9,11 +9,11 @@ namespace SeleniumProject.Pages
         private readonly IWebDriver _driver;
         private readonly WaitHelper _wait;
 
-        // URL — lấy từ BaseUrl trong appsettings.json
-        private readonly string _checkoutUrl;
-        private readonly string _cartUrl;
-        private readonly string _loginUrl;
-        private readonly string _shopUrl;
+        // URL
+        private const string CheckoutUrl = "http://localhost:5270/Checkout";
+        private const string CartUrl     = "http://localhost:5270/Cart";
+        private const string LoginUrl    = "http://localhost:5270/Account/Login";
+        private const string ShopUrl     = "http://localhost:5270/Shop";
 
         // ===== LOCATORS – Login =====
         private By EmailInput    => By.Id("Email");
@@ -60,17 +60,10 @@ namespace SeleniumProject.Pages
         private By ToastBody => By.CssSelector(".toast-body");
 
         // =====================================================================
-        public CheckoutPage(IWebDriver driver, string baseUrl = "")
+        public CheckoutPage(IWebDriver driver)
         {
-            _driver      = driver;
-            _wait        = new WaitHelper(driver);
-
-            // Build URLs từ baseUrl (xóa dấu sàng cuối cho gọn)
-            var root     = baseUrl.TrimEnd('/');
-            _checkoutUrl = $"{root}/Checkout";
-            _cartUrl     = $"{root}/Cart";
-            _loginUrl    = $"{root}/Account/Login";
-            _shopUrl     = $"{root}/Shop";
+            _driver = driver;
+            _wait   = new WaitHelper(driver);
         }
 
         // =====================================================================
@@ -80,25 +73,25 @@ namespace SeleniumProject.Pages
         /// <summary>Đăng nhập</summary>
         public void Login(string email, string password)
         {
-            _driver.Navigate().GoToUrl(_loginUrl);
+            _driver.Navigate().GoToUrl(LoginUrl);
             _wait.SlowType(EmailInput, email);
             _wait.SlowType(PasswordInput, password);
             _wait.WaitForClickable(LoginButton).Click();
-            _wait.WaitForUrlNotContains("/Account/Login");
-            Thread.Sleep(400);
+            _wait.WaitForUrlContains("localhost:5270");
+            Thread.Sleep(800);
         }
 
         /// <summary>Mở trang Checkout trực tiếp</summary>
         public void Open()
         {
-            _driver.Navigate().GoToUrl(_checkoutUrl);
+            _driver.Navigate().GoToUrl(CheckoutUrl);
             Thread.Sleep(600);
         }
 
         /// <summary>Mở giỏ hàng</summary>
         public void OpenCart()
         {
-            _driver.Navigate().GoToUrl(_cartUrl);
+            _driver.Navigate().GoToUrl(CartUrl);
             Thread.Sleep(600);
         }
 
@@ -128,7 +121,7 @@ namespace SeleniumProject.Pages
             Thread.Sleep(800);
 
             // Bước 2: Vào trang Giỏ hàng
-            _driver.Navigate().GoToUrl(_cartUrl);
+            _driver.Navigate().GoToUrl(CartUrl);
             Thread.Sleep(800);
 
             // Bước 3: Click nút THANH TOÁN trên trang Cart
@@ -156,7 +149,7 @@ namespace SeleniumProject.Pages
                 _wait.WaitForClickable(BuyNowButton).Click();
                 Thread.Sleep(1000);
                 if (!_driver.Url.Contains("/Checkout"))
-                    _driver.Navigate().GoToUrl(_checkoutUrl);
+                    _driver.Navigate().GoToUrl(CheckoutUrl);
             }
             catch
             {
@@ -166,7 +159,7 @@ namespace SeleniumProject.Pages
                     Thread.Sleep(800);
                 }
                 catch { }
-                _driver.Navigate().GoToUrl(_checkoutUrl);
+                _driver.Navigate().GoToUrl(CheckoutUrl);
             }
 
             Thread.Sleep(800);
@@ -492,6 +485,67 @@ namespace SeleniumProject.Pages
         {
             try { return _driver.FindElement(locator).Text; }
             catch { return string.Empty; }
+        }
+
+        // =====================================================================
+        // ORDER SUMMARY HELPERS
+        // =====================================================================
+
+        /// <summary>
+        /// Lấy toàn bộ text của khu vực Order Summary trên trang Checkout.
+        /// Thử tìm container riêng; nếu không tìm thấy, trả về body text.
+        /// </summary>
+        public string GetOrderSummaryText()
+        {
+            Thread.Sleep(500);
+            try
+            {
+                var candidates = new[]
+                {
+                    ".order-summary", ".checkout-summary", "[class*='order-summary']",
+                    "[class*='cart-summary']", ".summary-section", "aside .summary"
+                };
+                foreach (var sel in candidates)
+                {
+                    var els = _driver.FindElements(By.CssSelector(sel));
+                    if (els.Count > 0 && !string.IsNullOrWhiteSpace(els[0].Text))
+                        return els[0].Text;
+                }
+                // Fallback: toàn bộ body
+                return _driver.FindElement(By.TagName("body")).Text;
+            }
+            catch { return string.Empty; }
+        }
+
+        /// <summary>
+        /// Kiểm tra Order Summary / body text có chứa chuỗi cho trước không.
+        /// </summary>
+        public bool OrderSummaryContains(string text)
+            => GetOrderSummaryText().Contains(text, StringComparison.OrdinalIgnoreCase);
+
+        // =====================================================================
+        // CART HELPERS
+        // =====================================================================
+
+        /// <summary>
+        /// Điều hướng đến /Cart và kiểm tra giỏ hàng có trống không.
+        /// </summary>
+        public bool IsCartEmpty()
+        {
+            try
+            {
+                _driver.Navigate().GoToUrl(CartUrl);
+                Thread.Sleep(800);
+                var body = _driver.FindElement(By.TagName("body")).Text;
+                bool emptyByText = body.Contains("trống", StringComparison.OrdinalIgnoreCase)
+                    || body.Contains("empty", StringComparison.OrdinalIgnoreCase)
+                    || body.Contains("No items", StringComparison.OrdinalIgnoreCase)
+                    || body.Contains("0 sản phẩm", StringComparison.OrdinalIgnoreCase);
+                bool noItemElements = _driver.FindElements(
+                    By.CssSelector(".cart-item, .cart-product, .cart-row, tr.product-row")).Count == 0;
+                return emptyByText || noItemElements;
+            }
+            catch { return false; }
         }
     }
 }
