@@ -383,5 +383,14 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "province1": "Thành phố Hồ Chí Minh",
     "province2": "Thành phố Hà Nội"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_14_01_ADMIN",
+    "testCaseId": "F5.14_01",
+    "description": "Admin đăng nhập kiểm tra tồn kho trước và sau khi đặt hàng",
+    "adminEmail": "admin@fruitables.com",
+    "adminPassword": "Admin@123",
+    "productId": "1",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
   }
 ]

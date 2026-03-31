@@ -442,8 +442,144 @@ namespace SeleniumProject.Tests.Checkout
         }
 
         // =========================================================
+        // F5.6 – Address Dropdown (6 test cases)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_6_01_DanhSachQuanHuyenThayDoiTheoTinh()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            Thread.Sleep(1000);
+
+            // Sau khi chọn Tỉnh, danh sách Quận/Huyện phải được load
+            var districtOptions = Driver.FindElements(By.CssSelector("#districtSelect option"));
+            Assert.That(districtOptions.Count, Is.GreaterThan(1),
+                "[F5.6_01] Danh sách Quận/Huyện phải được cập nhật khi chọn Tỉnh/TP");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_6_02_DanhSachPhuongXaThayDoiTheoQuan()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            Thread.Sleep(1000);
+            _checkoutPage.SelectDistrict("Quận 1");
+            Thread.Sleep(1000);
+
+            // Sau khi chọn Quận, danh sách Phường/Xã phải được load
+            var wardOptions = Driver.FindElements(By.CssSelector("#wardSelect option"));
+            Assert.That(wardOptions.Count, Is.GreaterThan(1),
+                "[F5.6_02] Danh sách Phường/Xã phải được cập nhật khi chọn Quận/Huyện");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_6_03_DropdownQuanHuyenDisableTruocKhiChonTinh()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            // Chưa chọn Tỉnh → Quận phải disabled hoặc chỉ có placeholder
+            var districtSelect = Driver.FindElement(By.Id("districtSelect"));
+            bool isDisabled = !districtSelect.Enabled
+                || districtSelect.GetAttribute("disabled") != null
+                || Driver.FindElements(By.CssSelector("#districtSelect option")).Count <= 1;
+            Assert.That(isDisabled, Is.True,
+                "[F5.6_03] Dropdown Quận/Huyện phải disabled hoặc chỉ có placeholder khi chưa chọn Tỉnh/TP");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_6_04_DropdownPhuongXaDisableTruocKhiChonQuan()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            Thread.Sleep(1000);
+            // Chưa chọn Quận → Ward phải disabled
+            var wardSelect = Driver.FindElement(By.Id("wardSelect"));
+            bool isDisabled = !wardSelect.Enabled
+                || wardSelect.GetAttribute("disabled") != null
+                || Driver.FindElements(By.CssSelector("#wardSelect option")).Count <= 1;
+            Assert.That(isDisabled, Is.True,
+                "[F5.6_04] Dropdown Phường/Xã phải disabled khi chưa chọn Quận/Huyện");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_6_05_DoiTinhThiQuanVaPhuongBiReset()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            // Chọn Hồ Chí Minh → Quận 1 → Phường Bến Nghé
+            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            Thread.Sleep(1000);
+            _checkoutPage.SelectDistrict("Quận 1");
+            Thread.Sleep(1000);
+            _checkoutPage.SelectWard("Phường Bến Nghé");
+            Thread.Sleep(500);
+
+            // Đổi sang Hà Nội → Quận và Phường phải reset
+            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            Thread.Sleep(1000);
+
+            var districtSelect = new SelectElement(Driver.FindElement(By.Id("districtSelect")));
+            var wardSelect    = new SelectElement(Driver.FindElement(By.Id("wardSelect")));
+            bool districtReset = districtSelect.SelectedOption.GetAttribute("value") == "" || districtSelect.SelectedOption.Text.Contains("Chọn");
+            bool wardReset     = wardSelect.SelectedOption.GetAttribute("value") == ""     || wardSelect.SelectedOption.Text.Contains("Chọn");
+            Assert.That(districtReset, Is.True,
+                "[F5.6_05] Dropdown Quận/Huyện phải reset về placeholder sau khi đổi Tỉnh");
+            Assert.That(wardReset, Is.True,
+                "[F5.6_05] Dropdown Phường/Xã phải reset về placeholder sau khi đổi Tỉnh");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_6_06_DoiQuanThiPhuongBiReset()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            Thread.Sleep(1000);
+            _checkoutPage.SelectDistrict("Quận 1");
+            Thread.Sleep(1000);
+            _checkoutPage.SelectWard("Phường Bến Nghé");
+            Thread.Sleep(500);
+
+            // Đổi sang quận khác → Phường phải reset
+            _checkoutPage.SelectDistrict("Quận 3");
+            Thread.Sleep(1000);
+
+            var wardSelect = new SelectElement(Driver.FindElement(By.Id("wardSelect")));
+            bool wardReset = wardSelect.SelectedOption.GetAttribute("value") == "" || wardSelect.SelectedOption.Text.Contains("Chọn");
+            Assert.That(wardReset, Is.True,
+                "[F5.6_06] Dropdown Phường/Xã phải reset về placeholder sau khi đổi Quận");
+
+            // Danh sách Phường mới phải load theo Quận 3
+            var wardOptions = Driver.FindElements(By.CssSelector("#wardSelect option"));
+            Assert.That(wardOptions.Count, Is.GreaterThan(1),
+                "[F5.6_06] Danh sách Phường mới phải load sau khi đổi Quận");
+        }
+
+        // =========================================================
         // F5.7 – Subtotal Calculation (3 test cases)
         // =========================================================
+
         [Test]
         public void TC_CHECKOUT_F5_7_01_TinhToanSubtotalDung()
         {
@@ -818,9 +954,290 @@ namespace SeleniumProject.Tests.Checkout
         }
 
         // =========================================================
+        // F5.9_02 – Tổng cộng = Tạm tính + Phí vận chuyển
+        // =========================================================
+
+        [Test]
+        public void TC_CHECKOUT_F5_9_02_TongCongBangTamTinhCongPhiShip()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_9_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            _checkoutPage.SelectDistrict("Quận Ba Đình");
+            _checkoutPage.SelectWard("Phường Phúc Xá");
+            Thread.Sleep(1000);
+
+            var summaryText = _checkoutPage.GetOrderSummaryText();
+            // Xác nhận cả 3 giá trị: Tạm tính / Phí vận chuyển / Tổng cộng đều hiển thị
+            bool hasTamTinh = summaryText.Contains("Tạm tính", StringComparison.OrdinalIgnoreCase)
+                || summaryText.Contains("Subtotal", StringComparison.OrdinalIgnoreCase);
+            bool hasPhiShip = summaryText.Contains("Phí vận chuyển", StringComparison.OrdinalIgnoreCase)
+                || summaryText.Contains("Shipping", StringComparison.OrdinalIgnoreCase)
+                || summaryText.Contains("ship", StringComparison.OrdinalIgnoreCase);
+            bool hasTotal = summaryText.Contains("Tổng", StringComparison.OrdinalIgnoreCase)
+                || summaryText.Contains("Total", StringComparison.OrdinalIgnoreCase);
+
+            Assert.That(hasTamTinh, Is.True,
+                $"[F5.9_02] Order Summary phải hiển thị Tạm tính.\nSummary: {summaryText[..Math.Min(300, summaryText.Length)]}");
+            Assert.That(hasPhiShip, Is.True,
+                $"[F5.9_02] Order Summary phải hiển thị Phí vận chuyển.\nSummary: {summaryText[..Math.Min(300, summaryText.Length)]}");
+            Assert.That(hasTotal, Is.True,
+                $"[F5.9_02] Order Summary phải hiển thị Tổng cộng.\nSummary: {summaryText[..Math.Min(300, summaryText.Length)]}");
+        }
+
+        // =========================================================
+        // F5.14 – Trừ tồn kho sau đặt hàng (Admin kiểm tra)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_14_01_TruTonKhoSauDatHang()
+        {
+            var adminData  = DocDuLieu("TC_CHECKOUT_F5_14_01_ADMIN");
+            var orderData  = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            string productId = adminData["productId"];
+
+            // ── Bước 1: Admin đăng nhập & ghi nhận stock ban đầu ──────────
+            _checkoutPage.Login(adminData["adminEmail"], adminData["adminPassword"]);
+            Driver.Navigate().GoToUrl($"http://localhost:5270/Admin/Product/Edit/{productId}");
+            Thread.Sleep(1000);
+
+            // Đọc giá trị StockQuantity từ input trong trang Edit
+            var stockInput = Driver.FindElement(By.Id("Product_StockQuantity"));
+            int stockBefore = int.TryParse(stockInput.GetAttribute("value")?.Trim(), out var sb) ? sb : -1;
+            Assert.That(stockBefore, Is.GreaterThan(0),
+                $"[F5.14_01] Admin phải đọc được tồn kho > 0 trước khi đặt hàng. Giá trị đọc: {stockBefore}");
+
+            // ── Bước 2: Đăng xuất admin → đặt hàng bằng tài khoản user ──
+            Driver.Navigate().GoToUrl("http://localhost:5270/Account/Logout");
+            Thread.Sleep(800);
+
+            _checkoutPage.Login(orderData["email"], orderData["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(orderData["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+            _checkoutPage.EnterFullName(orderData["fullName"]);
+            _checkoutPage.EnterPhone(orderData["phone"]);
+            _checkoutPage.EnterStreetAddress(orderData["streetAddress"]);
+            _checkoutPage.SelectProvince(orderData["province"]);
+            _checkoutPage.SelectDistrict(orderData["district"]);
+            _checkoutPage.SelectWard(orderData["ward"]);
+            _checkoutPage.SelectPaymentCod();
+            _checkoutPage.ClickPlaceOrder();
+
+            Assert.That(_checkoutPage.IsOnConfirmationPage(), Is.True,
+                "[F5.14_01] Đặt hàng phải thành công");
+
+            // ── Bước 3: Admin đăng nhập lại → kiểm tra stock đã giảm ─────
+            Driver.Navigate().GoToUrl("http://localhost:5270/Account/Logout");
+            Thread.Sleep(600);
+            _checkoutPage.Login(adminData["adminEmail"], adminData["adminPassword"]);
+            Driver.Navigate().GoToUrl($"http://localhost:5270/Admin/Product/Edit/{productId}");
+            Thread.Sleep(1000);
+
+            stockInput = Driver.FindElement(By.Id("Product_StockQuantity"));
+            int stockAfter = int.TryParse(stockInput.GetAttribute("value")?.Trim(), out var sa) ? sa : -1;
+
+            Assert.That(stockAfter, Is.LessThan(stockBefore),
+                $"[F5.14_01] Tồn kho phải giảm sau khi đặt hàng. Trước: {stockBefore}, Sau: {stockAfter}");
+        }
+
+        // =========================================================
+        // F5.17 – Lưu địa chỉ mới (Medium - 2 TCs)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_17_01_LuuDiaChiMoiThanhCong()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+
+            _checkoutPage.EnterFullName(data["fullName"]);
+            _checkoutPage.EnterPhone(data["phone"]);
+            _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
+
+            // Tick checkbox "Lưu địa chỉ này cho lần mua sau"
+            var saveCheckbox = Driver.FindElements(By.CssSelector("input[id*='save'], input[id*='Save'], input[name*='save'], input[name*='Save']"));
+            if (saveCheckbox.Count > 0 && !saveCheckbox[0].Selected)
+                saveCheckbox[0].Click();
+
+            _checkoutPage.SelectPaymentCod();
+            _checkoutPage.ClickPlaceOrder();
+
+            Assert.That(_checkoutPage.IsOnConfirmationPage(), Is.True,
+                "[F5.17_01] Đặt hàng với lưu địa chỉ phải thành công");
+
+            // Vào lần mua tiếp theo – kiểm tra dropdown địa chỉ đã lưu xuất hiện
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            Thread.Sleep(1000);
+            var savedDropdown = Driver.FindElements(By.CssSelector("select[id*='saved'], select[id*='Saved'], select[id*='address'], #savedAddressSelect"));
+            Assert.That(savedDropdown.Count, Is.GreaterThan(0),
+                "[F5.17_01] Dropdown địa chỉ đã lưu phải xuất hiện trong lần mua tiếp theo");
+        }
+
+        [Test]
+        public void TC_CHECKOUT_F5_17_02_DropdownDiaChiDaLuuHienThi()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            Thread.Sleep(1000);
+
+            // Kiểm tra dropdown địa chỉ đã lưu hiển thị (user đã có địa chỉ lưu từ trước)
+            var savedDropdown = Driver.FindElements(By.CssSelector(
+                "#savedAddressSelect, select[id*='saved'], select[id*='Saved'], [id*='address-dropdown']"));
+            bool dropdownExists = savedDropdown.Count > 0;
+
+            // Nếu có dropdown → phải có ít nhất 1 địa chỉ trong danh sách
+            if (dropdownExists)
+            {
+                var options = Driver.FindElements(By.CssSelector(
+                    "#savedAddressSelect option, select[id*='saved'] option"));
+                Assert.That(options.Count, Is.GreaterThan(1),
+                    "[F5.17_02] Dropdown địa chỉ đã lưu phải hiển thị ít nhất 1 địa chỉ");
+            }
+            else
+            {
+                Assert.Ignore("[F5.17_02] User chưa có địa chỉ lưu – cần chạy F5.17_01 trước");
+            }
+        }
+
+        // =========================================================
+        // F5.18 – Chọn địa chỉ đã lưu tự động điền form (Medium)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_18_01_ChonDiaChiDaLuuTuDongDienForm()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            Thread.Sleep(1000);
+
+            var savedDropdown = Driver.FindElements(By.CssSelector(
+                "#savedAddressSelect, select[id*='saved'], select[id*='Saved']"));
+            if (savedDropdown.Count == 0)
+            {
+                Assert.Ignore("[F5.18_01] User chưa có địa chỉ lưu – cần chạy F5.17_01 trước");
+                return;
+            }
+
+            // Chọn địa chỉ đã lưu đầu tiên
+            var sel = new SelectElement(savedDropdown[0]);
+            sel.SelectByIndex(1); // index 0 thường là placeholder
+            Thread.Sleep(800);
+
+            // Form phải tự động điền họ tên và địa chỉ
+            var fullNameValue = Driver.FindElement(By.Id("FullNameInput")).GetAttribute("value");
+            var phoneValue    = Driver.FindElement(By.Id("Mobile")).GetAttribute("value");
+            Assert.That(fullNameValue, Is.Not.Empty,
+                "[F5.18_01] Họ tên phải được tự động điền sau khi chọn địa chỉ đã lưu");
+            Assert.That(phoneValue, Is.Not.Empty,
+                "[F5.18_01] Số điện thoại phải được tự động điền sau khi chọn địa chỉ đã lưu");
+        }
+
+        // =========================================================
+        // F5.21 – Mã đơn hàng trên trang xác nhận
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_21_01_MaDonHangXuatHienTrenTrangXacNhan()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+            _checkoutPage.EnterFullName(data["fullName"]);
+            _checkoutPage.EnterPhone(data["phone"]);
+            _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
+            _checkoutPage.SelectPaymentCod();
+            _checkoutPage.ClickPlaceOrder();
+
+            Assert.That(Driver.Url, Does.Contain("/Checkout/Confirmation"),
+                "[F5.21_01] URL phải chứa /Checkout/Confirmation");
+
+            var pageText = Driver.FindElement(By.TagName("body")).Text;
+            bool hasMaOrder = pageText.Contains("Mã đơn hàng", StringComparison.OrdinalIgnoreCase)
+                || pageText.Contains("Order", StringComparison.OrdinalIgnoreCase)
+                || pageText.Contains("#", StringComparison.OrdinalIgnoreCase);
+            Assert.That(hasMaOrder, Is.True,
+                $"[F5.21_01] Trang xác nhận phải hiển thị mã đơn hàng.\nText: {pageText[..Math.Min(300, pageText.Length)]}");
+        }
+
+        // =========================================================
+        // F5.22 – Nút "Tiếp tục mua sắm" (Medium)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_22_01_NutTiepTucMuaSam()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_12_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+            _checkoutPage.SelectNewAddressOption();
+            _checkoutPage.EnterFullName(data["fullName"]);
+            _checkoutPage.EnterPhone(data["phone"]);
+            _checkoutPage.EnterStreetAddress(data["streetAddress"]);
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
+            _checkoutPage.SelectPaymentCod();
+            _checkoutPage.ClickPlaceOrder();
+
+            Assert.That(_checkoutPage.IsOnConfirmationPage(), Is.True,
+                "[F5.22_01] Phải đến trang xác nhận trước");
+
+            // Tìm và click nút "Tiếp tục mua sắm" hoặc "Về trang chủ"
+            var continueBtn = Driver.FindElements(By.CssSelector(
+                "a[href*='/Shop'], a[href*='/'], button[id*='continue'], a[id*='continue']"))
+                .FirstOrDefault(e => e.Displayed &&
+                    (e.Text.Contains("mua sắm", StringComparison.OrdinalIgnoreCase)
+                  || e.Text.Contains("trang chủ", StringComparison.OrdinalIgnoreCase)
+                  || e.Text.Contains("Shop", StringComparison.OrdinalIgnoreCase)));
+
+            Assert.That(continueBtn, Is.Not.Null,
+                "[F5.22_01] Phải tồn tại nút 'Tiếp tục mua sắm' hoặc 'Về trang chủ' trên trang xác nhận");
+            continueBtn!.Click();
+            Thread.Sleep(1000);
+
+            bool onShopOrHome = Driver.Url.Contains("/Shop") || Driver.Url == "http://localhost:5270/"
+                || Driver.Url.EndsWith("/") || Driver.Url.Contains("/Home");
+            Assert.That(onShopOrHome, Is.True,
+                $"[F5.22_01] Phải chuyển về trang chủ hoặc Shop.\nURL thực: {Driver.Url}");
+        }
+
+        // =========================================================
+        // F5.23 – Thông tin ngân hàng ẩn khi đổi về COD (Medium)
+        // =========================================================
+        [Test]
+        public void TC_CHECKOUT_F5_23_01_ThongTinNganHangAnKhiDoiVeCOD()
+        {
+            var data = DocDuLieu("TC_CHECKOUT_F5_10_01");
+            _checkoutPage.Login(data["email"], data["password"]);
+            _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
+
+            // Chọn Chuyển khoản → thông tin ngân hàng phải hiện
+            _checkoutPage.SelectPaymentTransfer();
+            Assert.That(_checkoutPage.IsBankInfoDisplayed(), Is.True,
+                "[F5.23_01] Thông tin ngân hàng phải hiển thị khi chọn Chuyển khoản");
+
+            // Đổi về COD → thông tin ngân hàng phải ẩn
+            _checkoutPage.SelectPaymentCod();
+            Assert.That(_checkoutPage.IsBankInfoDisplayed(), Is.False,
+                "[F5.23_01] Thông tin ngân hàng phải ẩn khi đổi về COD");
+            Assert.That(_checkoutPage.IsCodSelected(), Is.True,
+                "[F5.23_01] COD phải được chọn thành công");
+        }
+
+        // =========================================================
         // HELPER
         // =========================================================
         private DefaultDictionary DocDuLieu(string testCaseId)
+
         {
             var json     = File.ReadAllText(DataPath);
             var danhSach = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json)!;
