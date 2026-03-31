@@ -494,3 +494,8 @@ $RECYCLE.BIN/
 
 # Báo cáo test
 *.xlsx
+
+# Local utility scripts & tools folder
+Tests/Tools/
+204_local_backup.xlsx
+204_onedrive.xlsx
