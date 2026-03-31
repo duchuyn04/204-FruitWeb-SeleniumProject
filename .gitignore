@@ -11,6 +11,7 @@ appsettings.local.json
 appsettings.json
 
 # Ghi chú cá nhân — không commit lên Git
+howtocommit.md
 NOTES.md
 explain-prompt.md
 
