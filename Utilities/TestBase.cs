@@ -38,7 +38,7 @@ namespace SeleniumProject.Utilities
         // Đọc config từ appsettings.json
         private static readonly IConfiguration Config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
             .Build();
 
         protected static string BaseUrl
