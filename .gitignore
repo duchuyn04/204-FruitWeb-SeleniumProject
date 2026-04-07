@@ -500,3 +500,13 @@ $RECYCLE.BIN/
 Tests/Tools/
 204_local_backup.xlsx
 204_onedrive.xlsx
+
+#plan
+howtocreatetc.md
+plan.md
+prompt.md
+
+.vscode/
+
+#skills
+skills/
