@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumProject.Pages.ProductManagement;
 using SeleniumProject.Utilities;
@@ -23,7 +23,7 @@ namespace SeleniumProject.Tests.ProductManagement
             LoginAsAdmin();
         }
 
-        // STT 29 — TC_F2.4_01: Tìm SP không tồn tại - thông báo trống
+        // STT 29 - TC_F2.4_01: Tìm SP không tồn tại - thông báo trống
         [Test]
         public void TC_F2_4_01_TimKiemKhongTonTai_ThongBaoTrong()
         {
@@ -43,7 +43,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_01] Phải hiển thị 0 kết quả khi tìm SP không tồn tại");
         }
 
-        // STT 30 — TC_F2.4_02: Tìm kiếm với XSS - không crash
+        // STT 30 - TC_F2.4_02: Tìm kiếm với XSS - không crash
         [Test]
         public void TC_F2_4_02_TimKiemXSS_KhongCrash()
         {
@@ -60,7 +60,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_02] Trang không được crash khi nhập XSS");
         }
 
-        // STT 31 — TC_F2.4_03: SQL Injection - không crash
+        // STT 31 - TC_F2.4_03: SQL Injection - không crash
         [Test]
         public void TC_F2_4_03_TimKiemSQLInjection_KhongCrash()
         {
@@ -79,7 +79,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_03] Trang không được crash khi nhập SQL Injection");
         }
 
-        // STT 32 — TC_F2.4_04: Boundary 254 ký tự (max-1)
+        // STT 32 - TC_F2.4_04: Boundary 254 ký tự (max-1)
         [Test]
         public void TC_F2_4_04_Boundary254KyTu()
         {
@@ -96,7 +96,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_04] Trang phải xử lý bình thường với 254 ký tự");
         }
 
-        // STT 33 — TC_F2.4_05: Boundary 256 ký tự (max+1)
+        // STT 33 - TC_F2.4_05: Boundary 256 ký tự (max+1)
         [Test]
         public void TC_F2_4_05_Boundary256KyTu()
         {
@@ -113,7 +113,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_05] Trang phải xử lý bình thường với 256 ký tự");
         }
 
-        // STT 34 — TC_F2.4_06: Tìm kiếm emoji
+        // STT 34 - TC_F2.4_06: Tìm kiếm emoji
         [Test]
         public void TC_F2_4_06_TimKiemEmoji()
         {
@@ -130,7 +130,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_06] Trang không được crash khi tìm kiếm emoji");
         }
 
-        // STT 35 — TC_F2.4_07: HTML entities
+        // STT 35 - TC_F2.4_07: HTML entities
         [Test]
         public void TC_F2_4_07_TimKiemHtmlEntities()
         {
@@ -147,7 +147,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_07] Trang không được crash khi tìm HTML entities");
         }
 
-        // STT 36 — TC_F2.4_08: Gõ nhanh liên tục (debounce)
+        // STT 36 - TC_F2.4_08: Gõ nhanh liên tục (debounce)
         [Test]
         public void TC_F2_4_08_GoNhanhLienTuc_Debounce()
         {
@@ -176,7 +176,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 $"[TC_F2.4_08] Kết quả cuối cùng phải hiển thị đúng SP '{data["expectedProductName"]}'");
         }
 
-        // STT 37 — TC_F2.4_09: Nhấn Enter - không submit form
+        // STT 37 - TC_F2.4_09: Nhấn Enter - không submit form
         [Test]
         public void TC_F2_4_09_NhanEnter_KhongSubmitForm()
         {
@@ -198,7 +198,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.4_09] Trang không được crash hoặc reload bất ngờ khi nhấn Enter");
         }
 
-        // STT 38 — TC_F2.4_10: Decision Table: SP không tồn tại + Category + Sort
+        // STT 38 - TC_F2.4_10: Decision Table: SP không tồn tại + Category + Sort
         [Test]
         public void TC_F2_4_10_DecisionTable_KhongTonTai_Category_Sort()
         {

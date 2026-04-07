@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumProject.Pages.ProductManagement;
 using SeleniumProject.Utilities;
@@ -23,7 +23,7 @@ namespace SeleniumProject.Tests.ProductManagement
             LoginAsAdmin();
         }
 
-        // STT 39 — TC_F2.5_01: State Transition: đổi category → kết quả cập nhật
+        // STT 39 - TC_F2.5_01: State Transition: đổi category → kết quả cập nhật
         [Test]
         public void TC_F2_5_01_StateTransition_DoiCategory()
         {
@@ -50,7 +50,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.5_01] Trang phải hoạt động bình thường sau khi đổi category");
         }
 
-        // STT 40 — TC_F2.5_02: Layout không vỡ khi 0 kết quả
+        // STT 40 - TC_F2.5_02: Layout không vỡ khi 0 kết quả
         [Test]
         public void TC_F2_5_02_LayoutKhongVoKhi0KetQua()
         {
@@ -75,7 +75,7 @@ namespace SeleniumProject.Tests.ProductManagement
                 "[TC_F2.5_02] Phải hiển thị 0 sản phẩm");
         }
 
-        // STT 41 — TC_F2.5_03: Look & Feel: Dropdown Category & Sort hiển thị giá trị mặc định đúng
+        // STT 41 - TC_F2.5_03: Look & Feel: Dropdown Category & Sort hiển thị giá trị mặc định đúng
         [Test]
         public void TC_F2_5_03_GiaTriMacDinh_DropdownCategorySort()
         {

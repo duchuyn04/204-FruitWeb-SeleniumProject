@@ -1,0 +1,6 @@
+﻿test(product): đồng bộ dấu gạch ngang trong các file test
+
+- thay thế gạch dài thành gạch chuẩn tại ProductSearchTests.cs
+- thay thế gạch dài thành gạch chuẩn tại ProductListTests.cs
+- thay thế gạch dài thành gạch chuẩn tại ProductFilterTests.cs
+- hoàn thiện case từ STT 61-94 tại ProductCreateTests.cs
