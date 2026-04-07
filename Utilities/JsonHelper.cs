@@ -46,7 +46,7 @@ namespace SeleniumProject.Utilities
                 return ketQua;
             }
 
-            // Bước 5: Không tìm thấy — ném exception rõ ràng
+            // Bước 5: Không tìm thấy - ném exception rõ ràng
             throw new KeyNotFoundException(
                 $"Không tìm thấy test case '{testCaseId}' trong file: {filePath}"
             );

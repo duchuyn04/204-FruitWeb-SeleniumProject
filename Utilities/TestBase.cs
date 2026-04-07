@@ -170,6 +170,10 @@ namespace SeleniumProject.Utilities
         [SetUp]
         public void SetUp()
         {
+            // Xóa kết quả lưu tạm của bài test trước đó để tránh ghi nhầm vào báo cáo nếu test bị văng Exception sớm
+            CurrentTestCaseId = "";
+            CurrentActualResult = "";
+
             // UseSharedDriver = true → driver được tạo ở [OneTimeSetUp] của subclass, không tạo lại
             if (!UseSharedDriver)
             {
@@ -203,6 +207,12 @@ namespace SeleniumProject.Utilities
                     if (ghiChu.Contains("\n"))
                     {
                         ghiChu = ghiChu.Split('\n')[0].Trim();
+                    }
+
+                    // NẾU LỖI MÀ CHƯA CÓ RESULT: Tự động ghi lại nguyên nhân văng lỗi
+                    if (loi && string.IsNullOrEmpty(CurrentActualResult))
+                    {
+                        CurrentActualResult = ExtractWebState();
                     }
 
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
@@ -298,6 +308,36 @@ namespace SeleniumProject.Utilities
                 // Trả về rỗng nếu chụp thất bại
                 return "";
             }
+        }
+
+        // Đọc trạng thái web hiện tại (lỗi server, toast, validation) khi test bị văng exception giữa chừng
+        private string ExtractWebState()
+        {
+            if (Driver == null) return "Browser closed";
+            string url = Driver.Url;
+            
+            Driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+            try
+            {
+                // Kiểm tra banner server
+                var banners = Driver.FindElements(By.CssSelector(".alert-danger, .alert.alert-danger"));
+                foreach(var b in banners) { if(!string.IsNullOrEmpty(b.Text)) return $"Lỗi server: '{b.Text.Trim()}' | URL: {url}"; }
+
+                // Kiểm tra validation errors
+                var vals = Driver.FindElements(By.CssSelector(".field-validation-error"));
+                foreach(var v in vals) { if(!string.IsNullOrEmpty(v.Text)) return $"Lỗi validation: '{v.Text.Trim()}' | URL: {url}"; }
+
+                // Kiểm tra toast
+                var toasts = Driver.FindElements(By.CssSelector(".toast-body"));
+                foreach(var t in toasts) { if(!string.IsNullOrEmpty(t.Text)) return $"Toast: '{t.Text.Trim()}' | URL: {url}"; }
+            }
+            catch { }
+            finally
+            {
+                Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Timeout);
+            }
+
+            return $"Dừng tại URL: {url}";
         }
     }
 }

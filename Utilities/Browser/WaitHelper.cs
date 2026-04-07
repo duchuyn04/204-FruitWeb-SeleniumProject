@@ -115,7 +115,20 @@ namespace SeleniumProject.Utilities
             // Chỉ click nếu trạng thái hiện tại khác với trạng thái mong muốn
             if (isCurrentlyChecked != shouldBeChecked)
             {
-                checkbox.Click();
+                // Cuộn tới checkbox để tránh bị che khuất bởi navbar/header
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", checkbox);
+                Thread.Sleep(300);
+
+                try 
+                {
+                    checkbox.Click();
+                }
+                catch (ElementClickInterceptedException)
+                {
+                    // Fallback Click bằng JS nếu scroll xong vẫn còn bị che khuất nhỏ hẹp
+                    js.ExecuteScript("arguments[0].click();", checkbox);
+                }
             }
         }
 

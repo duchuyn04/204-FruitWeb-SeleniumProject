@@ -201,6 +201,9 @@ namespace SeleniumProject.Utilities
                 ICellStyle stylePass = workbook.CreateCellStyle();
                 stylePass.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
                 stylePass.FillPattern = FillPattern.SolidForeground;
+                stylePass.Alignment = HorizontalAlignment.Center;
+                stylePass.VerticalAlignment = VerticalAlignment.Center;
+
                 IFont fontBold = workbook.CreateFont();
                 fontBold.IsBold = true;
                 stylePass.SetFont(fontBold);
@@ -208,6 +211,8 @@ namespace SeleniumProject.Utilities
                 ICellStyle styleFail = workbook.CreateCellStyle();
                 styleFail.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
                 styleFail.FillPattern = FillPattern.SolidForeground;
+                styleFail.Alignment = HorizontalAlignment.Center;
+                styleFail.VerticalAlignment = VerticalAlignment.Center;
                 styleFail.SetFont(fontBold);
 
                 // Ghi Actual Result (cột J = index 9)
