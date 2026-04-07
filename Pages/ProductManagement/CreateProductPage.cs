@@ -55,11 +55,10 @@ namespace SeleniumProject.Pages.ProductManagement
         private readonly By ToastMessage         = By.CssSelector(".toast-body");
 
         // --- Live preview giá (hiển thị ngay khi nhập giá gốc) ---
-        // TODO: Xác nhận lại selector này với HTML thực tế của trang
-        private readonly By PricePreviewText     = By.CssSelector(".price-display");
+        private readonly By PricePreviewText     = By.Id("pricePreview");
 
         // --- Thông báo lỗi validation (inline, dưới mỗi ô nhập) ---
-        private readonly By ValidationErrors     = By.CssSelector(".text-danger");
+        private readonly By ValidationErrors     = By.CssSelector(".field-validation-error");
 
         // --- Thông báo lỗi từ server (banner đỏ ở đầu trang) ---
         // VD: "Slug '...' đã tồn tại"
@@ -247,10 +246,25 @@ namespace SeleniumProject.Pages.ProductManagement
             return _wait.WaitForToast(ToastMessage);
         }
 
+        // Helper đọc nhánh nhanh (không dùng ImplicitWait toàn cục)
+        // Dùng cho việc kiểm tra lỗi hoặc toast vì chúng có thể không tồn tại
+        private IReadOnlyCollection<IWebElement> FindElementsQuickly(By locator)
+        {
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+            try
+            {
+                return _driver.FindElements(locator);
+            }
+            finally
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            }
+        }
+
         // Lấy tất cả thông báo lỗi validation trên form
         public IReadOnlyList<string> GetValidationErrors()
         {
-            IReadOnlyCollection<IWebElement> errorElements = _driver.FindElements(ValidationErrors);
+            IReadOnlyCollection<IWebElement> errorElements = FindElementsQuickly(ValidationErrors);
             List<string> errors = new List<string>();
             foreach (IWebElement el in errorElements)
             {
@@ -276,6 +290,7 @@ namespace SeleniumProject.Pages.ProductManagement
             IWebElement slugField = _wait.WaitForVisible(SlugInput);
             return slugField.GetAttribute("value");
         }
+
 
         // Kiểm tra ảnh preview có hiển thị sau khi upload không
         public bool IsImagePreviewDisplayed()
@@ -359,7 +374,7 @@ namespace SeleniumProject.Pages.ProductManagement
         {
             try
             {
-                IReadOnlyCollection<IWebElement> banners = _driver.FindElements(ServerErrorBanner);
+                IReadOnlyCollection<IWebElement> banners = FindElementsQuickly(ServerErrorBanner);
                 foreach (IWebElement banner in banners)
                 {
                     string text = banner.Text.Trim();
@@ -393,7 +408,7 @@ namespace SeleniumProject.Pages.ProductManagement
 
             // Ưu tiên 2: Toast notification — đọc NGAY LẬP TỨC (không dùng WaitForToast
             // vì WaitForToast block đến hết timeout nếu toast đã biến mất sau redirect)
-            IReadOnlyCollection<IWebElement> toastElements = _driver.FindElements(ToastMessage);
+            IReadOnlyCollection<IWebElement> toastElements = FindElementsQuickly(ToastMessage);
             foreach (IWebElement toastEl in toastElements)
             {
                 string toastText = toastEl.Text.Trim();

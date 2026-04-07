@@ -113,6 +113,48 @@ namespace SeleniumProject.Pages.ProductManagement
             Thread.Sleep(800);
         }
 
+        // Mở dropdown thao tác của một sản phẩm cụ thể và chọn Xóa tạm thời
+        public void DeleteProductSoft(string productName)
+        {
+            Search(productName);
+            Thread.Sleep(1000);
+
+            // Tìm hàng chứa tên SP
+            IReadOnlyCollection<IWebElement> rows = _driver.FindElements(ProductRows);
+            IWebElement targetRow = null;
+            foreach (IWebElement row in rows)
+            {
+                if (row.Text.Contains(productName))
+                {
+                    targetRow = row;
+                    break;
+                }
+            }
+
+            if (targetRow != null)
+            {
+                // Cuộn tới dòng đó
+                IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", targetRow);
+                Thread.Sleep(300);
+
+                // Click dropdown toggle
+                IWebElement dropdownToggle = targetRow.FindElement(By.CssSelector(".dropdown-toggle"));
+                dropdownToggle.Click();
+                Thread.Sleep(500);
+
+                // Click 'Chuyển vào thùng rác'
+                IWebElement softDeleteOpt = targetRow.FindElement(By.XPath(".//a[contains(@onclick, 'confirmSoftDelete')]"));
+                softDeleteOpt.Click();
+                Thread.Sleep(500);
+
+                // Click confirm trong Modal
+                IWebElement confirmBtn = _wait.WaitForClickable(By.CssSelector("#softDeleteForm button[type='submit']"));
+                confirmBtn.Click();
+                Thread.Sleep(1000); // Chờ reload trang sau khi xóa
+            }
+        }
+
         // ==============================================================
         // QUERIES — hỏi thông tin từ trang
         // ==============================================================
@@ -273,6 +315,50 @@ namespace SeleniumProject.Pages.ProductManagement
             string danhSach = names.Count > 0 ? string.Join(", ", names) : "(trống)";
 
             return $"Tìm thấy {soLuong} SP: [{danhSach}] | URL: {urlHienTai}";
+        }
+
+        public IWebElement GetSearchInput()
+        {
+            return _wait.WaitForVisible(SearchInput);
+        }
+
+        public string GetSearchPlaceholder()
+        {
+            IWebElement searchBox = _wait.WaitForVisible(SearchInput);
+            return searchBox.GetAttribute("placeholder");
+        }
+
+        public bool IsEmptyMessageDisplayed()
+        {
+            return HasNoResultMessage();
+        }
+
+        public string GetCurrentSortValue()
+        {
+            try
+            {
+                IWebElement sortDropdown = _wait.WaitForVisible(SortDropdown);
+                SelectElement select = new SelectElement(sortDropdown);
+                return select.SelectedOption.Text.Trim();
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public string GetCurrentCategoryValue()
+        {
+            try
+            {
+                IWebElement categoryDropdown = _wait.WaitForVisible(CategoryDropdown);
+                SelectElement select = new SelectElement(categoryDropdown);
+                return select.SelectedOption.Text.Trim();
+            }
+            catch
+            {
+                return "";
+            }
         }
     }
 }
