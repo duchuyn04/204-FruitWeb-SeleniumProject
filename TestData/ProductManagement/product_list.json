@@ -1,0 +1,23 @@
+[
+  {
+    "testCase": "TC_F2.5_01",
+    "no": 39,
+    "description": "State Transition: Tìm → lọc category → đổi category → kết quả cập nhật",
+    "searchKeyword": "Táo",
+    "categoryFilter1": "Trái cây nội địa",
+    "categoryFilter2": "Táo"
+  },
+  {
+    "testCase": "TC_F2.5_02",
+    "no": 40,
+    "description": "Look & Feel: Layout không bị vỡ khi 0 kết quả",
+    "searchKeyword": "xyzkhongtontai"
+  },
+  {
+    "testCase": "TC_F2.5_03",
+    "no": 41,
+    "description": "Look & Feel: Dropdown Category & Sort hiển thị giá trị mặc định đúng",
+    "expectedCategory": "-- Tất cả danh mục --",
+    "expectedSort": "Sắp xếp mặc định"
+  }
+]

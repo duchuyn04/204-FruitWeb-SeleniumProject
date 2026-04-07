@@ -1,0 +1,485 @@
+[
+    {
+        "testCase": "TC_F2.6_01",
+        "no": 42,
+        "description": "Kiểm tra live preview giá VND cập nhật ngay khi nhập",
+        "price1": "75000",
+        "price2": "200000"
+    },
+    {
+        "testCase": "TC_F2.6_02",
+        "no": 43,
+        "description": "Kiểm tra thêm sản phẩm thành công với Giá gốc = 1 (min hợp lệ)",
+        "productName": "Sản phẩm Test Giá Min",
+        "category": "Trái cây nội địa",
+        "price": "1"
+    },
+    {
+        "testCase": "TC_F2.6_03",
+        "no": 44,
+        "description": "Kiểm tra thêm SP với Số lượng tồn kho = 0",
+        "productName": "Sầu Riêng Musang King",
+        "category": "Trái cây nhập khẩu",
+        "price": "500000",
+        "stock": "0"
+    },
+    {
+        "testCase": "TC_F2.6_04",
+        "no": 45,
+        "description": "Kiểm tra thêm SP khi bật Hiển thị (isActive = true)",
+        "productName": "Mận Hậu Sơn La Hữu Cơ",
+        "category": "Trái cây nội địa",
+        "price": "55000",
+        "isActive": true
+    },
+    {
+        "testCase": "TC_F2.6_05",
+        "no": 46,
+        "description": "Kiểm tra thêm SP khi Ẩn SP (isActive = false)",
+        "productName": "Chuối Rượu Nếp Hòa An",
+        "category": "Trái cây nội địa",
+        "price": "70000",
+        "isActive": false
+    },
+    {
+        "testCase": "TC_F2.6_06",
+        "no": 47,
+        "description": "Kiểm tra thêm rồi xóa SP tạm thời",
+        "productName": "Sản Phẩm Tạm Xóa R1",
+        "category": "Trái cây nội địa",
+        "price": "30000"
+    },
+    {
+        "testCase": "TC_F2.6_07",
+        "no": 48,
+        "description": "Kiểm tra Giá khuyến mãi = 0",
+        "productName": "Quýt Đường Lai Vung",
+        "category": "Trái cây nội địa",
+        "price": "60000",
+        "salePrice": "0"
+    },
+    {
+        "testCase": "TC_F2.6_08",
+        "no": 49,
+        "description": "Kiểm tra Slug thủ công hợp lệ",
+        "productName": "Buoi Da Xanh",
+        "slug": "buoi-da-xanh-2026",
+        "category": "Trái cây nội địa",
+        "price": "45000"
+    },
+    {
+        "testCase": "TC_F2.6_09",
+        "no": 50,
+        "description": "Kiểm tra MinOrder = 0",
+        "productName": "Chom Chom Gia Lai",
+        "category": "Trái cây nội địa",
+        "price": "35000",
+        "minOrder": "0"
+    },
+    {
+        "testCase": "TC_F2.6_10",
+        "no": 51,
+        "description": "Kiểm tra Stock = 1 (boundary)",
+        "productName": "Roi Sữa Vĩnh Kim",
+        "category": "Trái cây nội địa",
+        "price": "42000",
+        "stock": "1"
+    },
+    {
+        "testCase": "TC_F2.6_11",
+        "no": 52,
+        "description": "Kiểm tra Mô tả ngắn chứa link URL",
+        "productName": "Đu Đủ Ruột Đỏ",
+        "category": "Trái cây nội địa",
+        "price": "28000",
+        "shortDescription": "Xem tại https://vuatraicay.site"
+    },
+    {
+        "testCase": "TC_F2.6_12",
+        "no": 53,
+        "description": "Kiểm tra redirect đúng sau khi lưu thành công",
+        "productName": "SP Redirect Test",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedUrl": "/Admin/Product"
+    },
+    {
+        "testCase": "TC_F2.6_13",
+        "no": 54,
+        "description": "Kiểm tra toast message sau lưu thành công",
+        "productName": "SP Toast Test",
+        "category": "Trái cây nội địa",
+        "price": "60000",
+        "expectedToast": "Thêm sản phẩm thành công"
+    },
+    {
+        "testCase": "TC_F2.6_14",
+        "no": 55,
+        "description": "Kiểm tra SP mới xuất hiện trong danh sách",
+        "productName": "SP List Check",
+        "category": "Trái cây nội địa",
+        "price": "45000"
+    },
+    {
+        "testCase": "TC_F2.6_15",
+        "no": 56,
+        "description": "Kiểm tra SP hiển giá đúng sau lưu",
+        "productName": "SP Gia Check",
+        "category": "Trái cây nội địa",
+        "price": "100000",
+        "salePrice": "80000"
+    },
+    {
+        "testCase": "TC_F2.7_01",
+        "no": 57,
+        "description": "Kiểm tra thêm sản phẩm thành công với đầy đủ thông tin hợp lệ",
+        "productName": "Táo New Zealand Envy",
+        "shortDescription": "Táo nhập khẩu tươi ngon từ New Zealand",
+        "category": "Trái cây nhập khẩu",
+        "price": "150000",
+        "salePrice": "120000",
+        "stock": "100",
+        "imageName": "apple.jpg"
+    },
+    {
+        "testCase": "TC_F2.7_02",
+        "no": 58,
+        "description": "Kiểm tra thêm sản phẩm thành công chỉ với các trường bắt buộc",
+        "productName": "Xoài Cát Hòa Lộc",
+        "category": "Trái cây nội địa",
+        "price": "80000"
+    },
+    {
+        "testCase": "TC_F2.7_03",
+        "no": 59,
+        "description": "Kiểm tra nhập Slug tùy chỉnh hợp lệ",
+        "productName": "Táo New Zealand",
+        "slug": "tao-new-zealand-2026",
+        "category": "Trái cây nhập khẩu",
+        "price": "150000"
+    },
+    {
+        "testCase": "TC_F2.7_04",
+        "no": 60,
+        "description": "Kiểm tra Slug tự động sinh từ tên sản phẩm khi để trống",
+        "productName": "Táo New Zealand Auto Slug",
+        "category": "Trái cây nhập khẩu",
+        "price": "150000",
+        "expectedSlug": "tao-new-zealand-auto-slug"
+    },
+    {
+        "testCase": "TC_F2.7_05",
+        "no": 61,
+        "description": "Kiểm tra hệ thống báo lỗi khi submit form rỗng hoàn toàn",
+        "productName": "",
+        "category": "",
+        "price": "",
+        "expectedValidation": "Tên sản phẩm không được để trống; Danh mục không được để trống"
+    },
+    {
+        "testCase": "TC_F2.7_06",
+        "no": 62,
+        "description": "Kiểm tra hệ thống báo lỗi khi để trống Tên sản phẩm",
+        "productName": "",
+        "category": "Trái cây nội địa",
+        "price": "80000",
+        "expectedValidation": "Tên sản phẩm không được để trống"
+    },
+    {
+        "testCase": "TC_F2.7_07",
+        "no": 63,
+        "description": "Kiểm tra hệ thống báo lỗi khi không chọn Danh mục",
+        "productName": "Bưởi Da Xanh",
+        "category": "-- Chọn danh mục --",
+        "price": "90000",
+        "expectedValidation": "Danh mục không được để trống"
+    },
+    {
+        "testCase": "TC_F2.7_08",
+        "no": 64,
+        "description": "Kiểm tra hệ thống báo lỗi khi để trống Giá gốc",
+        "productName": "Dứa Mật",
+        "category": "Trái cây nội địa",
+        "price": "",
+        "expectedValidation": "Vui lòng nhập giá hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_09",
+        "no": 65,
+        "description": "Kiểm tra hệ thống báo lỗi khi Giá khuyến mãi lớn hơn Giá gốc",
+        "productName": "Nho Đen Úc",
+        "category": "Trái cây nhập khẩu",
+        "price": "50000",
+        "salePrice": "80000",
+        "expectedValidation": "Giá khuyến mãi phải nhỏ hơn giá gốc"
+    },
+    {
+        "testCase": "TC_F2.7_10",
+        "no": 66,
+        "description": "Kiểm tra hệ thống báo lỗi khi nhập Giá gốc âm",
+        "productName": "Lê Hàn Quốc",
+        "category": "Trái cây nhập khẩu",
+        "price": "-1000",
+        "expectedValidation": "Giá không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_11",
+        "no": 67,
+        "description": "Kiểm tra hệ thống chặn truy cập khi chưa đăng nhập",
+        "directUrl": "/Admin/Product/Create",
+        "expectedRedirect": "/Account/Login"
+    },
+    {
+        "testCase": "TC_F2.7_12",
+        "no": 68,
+        "description": "Kiểm tra hệ thống trả về 403 khi tài khoản không phải Admin",
+        "directUrl": "/Admin/Product/Create",
+        "loginRole": "Customer",
+        "expectedStatus": "403"
+    },
+    {
+        "testCase": "TC_F2.7_13",
+        "no": 69,
+        "description": "Kiểm tra thêm sản phẩm thành công với Tên sản phẩm 1 ký tự (min)",
+        "productName": "A",
+        "category": "Trái cây nội địa",
+        "price": "10000"
+    },
+    {
+        "testCase": "TC_F2.7_14",
+        "no": 70,
+        "description": "Kiểm tra hệ thống từ chối Tên sản phẩm vượt max length",
+        "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "category": "Trái cây nội địa",
+        "price": "10000",
+        "expectedValidation": "Tên sản phẩm vượt giới hạn"
+    },
+    {
+        "testCase": "TC_F2.7_15",
+        "no": 71,
+        "description": "Kiểm tra Slug bị trùng với SP đã tồn tại",
+        "productName": "Táo Envy Nhập Khẩu",
+        "slug": "tao-envy-new-zealand-r1",
+        "category": "Trái cây nhập khẩu",
+        "price": "150000",
+        "expectedValidation": "Slug đã tồn tại"
+    },
+    {
+        "testCase": "TC_F2.7_16",
+        "no": 72,
+        "description": "Kiểm tra Giá gốc nhập số thập phân",
+        "productName": "Bơ Booth Tây Nguyên",
+        "category": "Trái cây nội địa",
+        "price": "75000.5",
+        "expectedValidation": "Giá không hợp lệ hoặc hệ thống tự làm tròn"
+    },
+    {
+        "testCase": "TC_F2.7_17",
+        "no": 73,
+        "description": "Kiểm tra MinOrder nhập giá trị âm bị từ chối",
+        "productName": "Thanh Long Ruột Đỏ Bình Thuận",
+        "category": "Trái cây nội địa",
+        "price": "45000",
+        "minOrder": "-1",
+        "expectedValidation": "MinOrder không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_18",
+        "no": 74,
+        "description": "Kiểm tra Giá gốc nhập chữ thay vì số",
+        "productName": "Măng Cụt Quảng Bình",
+        "category": "Trái cây nội địa",
+        "price": "abc",
+        "expectedValidation": "Giá không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_19",
+        "no": 75,
+        "description": "Kiểm tra Giá gốc rất lớn (999999999)",
+        "productName": "Nho Đỏ Nam Phi Cao Cấp",
+        "category": "Trái cây nhập khẩu",
+        "price": "999999999",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi vượt giới hạn"
+    },
+    {
+        "testCase": "TC_F2.7_20",
+        "no": 76,
+        "description": "Kiểm tra Số lượng tồn kho âm bị từ chối",
+        "productName": "Mít Thái Siêu Sớm",
+        "category": "Trái cây nội địa",
+        "price": "85000",
+        "stock": "-5",
+        "expectedValidation": "Số lượng tồn kho không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_21",
+        "no": 77,
+        "description": "Kiểm tra Tên SP chứa ký tự đặc biệt (@#$%)",
+        "productName": "Táo @#$% Đặc Biệt!",
+        "category": "Trái cây nhập khẩu",
+        "price": "120000",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi theo rule hệ thống"
+    },
+    {
+        "testCase": "TC_F2.7_22",
+        "no": 78,
+        "description": "Kiểm tra XSS injection trong Tên SP",
+        "productName": "<script>alert('XSS')</script>",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedBehavior": "Escape hoặc từ chối; không thực thi script"
+    },
+    {
+        "testCase": "TC_F2.7_23",
+        "no": 79,
+        "description": "Kiểm tra SQL Injection trong Tên SP",
+        "productName": "'; DROP TABLE Products; --",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedBehavior": "Escape hoặc từ chối; không thực thi SQL"
+    },
+    {
+        "testCase": "TC_F2.7_24",
+        "no": 80,
+        "description": "Kiểm tra Mô tả ngắn vượt 500 ký tự",
+        "productName": "Xà Lách Đà Lạt Organic",
+        "category": "Trái cây nội địa",
+        "price": "35000",
+        "shortDescription": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "expectedBehavior": "Chặn hoặc cắt bớt về giới hạn 500 ký tự"
+    },
+    {
+        "testCase": "TC_F2.7_25",
+        "no": 81,
+        "description": "Kiểm tra Giá khuyến mãi âm",
+        "productName": "Vú Sữa Non Thái Lan",
+        "category": "Trái cây nhập khẩu",
+        "price": "200000",
+        "salePrice": "-5000",
+        "expectedValidation": "Giá khuyến mãi không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_26",
+        "no": 82,
+        "description": "Kiểm tra Slug chứa ký tự đặc biệt và khoảng trắng",
+        "productName": "Dâu Tây Đà Lạt Organic",
+        "slug": "dâu tây @#$ đà lạt!!",
+        "category": "Trái cây nội địa",
+        "price": "180000",
+        "expectedBehavior": "Normalize slug hoặc báo lỗi"
+    },
+    {
+        "testCase": "TC_F2.7_27",
+        "no": 83,
+        "description": "Kiểm tra Giá khuyến mãi bằng Giá gốc",
+        "productName": "Sapoche Mộc Châu",
+        "category": "Trái cây nội địa",
+        "price": "90000",
+        "salePrice": "90000",
+        "expectedBehavior": "Báo lỗi hoặc chấp nhận theo rule hệ thống"
+    },
+    {
+        "testCase": "TC_F2.7_28",
+        "no": 84,
+        "description": "Kiểm tra Tên SP chỉ chứa khoảng trắng",
+        "productName": "     ",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedValidation": "Tên sản phẩm không hợp lệ"
+    },
+    {
+        "testCase": "TC_F2.7_29",
+        "no": 85,
+        "description": "Kiểm tra Giá gốc = 0",
+        "productName": "Dưa Lưới Long An",
+        "category": "Trái cây nội địa",
+        "price": "0",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi theo rule hệ thống"
+    },
+    {
+        "testCase": "TC_F2.7_30",
+        "no": 86,
+        "description": "Kiểm tra Stock rất lớn (999999)",
+        "productName": "Cam Sành Vĩnh Long",
+        "category": "Trái cây nội địa",
+        "price": "40000",
+        "stock": "999999",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi giới hạn"
+    },
+    {
+        "testCase": "TC_F2.7_31",
+        "no": 87,
+        "description": "Kiểm tra Tên SP trùng SP đã có",
+        "productName": "Táo Envy New Zealand R1",
+        "category": "Trái cây nhập khẩu",
+        "price": "150000",
+        "expectedBehavior": "Cho trùng hoặc báo lỗi theo rule hệ thống"
+    },
+    {
+        "testCase": "TC_F2.7_32",
+        "no": 88,
+        "description": "Kiểm tra Mô tả ngắn để trống",
+        "productName": "Vải Thiều Bắc Giang",
+        "category": "Trái cây nội địa",
+        "price": "75000",
+        "shortDescription": "",
+        "expectedBehavior": "Lưu thành công nếu mô tả không bắt buộc"
+    },
+    {
+        "testCase": "TC_F2.7_33",
+        "no": 89,
+        "description": "Kiểm tra Tên SP chứa Emoji",
+        "productName": "Táo Xanh 🍏 Dưa Hấu 🍉",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi emoji theo rule hệ thống"
+    },
+    {
+        "testCase": "TC_F2.7_34",
+        "no": 90,
+        "description": "Kiểm tra trim space đầu/cuối Tên",
+        "productName": "   Táo Fuji Nhật   ",
+        "category": "Trái cây nhập khẩu",
+        "price": "250000",
+        "expectedTrimmedName": "Táo Fuji Nhật"
+    },
+    {
+        "testCase": "TC_F2.7_35",
+        "no": 91,
+        "description": "Kiểm tra MinOrder rất lớn (999999)",
+        "productName": "Nhãn Lồng Hưng Yên",
+        "category": "Trái cây nội địa",
+        "price": "90000",
+        "minOrder": "999999",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi giới hạn"
+    },
+    {
+        "testCase": "TC_F2.7_36",
+        "no": 92,
+        "description": "Kiểm tra Tên SP 255 ký tự (max DB column)",
+        "productName": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "expectedBehavior": "Lưu thành công hoặc báo lỗi vượt giới hạn"
+    },
+    {
+        "testCase": "TC_F2.7_37",
+        "no": 93,
+        "description": "Kiểm tra nhấn Cancel/Quay lại không lưu",
+        "productName": "SP Cancel Test",
+        "category": "Trái cây nội địa",
+        "price": "50000",
+        "action": "cancel",
+        "expectedBehavior": "Quay về danh sách và không lưu sản phẩm"
+    },
+    {
+        "testCase": "TC_F2.7_38",
+        "no": 94,
+        "description": "Kiểm tra tạo SP khi mất kết nối mạng",
+        "productName": "SP Network Test",
+        "category": "Trái cây nội địa",
+        "price": "40000",
+        "action": "save_when_offline",
+        "expectedBehavior": "Hiển thị lỗi kết nối; dữ liệu đã nhập không mất"
+    }
+]

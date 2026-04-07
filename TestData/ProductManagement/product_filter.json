@@ -1,0 +1,66 @@
+[
+  {
+    "testCase": "TC_F2.4_01",
+    "no": 29,
+    "description": "Kiểm tra tìm kiếm sản phẩm không tồn tại - hiển thị thông báo trống",
+    "searchKeyword": "xyzkhongtontai",
+    "expectedMessage": "Không tìm thấy sản phẩm nào"
+  },
+  {
+    "testCase": "TC_F2.4_02",
+    "no": 30,
+    "description": "Kiểm tra tìm kiếm với ký tự XSS - không crash, 0 kết quả",
+    "searchKeyword": "<script>alert('xss')</script>"
+  },
+  {
+    "testCase": "TC_F2.4_03",
+    "no": 31,
+    "description": "Kiểm tra tìm kiếm với SQL Injection - không crash hệ thống",
+    "searchKeyword": "'; DROP TABLE Products;--"
+  },
+  {
+    "testCase": "TC_F2.4_04",
+    "no": 32,
+    "description": "Boundary: Tìm kiếm với 254 ký tự (max-1)",
+    "searchKeyword": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "testCase": "TC_F2.4_05",
+    "no": 33,
+    "description": "Boundary: Tìm kiếm với 256 ký tự (max+1)",
+    "searchKeyword": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "testCase": "TC_F2.4_06",
+    "no": 34,
+    "description": "Negative: Tìm kiếm với ký tự đặc biệt emoji - không crash",
+    "searchKeyword": "🍎"
+  },
+  {
+    "testCase": "TC_F2.4_07",
+    "no": 35,
+    "description": "Negative: Tìm kiếm với HTML entities - không render HTML",
+    "searchKeyword": "&amp; &lt; &gt;"
+  },
+  {
+    "testCase": "TC_F2.4_08",
+    "no": 36,
+    "description": "Error Guessing: Gõ nhanh liên tục - debounce hoạt động",
+    "searchKeyword": "Táo Fuji Mỹ",
+    "expectedProductName": "Táo Fuji Mỹ"
+  },
+  {
+    "testCase": "TC_F2.4_09",
+    "no": 37,
+    "description": "Error Guessing: Nhấn Enter trong ô tìm kiếm - không submit form",
+    "searchKeyword": "Táo"
+  },
+  {
+    "testCase": "TC_F2.4_10",
+    "no": 38,
+    "description": "Decision Table: Search không tồn tại + Category cụ thể + Sort A-Z → 0 kết quả",
+    "searchKeyword": "xyzabc999",
+    "categoryFilter": "Trái cây nhập khẩu",
+    "sortOption": "Tên A-Z"
+  }
+]
