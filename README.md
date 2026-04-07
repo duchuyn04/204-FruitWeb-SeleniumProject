@@ -13,23 +13,29 @@ SeleniumProject/
 │   ├── Auth/
 │   │   └── LoginPage.cs                ← Trang đăng nhập
 │   ├── ProductManagement/
-│   │   └── CreateProductPage.cs        ← Trang tạo sản phẩm (Admin)
+│   │   ├── CreateProductPage.cs        ← Trang tạo sản phẩm mới
+│   │   └── ProductListPage.cs          ← Trang danh sách sản phẩm
 │   └── CheckoutPage.cs                 ← Trang thanh toán
 │
 ├── Tests/                              ← Test cases chia theo module
 │   ├── Auth/
 │   │   └── LoginTests.cs               ← Test đăng nhập
 │   ├── ProductManagement/
-│   │   ├── AddProductTests.cs           ← Test thêm sản phẩm
-│   │   ├── ProductValidationTests.cs    ← Test validation sản phẩm
-│   │   └── ProductAccessTests.cs        ← Test phân quyền truy cập
+│   │   ├── ProductCreateTests.cs       ← Test chức năng thêm sản phẩm
+│   │   ├── ProductFilterTests.cs       ← Test lọc sản phẩm
+│   │   ├── ProductListTests.cs         ← Test danh sách sản phẩm
+│   │   └── ProductSearchTests.cs       ← Test tìm kiếm sản phẩm
 │   └── CheckoutTests.cs                ← Test luồng thanh toán
 │
 ├── TestData/                           ← Dữ liệu test (JSON + file)
 │   ├── Auth/
 │   │   └── login_data.json
 │   ├── ProductManagement/
-│   │   └── product_data.json
+│   │   ├── product_create.json         ← Dữ liệu tạo sản phẩm
+│   │   ├── product_filter.json         ← Dữ liệu lọc sản phẩm
+│   │   ├── product_list.json           ← Dữ liệu danh sách sản phẩm
+│   │   ├── product_search.json         ← Dữ liệu tìm kiếm sản phẩm
+│   │   └── product_upload.json         ← Dữ liệu upload file
 │   ├── Checkout/
 │   │   └── checkout_data.json
 │   └── Images/                         ← File dùng cho upload test
@@ -69,7 +75,7 @@ SeleniumProject/
 | Module | Page Object | Test Class | Mô tả |
 |---|---|---|---|
 | **Auth** | `LoginPage.cs` | `LoginTests.cs` | Đăng nhập với nhiều bộ dữ liệu |
-| **Product Management** | `CreateProductPage.cs` | `AddProductTests.cs`, `ProductValidationTests.cs`, `ProductAccessTests.cs` | Thêm sản phẩm, validation form, phân quyền Admin/Customer |
+| **Product Management** | `CreateProductPage.cs`, `ProductListPage.cs` | `ProductCreateTests.cs`, `ProductFilterTests.cs`, `ProductListTests.cs`, `ProductSearchTests.cs` | Thêm sản phẩm, thiết lập trạng thái, tìm kiếm, lọc và phân trang |
 | **Checkout** | `CheckoutPage.cs` | `CheckoutTests.cs` | Luồng thanh toán, áp mã giảm giá |
 
 ---
@@ -149,7 +155,7 @@ dotnet test SeleniumProject.csproj --filter "FullyQualifiedName~TC_LOGIN_01"
 
 # Chạy toàn bộ 1 module
 dotnet test SeleniumProject.csproj --filter "ClassName~LoginTests"
-dotnet test SeleniumProject.csproj --filter "ClassName~AddProductTests"
+dotnet test SeleniumProject.csproj --filter "ClassName~ProductCreateTests"
 dotnet test SeleniumProject.csproj --filter "ClassName~CheckoutTests"
 
 # Chạy tất cả test trong namespace ProductManagement
@@ -219,6 +225,6 @@ public void TC_XX_01_MoTaNgan()
 | `NUnit3TestAdapter` | 5.0 | Adapter để `dotnet test` nhận diện NUnit |
 | `WebDriverManager` | 2.17 | Tự động tải ChromeDriver |
 | `DotNetSeleniumExtras.WaitHelpers` | 3.11 | Explicit wait conditions |
-| `ClosedXML` | 0.105 | Đọc/ghi file Excel (.xlsx) |
+| `ClosedXML` | 0.105 | Đọc/ghi file Excel (.xlsx) |`
 | `NPOI` | 2.7 | Xử lý file Excel (backup) |
 | `Microsoft.Extensions.Configuration` | 10.0 | Đọc cấu hình từ JSON |
