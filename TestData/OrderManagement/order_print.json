@@ -1,0 +1,28 @@
+[
+  {
+    "no": 52,
+    "tcId": "TC_F12.32_01",
+    "requirementId": "F12.32",
+    "feature": "Order Print",
+    "testName": "Nút In đơn hàng hiển thị trên trang chi tiết",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "printButtonText": "In đơn hàng",
+    "preCondition": "Đã đăng nhập Admin, đang ở trang chi tiết đơn hàng",
+    "expectedResult": "Nút In đơn hàng hiển thị và có thể click"
+  },
+  {
+    "no": 53,
+    "tcId": "TC_F12.32_02",
+    "requirementId": "F12.32",
+    "feature": "Order Print",
+    "testName": "Click nút In đơn hàng mở trình in hoặc xuất file",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "printButtonText": "In đơn hàng",
+    "preCondition": "Đã đăng nhập Admin, đang ở trang chi tiết đơn hàng",
+    "expectedResult": "Mở cửa sổ cấu hình máy in hoặc tải file PDF về máy tính"
+  }
+]

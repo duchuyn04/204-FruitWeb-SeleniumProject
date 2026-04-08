@@ -1,0 +1,45 @@
+[
+  {
+    "no": 36,
+    "tcId": "TC_F12.28_01",
+    "requirementId": "F12.28",
+    "feature": "Order Note",
+    "testName": "Ghi chú mới xuất hiện ngay không cần reload trang",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "noteTextareaId": "noteContent",
+    "addNoteBtnId": "addNoteBtn",
+    "noteInput": "Đã kiểm tra đơn hàng - Admin Huy",
+    "preCondition": "Đang ở trang chi tiết đơn, chưa có ghi chú nào",
+    "expectedResult": "Ghi chú hiện lên đầu danh sách kèm tên Admin và thời gian, không reload trang"
+  },
+  {
+    "no": 37,
+    "tcId": "TC_F12.28_02",
+    "requirementId": "F12.28",
+    "feature": "Order Note",
+    "testName": "Textarea ghi chú hiển thị placeholder và bộ đếm ký tự 0/1000",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "noteTextareaId": "noteContent",
+    "expectedCounterInitial": "0/1000",
+    "preCondition": "Đang ở trang chi tiết đơn hàng",
+    "expectedResult": "Khung nhập hiển thị gợi ý mờ và bộ đếm khởi đầu 0/1000"
+  },
+  {
+    "no": 38,
+    "tcId": "TC_F12.28_03",
+    "requirementId": "F12.28",
+    "feature": "Order Note",
+    "testName": "Bộ đếm ký tự cập nhật real-time khi nhập nội dung",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "noteTextareaId": "noteContent",
+    "noteInput": "Ghi chú kiểm tra",
+    "preCondition": "Đang ở trang chi tiết đơn, textarea ghi chú hiển thị",
+    "expectedResult": "Bộ đếm tự động tăng theo đúng số ký tự gõ vào"
+  }
+]

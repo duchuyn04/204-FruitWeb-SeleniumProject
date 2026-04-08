@@ -1,0 +1,49 @@
+[
+  {
+    "no": 16,
+    "tcId": "TC_F12.24_01",
+    "requirementId": "F12.24",
+    "feature": "Order Payment",
+    "testName": "Nút Xác nhận thu tiền hiển thị khi thanh toán Chờ thanh toán",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterPaymentStatusElementId": "filterPaymentStatus",
+    "filterPaymentStatusValue": "Chờ thanh toán",
+    "paymentBtnText": "Xác nhận thu tiền",
+    "preCondition": "Có đơn hàng thanh toán Chờ thanh toán",
+    "expectedResult": "Nút Xác nhận thu tiền hiển thị và có thể click"
+  },
+  {
+    "no": 17,
+    "tcId": "TC_F12.24_02",
+    "requirementId": "F12.24",
+    "feature": "Order Payment",
+    "testName": "Modal xác nhận thu tiền hiện ra khi nhấn nút",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterPaymentStatusElementId": "filterPaymentStatus",
+    "filterPaymentStatusValue": "Chờ thanh toán",
+    "paymentModalId": "paymentModal",
+    "preCondition": "Đang ở trang chi tiết đơn có thanh toán Chờ thanh toán",
+    "expectedResult": "Hộp thoại xác nhận hiện ra kèm nút Xác nhận và Hủy"
+  },
+  {
+    "no": 18,
+    "tcId": "TC_F12.24_03",
+    "requirementId": "F12.24",
+    "feature": "Order Payment",
+    "testName": "Trạng thái thanh toán chuyển Đã thanh toán sau khi xác nhận",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterPaymentStatusElementId": "filterPaymentStatus",
+    "filterPaymentStatusValue": "Chờ thanh toán",
+    "paymentModalId": "paymentModal",
+    "paymentStatusBefore": "Chờ thanh toán",
+    "paymentStatusAfter": "Đã thanh toán",
+    "preCondition": "Modal xác nhận thu tiền đang hiển thị",
+    "expectedResult": "Trạng thái đổi thành Đã thanh toán, nút thu tiền biến mất ngay"
+  }
+]

@@ -1,0 +1,131 @@
+[
+  {
+    "no": 1,
+    "tcId": "TC_F12.1_01",
+    "requirementId": "F12.1",
+    "feature": "Order List",
+    "testName": "Truy cập khi chưa đăng nhập tự động chuyển về trang login",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Chưa đăng nhập, trỏ thẳng vào URL Admin/Order",
+    "expectedResult": "Hệ thống tự động chuyển hướng về trang đăng nhập"
+  },
+  {
+    "no": 2,
+    "tcId": "TC_F12.1_02",
+    "requirementId": "F12.1",
+    "feature": "Order List",
+    "testName": "Sau khi đăng nhập đúng được phép truy cập danh sách đơn",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Tài khoản Admin hợp lệ, chưa đăng nhập",
+    "expectedResult": "Được phép vào trang danh sách đơn hàng thành công"
+  },
+  {
+    "no": 3,
+    "tcId": "TC_F12.2_01",
+    "requirementId": "F12.2",
+    "feature": "Order List",
+    "testName": "Tài khoản không phải Admin bị chặn truy cập",
+    "nonAdminEmail": "customer@gmail.com",
+    "nonAdminPassword": "Customer123",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Đã đăng nhập bằng tài khoản khách hàng thông thường",
+    "expectedResult": "Hệ thống báo lỗi phân quyền và chặn truy cập"
+  },
+  {
+    "no": 7,
+    "tcId": "TC_F12.3_01",
+    "requirementId": "F12.3",
+    "feature": "Order List",
+    "testName": "Danh sách đơn hàng hiển thị đúng, đơn mới nhất trên cùng",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Đã đăng nhập Admin, có ít nhất 1 đơn trong CSDL",
+    "expectedResult": "Danh sách đơn hàng hiển thị đúng, đơn mới nhất nằm trên cùng"
+  },
+  {
+    "no": 8,
+    "tcId": "TC_F12.3_02",
+    "requirementId": "F12.3",
+    "feature": "Order List",
+    "testName": "Bảng danh sách hiển thị đủ các cột thông tin",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "expectedColumns": [
+      "Mã đơn",
+      "Khách hàng",
+      "Ngày tạo",
+      "Tổng tiền",
+      "Trạng thái",
+      "Thanh toán"
+    ],
+    "preCondition": "Đã đăng nhập Admin",
+    "expectedResult": "Bảng hiển thị đầy đủ các cột theo thiết kế"
+  },
+  {
+    "no": 9,
+    "tcId": "TC_F12.3_03",
+    "requirementId": "F12.3",
+    "feature": "Order List",
+    "testName": "Danh sách tải thành công không có lỗi hiển thị",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Đã đăng nhập Admin",
+    "expectedResult": "Trang tải hoàn chỉnh, không có spinner lâu hay lỗi JS"
+  },
+  {
+    "no": 34,
+    "tcId": "TC_F12.4_01",
+    "requirementId": "F12.4",
+    "feature": "Order List",
+    "testName": "Click mã đơn hàng mở đúng trang chi tiết",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "preCondition": "Đã đăng nhập Admin, danh sách có ít nhất 1 đơn",
+    "expectedResult": "Mở đúng trang chi tiết của đơn hàng đó"
+  },
+  {
+    "no": 35,
+    "tcId": "TC_F12.4_02",
+    "requirementId": "F12.4",
+    "feature": "Order List",
+    "testName": "Click icon xem chi tiết mở đúng trang chi tiết",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "viewDetailIconSelector": ".btn-view-detail",
+    "preCondition": "Đã đăng nhập Admin, danh sách có ít nhất 1 đơn",
+    "expectedResult": "Mở đúng trang chi tiết đơn hàng tương ứng"
+  },
+  {
+    "no": 48,
+    "tcId": "TC_F12.5_01",
+    "requirementId": "F12.5",
+    "feature": "Order List",
+    "testName": "Mỗi trang hiển thị tối đa 10 đơn hàng",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "pageSize": 10,
+    "preCondition": "Có hơn 10 đơn hàng trong CSDL",
+    "expectedResult": "Mỗi trang chỉ hiện tối đa 10 đơn"
+  },
+  {
+    "no": 49,
+    "tcId": "TC_F12.5_02",
+    "requirementId": "F12.5",
+    "feature": "Order List",
+    "testName": "Chuyển sang trang 2 dữ liệu thay đổi không trùng trang 1",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "pageSize": 10,
+    "preCondition": "Có hơn 10 đơn hàng trong CSDL",
+    "expectedResult": "Bấm sang trang 2, dữ liệu thay đổi không trùng với trang 1"
+  }
+]

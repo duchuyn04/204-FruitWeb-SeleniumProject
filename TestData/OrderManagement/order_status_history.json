@@ -1,0 +1,46 @@
+[
+  {
+    "no": 39,
+    "tcId": "TC_F12.31_01",
+    "requirementId": "F12.31",
+    "feature": "Order Status History",
+    "testName": "Section lịch sử trạng thái hiển thị đủ thông tin mỗi lần thay đổi",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterStatusElementId": "filterStatus",
+    "filterStatusValue": "Đang xử lý",
+    "preCondition": "Có đơn hàng đã được duyệt ít nhất 1 lần",
+    "expectedResult": "Hiện đầy đủ lịch sử: tên hành động, thời gian và người thực hiện"
+  },
+  {
+    "no": 40,
+    "tcId": "TC_F12.31_02",
+    "requirementId": "F12.31",
+    "feature": "Order Status History",
+    "testName": "Lịch sử ghi nhận đúng timestamp thời điểm thực hiện",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterStatusElementId": "filterStatus",
+    "filterStatusValue": "Chờ xử lý",
+    "timestampToleranceMinutes": 2,
+    "preCondition": "Vừa duyệt đơn thành công",
+    "expectedResult": "Timestamp trong lịch sử khớp với thời gian hệ thống trong vòng 2 phút"
+  },
+  {
+    "no": 41,
+    "tcId": "TC_F12.31_03",
+    "requirementId": "F12.31",
+    "feature": "Order Status History",
+    "testName": "Lịch sử ghi nhận đúng tên Admin thực hiện hành động",
+    "adminEmail": "duchuy2004@gmail.com",
+    "adminPassword": "Duchuy2004",
+    "adminOrderUrl": "http://localhost:5270/Admin/Order",
+    "filterStatusElementId": "filterStatus",
+    "filterStatusValue": "Chờ xử lý",
+    "expectedAdminName": "duchuy2004@gmail.com",
+    "preCondition": "Đã đăng nhập bằng tài khoản duchuy2004@gmail.com và vừa duyệt đơn",
+    "expectedResult": "Lịch sử ghi nhận chính xác email/tên người thực hiện"
+  }
+]
