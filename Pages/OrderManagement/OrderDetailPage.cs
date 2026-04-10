@@ -220,5 +220,49 @@ namespace SeleniumProject.Pages.OrderManagement
                 return $"URL={_driver.Url}";
             }
         }
+        // Đếm số dòng trong bảng sản phẩm
+        public int GetProductTableRowCount()
+            => _driver.FindElements(ProductRows).Count;
+
+        // Kiểm tra section thông tin khách hàng
+        public bool HasCustomerSection()
+            => _driver.FindElements(By.XPath("//*[contains(text(),'Khách hàng') or contains(text(),'Thông tin khách')]")).Count > 0;
+
+        // Kiểm tra nút Quay lại
+        public bool IsBackButtonExists() => _driver.FindElements(BackBtn).Count > 0;
+        public bool IsBackButtonDisplayed() => IsBackButtonExists() && _driver.FindElement(BackBtn).Displayed;
+        public bool IsBackButtonEnabled() => IsBackButtonExists() && _driver.FindElement(BackBtn).Enabled;
+
+        // Kiểm tra textarea ghi chú nội bộ
+        public bool IsNoteTextareaDisplayed()
+            => _driver.FindElements(NoteTextarea).Count > 0 && _driver.FindElement(NoteTextarea).Displayed;
+
+        // Nhấn phím Escape (thay Driver.FindElement(By.TagName("body")).SendKeys trong test)
+        public void PressEscapeKey()
+            => _driver.FindElement(By.TagName("body")).SendKeys(Keys.Escape);
+
+        // Kiểm tra section lịch sử trạng thái
+        public bool HasHistorySection()
+            => _driver.FindElements(By.XPath("//*[contains(text(),'Lịch sử') or contains(@class,'history') or contains(@id,'history')]")).Count > 0;
+
+        // Kiểm tra timestamp có chứa năm chỉ định
+        public bool HasTimestampForYear(string year)
+            => _driver.FindElements(By.XPath($"//*[contains(text(),'{year}')]")).Count > 0;
+
+        // Kiểm tra page source có chứa text (thay Driver.PageSource.Contains trong test)
+        public bool PageContains(string text) => _driver.PageSource.Contains(text);
+
+        // Kiểm tra nút In đơn hàng
+        public bool IsPrintButtonExists() => _driver.FindElements(PrintBtn).Count > 0;
+        public bool IsPrintButtonDisplayed()
+        {
+            var els = _driver.FindElements(PrintBtn);
+            return els.Count > 0 && els[0].Displayed;
+        }
+        public bool IsPrintButtonEnabled()
+        {
+            var els = _driver.FindElements(PrintBtn);
+            return els.Count > 0 && els[0].Enabled;
+        }
     }
 }

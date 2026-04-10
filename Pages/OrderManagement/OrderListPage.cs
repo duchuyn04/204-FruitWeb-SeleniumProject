@@ -176,5 +176,14 @@ namespace SeleniumProject.Pages.OrderManagement
                 return $"URL={_driver.Url}";
             }
         }
+
+        // Lấy danh sách tiêu đề cột bảng (thay Driver.FindElements trong test)
+        public List<string> GetTableHeaders()
+        {
+            var headers = _driver.FindElements(By.CssSelector("table thead th"));
+            var result = new List<string>();
+            foreach (var h in headers) result.Add(h.Text.Trim());
+            return result;
+        }
     }
 }
