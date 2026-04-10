@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -39,19 +38,16 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
+
+            bool btnExists = _orderDetailPage.IsPrintButtonExists();
+            bool btnDisplayed = _orderDetailPage.IsPrintButtonDisplayed();
+            bool btnEnabled = _orderDetailPage.IsPrintButtonEnabled();
 
             string printBtnText = data.GetValueOrDefault("printButtonText", "In đơn hàng");
-            var printBtns = Driver.FindElements(
-                By.XPath($"//button[contains(.,'{printBtnText}')]"));
-
-            bool btnExists = printBtns.Count > 0;
-            bool btnDisplayed = btnExists && printBtns[0].Displayed;
-            bool btnEnabled = btnExists && printBtns[0].Enabled;
-
             CurrentActualResult = $"Nút '{printBtnText}' - Tồn tại: {btnExists} | Hiển thị: {btnDisplayed} | Click được: {btnEnabled}";
 
             Assert.That(btnExists, Is.True,
@@ -73,10 +69,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string urlBefore = Driver.Url;
 

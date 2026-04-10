@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -39,13 +38,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             bool isPaymentBtnVisible = _orderDetailPage.IsConfirmPaymentButtonVisible();
             string paymentStatus = _orderDetailPage.GetPaymentStatus();
@@ -66,13 +65,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickConfirmPayment();
             Thread.Sleep(1000);
@@ -96,13 +95,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickConfirmPayment();
             Thread.Sleep(1000);

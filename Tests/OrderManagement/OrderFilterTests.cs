@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -37,10 +36,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             var rows = _orderListPage.GetAllRows();
             int rowCount = rows.Count;
@@ -73,10 +72,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đã hủy"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             var rows = _orderListPage.GetAllRows();
             int rowCount = rows.Count;
@@ -108,19 +107,19 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             int totalBefore = _orderListPage.GetTotalOrderCount();
 
             // Lọc theo Chờ xử lý
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusBefore", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             int filteredCount = _orderListPage.GetTotalOrderCount();
 
             // Reset về Tất cả
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusAll", "Tất cả"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             int totalAfter = _orderListPage.GetTotalOrderCount();
 
@@ -140,10 +139,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             var rows = _orderListPage.GetAllRows();
             int rowCount = rows.Count;
@@ -175,10 +174,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Đã thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             var rows = _orderListPage.GetAllRows();
             int rowCount = rows.Count;
@@ -210,15 +209,15 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             int totalBefore = _orderListPage.GetTotalOrderCount();
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusBefore", "Chờ thanh toán"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusAll", "Tất cả"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             int totalAfter = _orderListPage.GetTotalOrderCount();
 
@@ -238,14 +237,14 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string fromDate = data.GetValueOrDefault("fromDate", "01/01/2025");
             string toDate = data.GetValueOrDefault("toDate", "12/31/2025");
 
             _orderListPage.SetFromDate(fromDate);
             _orderListPage.SetToDate(toDate);
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
@@ -266,13 +265,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string fromDate = data.GetValueOrDefault("fromDate", "03/01/2025");
 
             _orderListPage.SetFromDate(fromDate);
             // Không set toDate — để trống
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
@@ -293,7 +292,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string filterStatus = data.GetValueOrDefault("filterStatusValue", "Chờ xử lý");
             string filterPayment = data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán");
@@ -301,7 +300,7 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectStatus(filterStatus);
             Thread.Sleep(500);
             _orderListPage.SelectPaymentStatus(filterPayment);
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             var rows = _orderListPage.GetAllRows();
             int rowCount = rows.Count;
@@ -334,7 +333,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đã hủy"));
             Thread.Sleep(500);
@@ -342,7 +341,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Thread.Sleep(500);
             _orderListPage.SetFromDate(data.GetValueOrDefault("fromDate", "01/01/2025"));
             _orderListPage.SetToDate(data.GetValueOrDefault("toDate", "01/31/2025"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
@@ -363,11 +362,11 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SetFromDate(data.GetValueOrDefault("fromDate", "12/31/2025"));
             _orderListPage.SetToDate(data.GetValueOrDefault("toDate", "01/01/2025"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             // Kết quả hợp lệ: hoặc trang báo lỗi, hoặc không có kết quả nào
             bool pageHealthy = _orderListPage.IsPageHealthy();
@@ -396,12 +395,12 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string sameDate = data.GetValueOrDefault("fromDate", "03/15/2025");
             _orderListPage.SetFromDate(sameDate);
             _orderListPage.SetToDate(data.GetValueOrDefault("toDate", "03/15/2025"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;

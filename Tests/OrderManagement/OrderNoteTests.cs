@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -39,16 +38,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
-            // Kiểm tra textarea tồn tại
-            var textarea = Driver.FindElement(By.Id(data.GetValueOrDefault("noteTextareaId", "noteContent")));
-            bool textareaExists = textarea.Displayed;
+            bool textareaExists = _orderDetailPage.IsNoteTextareaDisplayed();
 
-            // Kiểm tra bộ đếm ký tự ban đầu
             string charCounter = _orderDetailPage.GetNoteCharCount();
             string expectedCounter = data.GetValueOrDefault("expectedCounterInitial", "0/1000");
 
@@ -70,10 +66,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string noteText = data.GetValueOrDefault("noteInput", "Ghi chú kiểm tra");
             _orderDetailPage.EnterNote(noteText);
@@ -98,10 +94,10 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string urlBefore = Driver.Url;
             string noteText = data.GetValueOrDefault("noteInput", "Đã kiểm tra đơn hàng - Admin Huy");
@@ -113,8 +109,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Thread.Sleep(2000);
 
             string urlAfter = Driver.Url;
-            string pageSource = Driver.PageSource;
-            bool noteAppearedInPage = pageSource.Contains(noteText);
+            bool noteAppearedInPage = _orderDetailPage.PageContains(noteText);
 
             CurrentActualResult = $"URL thay đổi: {urlBefore != urlAfter} | Ghi chú hiển thị ngay: {noteAppearedInPage}";
 

@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -40,19 +39,15 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đang xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
-            // Kiểm tra section lịch sử tồn tại
-            var historyRows = Driver.FindElements(
-                By.XPath("//*[contains(text(),'Lịch sử') or contains(@class,'history') or contains(@id,'history')]"));
-
-            bool hasSectionHistory = historyRows.Count > 0;
+            bool hasSectionHistory = _orderDetailPage.HasHistorySection();
             string orderCode = _orderDetailPage.GetOrderCode();
 
             CurrentActualResult = $"Đơn: {orderCode} | Section lịch sử tồn tại: {hasSectionHistory}";
@@ -72,13 +67,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             DateTime timeBefore = DateTime.Now;
 
@@ -87,12 +82,8 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderDetailPage.ConfirmActionModal();
             Thread.Sleep(2000);
 
-            // Đọc timestamp từ lịch sử — tìm phần tử chứa năm hiện tại (yyyy)
             string currentYear = timeBefore.Year.ToString();
-            var timestampElements = Driver.FindElements(
-                By.XPath($"//*[contains(text(),'{currentYear}')]"));
-
-            bool hasCurrentYearTimestamp = timestampElements.Count > 0;
+            bool hasCurrentYearTimestamp = _orderDetailPage.HasTimestampForYear(currentYear);
 
             CurrentActualResult = $"Thời điểm duyệt: {timeBefore:HH:mm} | Có timestamp năm {currentYear}: {hasCurrentYearTimestamp}";
 
@@ -111,13 +102,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickApproveOrder();
             Thread.Sleep(500);
@@ -125,9 +116,8 @@ namespace SeleniumProject.Tests.OrderManagement
             Thread.Sleep(2000);
 
             string expectedAdminName = data.GetValueOrDefault("expectedAdminName", "duchuy2004@gmail.com");
-            string pageSource = Driver.PageSource;
-            bool hasAdminName = pageSource.Contains(expectedAdminName) 
-                || pageSource.Contains(expectedAdminName.Split('@')[0]);
+            bool hasAdminName = _orderDetailPage.PageContains(expectedAdminName)
+                || _orderDetailPage.PageContains(expectedAdminName.Split('@')[0]);
 
             CurrentActualResult = $"Admin thực hiện: {expectedAdminName} | Tên hiển thị trong lịch sử: {hasAdminName}";
 

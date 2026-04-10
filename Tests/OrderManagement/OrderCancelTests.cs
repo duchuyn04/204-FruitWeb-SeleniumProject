@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -39,13 +38,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickCancelOrder();
             Thread.Sleep(1000);
@@ -69,13 +68,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickCancelOrder();
             Thread.Sleep(1000);
@@ -101,13 +100,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string statusBefore = _orderDetailPage.GetOrderStatus();
 
@@ -135,20 +134,20 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string statusBefore = _orderDetailPage.GetOrderStatus();
 
             _orderDetailPage.ClickCancelOrder();
             Thread.Sleep(1000);
 
-            Driver.FindElement(By.TagName("body")).SendKeys(OpenQA.Selenium.Keys.Escape);
+            _orderDetailPage.PressEscapeKey();
             Thread.Sleep(1000);
 
             string statusAfter = _orderDetailPage.GetOrderStatus();

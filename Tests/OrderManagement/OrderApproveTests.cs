@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -39,13 +38,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();
@@ -67,13 +66,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickApproveOrder();
             Thread.Sleep(500);
@@ -102,23 +101,20 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             _orderDetailPage.ClickApproveOrder();
             Thread.Sleep(500);
             _orderDetailPage.ConfirmActionModal();
             Thread.Sleep(2000);
 
-            // Cuộn xuống section lịch sử và kiểm tra
-            var historySection = Driver.FindElements(
-                By.XPath("//*[contains(text(),'Lịch sử') or contains(text(),'lich su')]"));
-            bool hasHistorySection = historySection.Count > 0;
+            bool hasHistorySection = _orderDetailPage.HasHistorySection();
 
             CurrentActualResult = $"Section lịch sử tồn tại: {hasHistorySection} | Trạng thái mới: {_orderDetailPage.GetOrderStatus()}";
 
@@ -136,13 +132,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đã hủy"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();
@@ -163,13 +159,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đang xử lý"));
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();

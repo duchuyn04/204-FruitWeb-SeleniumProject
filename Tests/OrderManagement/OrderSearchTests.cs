@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -37,22 +36,21 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1000);
+            Wait.WaitForUrlContains("/Admin/Order");
 
-            // Xử lý đọc maliciousInput thay vì searchKeyword
             string maliciousInput = data.GetValueOrDefault("maliciousInput", "<script>alert('xss')</script>");
 
             _orderListPage.SearchByOrderCode(maliciousInput);
-            Thread.Sleep(1500); // Đợi Web load xong bảng
+            Thread.Sleep(1500);
 
             bool isHealthy = _orderListPage.IsPageHealthy();
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
-            
-            CurrentActualResult = isHealthy 
-                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả." 
+
+            CurrentActualResult = isHealthy
+                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả."
                 : "LỖI BẢO MẬT: Web bị vỡ trang hoặc hiện mã lỗi khi nhập XSS!";
 
-            Assert.That(isHealthy, Is.True, 
+            Assert.That(isHealthy, Is.True,
                 "[TC_F10.13_01] Trang bị crash hoặc lỗi hiển thị khi tiêm mã XSS");
         }
 
@@ -66,21 +64,21 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1000);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string maliciousInput = data.GetValueOrDefault("maliciousInput", "' OR '1'='1");
-            
+
             _orderListPage.SearchByOrderCode(maliciousInput);
             Thread.Sleep(1500);
 
             bool isHealthy = _orderListPage.IsPageHealthy();
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
-            
-            CurrentActualResult = isHealthy 
-                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả." 
+
+            CurrentActualResult = isHealthy
+                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả."
                 : "LỖI BẢO MẬT: Nhập SQL Injection gây lỗi phía Server/UI!";
 
-            Assert.That(isHealthy, Is.True, 
+            Assert.That(isHealthy, Is.True,
                 "[TC_F10.13_02] Gây lỗi khi nhập SQL Injection");
         }
 
@@ -94,7 +92,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1000);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string maliciousInput = data.GetValueOrDefault("maliciousInput", "AAAAAAAAAAAAAAAAAAAA");
             _orderListPage.SearchByOrderCode(maliciousInput);
@@ -102,12 +100,12 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool isHealthy = _orderListPage.IsPageHealthy();
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
-            
-            CurrentActualResult = isHealthy 
-                ? $"Web ổn định khi nhập chuỗi siêu dài. Kết quả trả về: {soLuongTimThay}" 
+
+            CurrentActualResult = isHealthy
+                ? $"Web ổn định khi nhập chuỗi siêu dài. Kết quả trả về: {soLuongTimThay}"
                 : "LỖI: Trình duyệt bị treo hoặc Server sập do chuỗi quá dài";
 
-            Assert.That(isHealthy, Is.True, 
+            Assert.That(isHealthy, Is.True,
                 "[TC_F10.13_03] Nhập dữ liệu quá dài gây vỡ/crash");
         }
 
@@ -121,7 +119,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             // Lấy mã đơn đầu tiên để dùng làm từ khóa tìm kiếm
             string firstOrderCode = _orderListPage.GetOrderCodeOfRow(0);
@@ -150,7 +148,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             // Tìm bằng chữ HOA
             _orderListPage.SearchByOrderCode("ORD");
@@ -178,7 +176,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             int totalBefore = _orderListPage.GetTotalOrderCount();
 
@@ -207,7 +205,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string notExistCode = data.GetValueOrDefault("searchKeyword", "ORD-99999999-ZZZZZZZZ");
             _orderListPage.SearchByOrderCode(notExistCode);
@@ -234,7 +232,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             string randomKeyword = data.GetValueOrDefault("searchKeyword", "ABCDEFGH12345678");
             _orderListPage.SearchByOrderCode(randomKeyword);

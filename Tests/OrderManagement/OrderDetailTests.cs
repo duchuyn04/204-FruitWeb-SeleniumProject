@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using SeleniumProject.Pages.OrderManagement;
 using SeleniumProject.Utilities;
 using System;
@@ -38,34 +37,25 @@ namespace SeleniumProject.Tests.OrderManagement
             CurrentTestCaseId = "TC_F10.8_01";
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
-            // Mở danh sách đơn hàng trước để chọn một đơn hợp lệ
             _orderListPage.Open();
-            Thread.Sleep(1500); // Chờ bảng load xong
+            Wait.WaitForUrlContains("/Admin/Order");
 
-            // Lấy mã đơn ở dòng 1 để lưu lại trước khi view detail
             string expectedOrderCode = _orderListPage.GetOrderCodeOfRow(0);
-            
-            // Nhấn xem chi tiết
-            _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500); // Chờ trang html Detail render
 
-            // Lấy mã hóa đơn ở trên màn hình chi tiết mới
+            _orderListPage.ClickViewDetail(0);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
+
             string actualOrderCodeOnDetail = _orderDetailPage.GetOrderCode();
-            
+
             string ketQuaHeThong = _orderDetailPage.DocKetQuaThucTe();
             CurrentActualResult = $"{ketQuaHeThong} | Đoạn Header: {actualOrderCodeOnDetail}";
 
-            // Kiểm tra mã đơn có trùng khớp không
             bool isOrderCodeMatch = actualOrderCodeOnDetail.Contains(expectedOrderCode);
-            Assert.That(isOrderCodeMatch, Is.True, 
+            Assert.That(isOrderCodeMatch, Is.True,
                 "[TC_F10.8_01] Mã đơn trên trang chi tiết không khớp với đơn vừa click");
-            
-            // Theo yêu cầu: Hiển thị đúng tên sản phẩm, số lượng, đơn giá, tổng tiền.
-            // Bảng sản phẩm tồn tại và có dữ liệu (có nhiều tr bên trong tbody của thẻ table đổ về)
-            IReadOnlyCollection<IWebElement> bangSanPhamRows = Driver.FindElements(By.CssSelector("table tbody tr"));
-            int rowCount = bangSanPhamRows.Count;
 
-            Assert.That(rowCount, Is.GreaterThan(0), 
+            int rowCount = _orderDetailPage.GetProductTableRowCount();
+            Assert.That(rowCount, Is.GreaterThan(0),
                 "[TC_F10.8_01] Bảng sản phẩm trống không thấy hàng hóa nào (Expected > 0)");
         }
 
@@ -79,28 +69,26 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string currentUrl = Driver.Url;
             bool isOnDetailPage = currentUrl.Contains("/Admin/Order/Detail/");
 
-            // Kiểm tra trang chi tiết load thành công
             Assert.That(isOnDetailPage, Is.True,
                 "[TC_F10.8_02] Không điều hướng được về trang chi tiết đơn hàng");
 
-            // Kiểm tra section khách hàng có hiển thị
-            bool hasCustomerSection = Driver.FindElements(By.XPath("//*[contains(text(),'Khách hàng') or contains(text(),'Thông tin khách')]")).Count > 0;
-            
+            bool hasCustomerSection = _orderDetailPage.HasCustomerSection();
+
             string orderStatus = _orderDetailPage.GetOrderStatus();
             string paymentStatus = _orderDetailPage.GetPaymentStatus();
 
             CurrentActualResult = $"URL: {currentUrl} | Trạng thái đơn: {orderStatus} | Thanh toán: {paymentStatus} | Có section khách: {hasCustomerSection}";
 
-            Assert.That(isOnDetailPage, Is.True,
-                "[TC_F10.8_02] Trang chi tiết không load đúng");
+            Assert.That(hasCustomerSection, Is.True,
+                "[TC_F10.8_02] Không tìm thấy section thông tin khách hàng trên trang chi tiết");
         }
 
         // ============================================
@@ -113,13 +101,12 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string currentUrl = Driver.Url;
-            // Kiểm tra URL có dạng /Admin/Order/Detail/{số nguyên}
             bool isValidUrl = System.Text.RegularExpressions.Regex.IsMatch(
                 currentUrl, @"/Admin/Order/Detail/\d+$");
 
@@ -145,8 +132,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string pageSource = Driver.PageSource.ToLower();
             string currentUrl = Driver.Url;
 
-            // Acceptnếu: 404, "not found", "không tồn tại", hoặc redirect
-            bool is404 = pageSource.Contains("404") 
+            bool is404 = pageSource.Contains("404")
                 || pageSource.Contains("not found")
                 || pageSource.Contains("không tìm thấy")
                 || pageSource.Contains("không tồn tại")
@@ -174,7 +160,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string pageSource = Driver.PageSource.ToLower();
             string currentUrl = Driver.Url;
 
-            bool isErrorPage = pageSource.Contains("404") 
+            bool isErrorPage = pageSource.Contains("404")
                 || pageSource.Contains("not found")
                 || pageSource.Contains("bad request")
                 || pageSource.Contains("không hợp lệ")
@@ -196,21 +182,19 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
-            // Xác nhận đang ở trang chi tiết
             Assert.That(Driver.Url.Contains("/Admin/Order/Detail/"), Is.True,
                 "[TC_F10.10_01] Không điều hướng được sang trang chi tiết");
 
-            // Click nút quay lại
             _orderDetailPage.ClickBack();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlNotContains("/Detail");
 
             string currentUrl = Driver.Url;
-            bool isBackOnList = currentUrl.Contains("/Admin/Order") 
+            bool isBackOnList = currentUrl.Contains("/Admin/Order")
                 && !currentUrl.Contains("/Admin/Order/Detail");
 
             CurrentActualResult = $"URL sau khi quay lại: {currentUrl} | Về danh sách: {isBackOnList}";
@@ -229,16 +213,14 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
-            // Kiểm tra nút back tồn tại và hiển thị
-            var backBtns = Driver.FindElements(By.CssSelector("a[href='/Admin/Order']"));
-            bool exists = backBtns.Count > 0;
-            bool isDisplayed = exists && backBtns[0].Displayed;
-            bool isEnabled = exists && backBtns[0].Enabled;
+            bool exists = _orderDetailPage.IsBackButtonExists();
+            bool isDisplayed = _orderDetailPage.IsBackButtonDisplayed();
+            bool isEnabled = _orderDetailPage.IsBackButtonEnabled();
 
             CurrentActualResult = $"Nút tồn tại: {exists} | Hiển thị: {isDisplayed} | Click được: {isEnabled}";
 
@@ -257,13 +239,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string orderCode = _orderDetailPage.GetOrderCode();
-            bool hasGuestLabel = Driver.PageSource.Contains("Khách vãng lai");
+            bool hasGuestLabel = _orderDetailPage.PageContains("Khách vãng lai");
 
             CurrentActualResult = $"Đơn: {orderCode} | Có nhãn Khách vãng lai: {hasGuestLabel}";
 
@@ -282,13 +264,13 @@ namespace SeleniumProject.Tests.OrderManagement
             Dictionary<string, string> data = DocDuLieu(CurrentTestCaseId);
 
             _orderListPage.Open();
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order");
 
             _orderListPage.ClickViewDetail(0);
-            Thread.Sleep(1500);
+            Wait.WaitForUrlContains("/Admin/Order/Detail/");
 
             string orderCode = _orderDetailPage.GetOrderCode();
-            bool hasGuestLabel = Driver.PageSource.Contains("Khách vãng lai");
+            bool hasGuestLabel = _orderDetailPage.PageContains("Khách vãng lai");
 
             CurrentActualResult = $"Đơn: {orderCode} | Nhãn khách vãng lai: {hasGuestLabel}";
 
