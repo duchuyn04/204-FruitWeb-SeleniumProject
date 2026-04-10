@@ -1,44 +1,182 @@
 [
   {
-    "testCase": "TC_LOGIN_01",
-    "description": "Đăng nhập thành công với tài khoản hợp lệ",
+    "no": 19,
+    "testCase": "TC_F1.4_01",
+    "description": "Đăng nhập thành công với tài khoản Admin hợp lệ",
     "email": "duchuy2004@gmail.com",
     "password": "Duchuy2004",
-    "expectedResult": "success"
+    "rememberMe": false,
+    "expectedResult": "success",
+    "expectedRedirect": "/Admin/Dashboard"
   },
   {
-    "testCase": "TC_LOGIN_02",
-    "description": "Đăng nhập thất bại với mật khẩu sai",
-    "email": "testuser_jetski_888@example.com",
-    "password": "SaiMatKhau999",
-    "expectedResult": "fail"
+    "no": 20,
+    "testCase": "TC_F1.4_02",
+    "description": "Đăng nhập thành công với Ghi nhớ đăng nhập được bật",
+    "email": "duchuy2004@gmail.com",
+    "password": "Duchuy2004",
+    "rememberMe": true,
+    "expectedResult": "success",
+    "expectedRedirect": "/Admin/Dashboard"
   },
   {
-    "testCase": "TC_LOGIN_03",
-    "description": "Đăng nhập thất bại với email không tồn tại",
-    "email": "khongtontai@example.com",
-    "password": "Password123!",
-    "expectedResult": "fail"
+    "no": 21,
+    "testCase": "TC_F1.4_03",
+    "description": "Đăng nhập thành công với tài khoản khách hàng thường (role Customer)",
+    "email": "customer.test@fruitables.vn",
+    "password": "Customer@2025",
+    "rememberMe": true,
+    "expectedResult": "success",
+    "expectedRedirect": "/"
   },
   {
-    "testCase": "TC_LOGIN_04",
-    "description": "Đăng nhập thất bại khi để trống email",
+    "no": 22,
+    "testCase": "TC_F1.4_04",
+    "description": "Đăng nhập thành công với tài khoản SuperAdmin",
+    "email": "superadmin@fruitables.vn",
+    "password": "SuperAdmin@2025",
+    "rememberMe": true,
+    "expectedResult": "success",
+    "expectedRedirect": "/Admin/Dashboard"
+  },
+  {
+    "no": 23,
+    "testCase": "TC_F1.4_05",
+    "description": "Chuyển hướng đúng trang sau khi đăng nhập từ URL được bảo vệ",
+    "email": "duchuy2004@gmail.com",
+    "password": "Duchuy2004",
+    "rememberMe": false,
+    "protectedUrl": "/Account/Profile",
+    "expectedResult": "success",
+    "expectedRedirect": "/Account/Profile"
+  },
+  {
+    "no": 24,
+    "testCase": "TC_F1.4_06",
+    "description": "Đăng nhập thành công với mật khẩu đúng 6 ký tự (boundary min)",
+    "email": "minpass.test@fruitables.vn",
+    "password": "abc123",
+    "rememberMe": false,
+    "expectedResult": "success",
+    "expectedRedirect": "/"
+  },
+  {
+    "no": 25,
+    "testCase": "TC_F1.5_01",
+    "description": "Báo lỗi khi để trống cả Email và Mật khẩu",
     "email": "",
-    "password": "Password123!",
-    "expectedResult": "fail"
-  },
-  {
-    "testCase": "TC_LOGIN_05",
-    "description": "Đăng nhập thất bại khi để trống mật khẩu",
-    "email": "testuser_jetski_888@example.com",
     "password": "",
+    "rememberMe": false,
     "expectedResult": "fail"
   },
   {
-    "testCase": "TC_LOGIN_06",
-    "description": "Đăng nhập thất bại khi email sai định dạng",
-    "email": "khong-phai-email",
-    "password": "Password123!",
+    "no": 26,
+    "testCase": "TC_F1.5_02",
+    "description": "Báo lỗi khi để trống Email",
+    "email": "",
+    "password": "SuperAdmin@2025",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 27,
+    "testCase": "TC_F1.5_03",
+    "description": "Báo lỗi khi để trống Mật khẩu",
+    "email": "duchuy2004@gmail.com",
+    "password": "",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 28,
+    "testCase": "TC_F1.5_04",
+    "description": "Báo lỗi khi Email sai định dạng",
+    "email": "notanemail",
+    "password": "Duchuy2004",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 29,
+    "testCase": "TC_F1.5_05",
+    "description": "Báo lỗi khi Email không tồn tại trong hệ thống",
+    "email": "notexist@fruitables.vn",
+    "password": "Duchuy2004",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 30,
+    "testCase": "TC_F1.5_06",
+    "description": "Báo lỗi khi Mật khẩu sai",
+    "email": "duchuy2004@gmail.com",
+    "password": "WrongPassword99",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 31,
+    "testCase": "TC_F1.5_07",
+    "description": "Báo lỗi khi mật khẩu đúng nhưng sai chữ hoa/thường",
+    "email": "duchuy2004@gmail.com",
+    "password": "duchuy2004",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 32,
+    "testCase": "TC_F1.5_08",
+    "description": "Đăng nhập thành công khi Email nhập có chữ hoa lẫn chữ thường (normalize)",
+    "email": "Duchuy2004@Gmail.COM",
+    "password": "Duchuy2004",
+    "rememberMe": false,
+    "expectedResult": "success",
+    "expectedRedirect": "/Admin/Dashboard"
+  },
+  {
+    "no": 33,
+    "testCase": "TC_F1.5_09",
+    "description": "Báo lỗi khi đăng nhập với tài khoản bị khóa",
+    "email": "locked.user@fruitables.vn",
+    "password": "Locked@2025",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 34,
+    "testCase": "TC_F1.5_10",
+    "description": "Báo lỗi khi đăng nhập lần 2 với tài khoản bị khóa (mật khẩu khác)",
+    "email": "locked.user@fruitables.vn",
+    "password": "WrongPass@2025",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 35,
+    "testCase": "TC_F1.5_11",
+    "description": "Báo lỗi khi mật khẩu chỉ có 5 ký tự (dưới giới hạn tối thiểu)",
+    "email": "duchuy2004@gmail.com",
+    "password": "abc12",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 36,
+    "testCase": "TC_F1.5_12",
+    "description": "Báo lỗi định dạng khi Email chứa khoảng trắng (trim không hỗ trợ)",
+    "email": " duc huy2004@gmail.com ",
+    "password": "Duchuy2004",
+    "rememberMe": false,
+    "expectedResult": "fail"
+  },
+  {
+    "no": 37,
+    "testCase": "TC_F1.5_13",
+    "description": "Chặn tài khoản Customer truy cập trang Admin Dashboard",
+    "email": "customer.test@fruitables.vn",
+    "password": "Customer@2025",
+    "rememberMe": false,
+    "accessUrl": "/Admin/Dashboard",
     "expectedResult": "fail"
   }
 ]

@@ -7,94 +7,162 @@ namespace SeleniumProject.Pages.Auth
     {
         private readonly IWebDriver _driver;
         private readonly WaitHelper _wait;
+        private readonly string _pageUrl;
 
-        // URL trang đăng nhập — xây từ BaseUrl trong appsettings.json
-        private readonly string LoginUrl;
+        // ==============================================================
+        // LOCATORS - Trang Đăng nhập (/Account/Login)
+        // ==============================================================
 
-        // Locators — khai báo cách tìm từng element trên trang
-        private readonly By EmailInput = By.Id("Email");
-        private readonly By PasswordInput = By.Id("Password");
-        private readonly By LoginButton = By.CssSelector(".btn-auth-primary");
-        private readonly By RememberMeCheckbox = By.Id("RememberMe");
-        private readonly By ForgotPasswordLink = By.CssSelector("a[href='/Account/ForgotPassword']");
-        private readonly By RegisterLink = By.CssSelector("a[href='/Account/Register']");
-        private readonly By ToastMessage = By.CssSelector(".toast-body");
+        // --- Form fields ---
+        private readonly By EmailInput      = By.Id("Email");
+        private readonly By PasswordInput   = By.Id("Password");
+        private readonly By RememberMeCheck = By.Id("RememberMe");
 
+        // --- Submit ---
+        private readonly By LoginButton     = By.CssSelector("button.btn-auth-primary");
+
+        // --- Validation messages (ASP.NET client-side) ---
+        private readonly By EmailError      = By.CssSelector("[data-valmsg-for='Email']");
+        private readonly By PasswordError   = By.CssSelector("[data-valmsg-for='Password']");
+
+        // --- Thông báo lỗi server-side ---
+        private readonly By ServerError     = By.CssSelector(".alert-danger, .toast-body, .validation-summary-errors li");
+
+        // ==============================================================
         public LoginPage(IWebDriver driver, string baseUrl)
         {
-            _driver = driver;
-            _wait = new WaitHelper(driver);
-            LoginUrl = baseUrl.TrimEnd('/') + "/Account/Login";
+            _driver  = driver;
+            _wait    = new WaitHelper(driver);
+            _pageUrl = baseUrl + "/Account/Login";
         }
 
-        // Mở trang đăng nhập
-        public void Open()
-        {
-            _driver.Navigate().GoToUrl(LoginUrl);
-        }
+        public void Open() => _driver.Navigate().GoToUrl(_pageUrl);
 
-        // Nhập email (gõ từng ký tự để nhìn thấy quá trình)
+        // --- Nhập form ---
         public void EnterEmail(string email)
         {
-            _wait.SlowType(EmailInput, email);
+            var el = _wait.WaitForVisible(EmailInput);
+            el.Clear();
+            if (!string.IsNullOrEmpty(email))
+                el.SendKeys(email);
         }
 
-        // Nhập mật khẩu (gõ từng ký tự để nhìn thấy quá trình)
         public void EnterPassword(string password)
         {
-            _wait.SlowType(PasswordInput, password);
+            var el = _wait.WaitForVisible(PasswordInput);
+            el.Clear();
+            if (!string.IsNullOrEmpty(password))
+                el.SendKeys(password);
         }
 
-        // Click nút đăng nhập
-        public void ClickLoginButton()
+        public void SetRememberMe(bool remember)
         {
-            _wait.WaitForClickable(LoginButton).Click();
-        }
-
-        // Thực hiện toàn bộ luồng đăng nhập (email + password + click)
-        public void Login(string email, string password)
-        {
-            EnterEmail(email);
-            EnterPassword(password);
-            ClickLoginButton();
-        }
-
-        // Tick vào ô "Ghi nhớ đăng nhập"
-        public void CheckRememberMe()
-        {
-            var checkbox = _wait.WaitForVisible(RememberMeCheckbox);
-            if (!checkbox.Selected)
+            var checkbox = _driver.FindElement(RememberMeCheck);
+            if (checkbox.Selected != remember)
                 checkbox.Click();
         }
 
-        // Click link "Quên mật khẩu?"
-        public void ClickForgotPassword()
+        public void ClickLogin() => _driver.FindElement(LoginButton).Click();
+
+        // Điền form và submit (rememberMe mặc định false)
+        public void Login(string email, string password, bool rememberMe = false)
         {
-            _wait.WaitForClickable(ForgotPasswordLink).Click();
+            EnterEmail(email);
+            EnterPassword(password);
+            SetRememberMe(rememberMe);
+            ClickLogin();
         }
 
-        // Click link "Đăng ký"
-        public void ClickRegisterLink()
+        // --- Đọc lỗi validation ---
+        public string GetEmailError()    => GetFieldError(EmailError);
+        public string GetPasswordError() => GetFieldError(PasswordError);
+
+        private string GetFieldError(By locator)
         {
-            _wait.WaitForClickable(RegisterLink).Click();
+            try
+            {
+                var el = _driver.FindElement(locator);
+                return el.Displayed ? el.Text.Trim() : "";
+            }
+            catch { return ""; }
         }
 
-        // Lấy nội dung thông báo toast (thành công hoặc lỗi)
-        public string GetToastMessage()
+        public List<string> GetAllValidationErrors()
         {
-            return _wait.WaitForVisible(ToastMessage).Text;
+            try
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+                var errors = _driver.FindElements(ServerError);
+                return errors
+                    .Where(e => e.Displayed && !string.IsNullOrWhiteSpace(e.Text))
+                    .Select(e => e.Text.Trim())
+                    .ToList();
+            }
+            finally
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            }
         }
 
-        // Kiểm tra đã đăng nhập thành công chưa (dựa vào URL redirect về trang chủ)
+        public bool HasAnyError()
+        {
+            if (!string.IsNullOrEmpty(GetEmailError())) return true;
+            if (!string.IsNullOrEmpty(GetPasswordError())) return true;
+            return GetAllValidationErrors().Count > 0;
+        }
+
+        // --- Kiểm tra trạng thái ---
+        public bool IsOnPage() => _driver.Url.Contains("/Account/Login");
+
+        public bool IsLoggedIn() =>
+            !_driver.Url.Contains("/Account/Login") &&
+            !_driver.Url.Contains("/Account/Register");
+
+        public bool IsRedirectedToAdmin() => _driver.Url.Contains("/Admin");
+
+        public bool IsRedirectedToHome() =>
+            _driver.Url.TrimEnd('/').EndsWith("5270") ||
+            _driver.Url.Contains("localhost:5270/") && !_driver.Url.Contains("/Account") && !_driver.Url.Contains("/Admin");
+
+        public string GetCurrentUrl() => _driver.Url;
+
+        // Đăng nhập thành công = không còn ở trang Login
         public bool IsLoginSuccessful()
         {
-            return _driver.Url.Contains("/Home") || _driver.Url.Contains("localhost:5270/");
+            Thread.Sleep(800);
+            return !_driver.Url.Contains("/Account/Login");
         }
 
-        // Lấy URL hiện tại
-        public string GetCurrentUrl()
+        // Lấy nội dung toast message (server-side hoặc JS toast)
+        public string GetToastMessage()
         {
-            return _driver.Url;
+            Thread.Sleep(800);
+            try
+            {
+                var toasts = _driver.FindElements(By.CssSelector(".toast-body, .alert-danger, .alert-success, [class*='toast']"));
+                foreach (var t in toasts)
+                    if (t.Displayed && !string.IsNullOrWhiteSpace(t.Text))
+                        return t.Text.Trim();
+                return "";
+            }
+            catch { return ""; }
+        }
+
+        public string DocKetQuaThucTe()
+        {
+            try
+            {
+                var toasts = _driver.FindElements(By.CssSelector(".toast-body, .alert, [class*='toast']"));
+                foreach (var t in toasts)
+                    if (t.Displayed && !string.IsNullOrWhiteSpace(t.Text))
+                        return "Toast: " + t.Text.Trim();
+
+                return $"URL={_driver.Url} | EmailErr={GetEmailError()} | PassErr={GetPasswordError()}";
+            }
+            catch
+            {
+                return $"URL={_driver.Url}";
+            }
         }
     }
 }

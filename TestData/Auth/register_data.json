@@ -1,0 +1,182 @@
+[
+  {
+    "no": 1,
+    "testCase": "TC_F1.1_01",
+    "description": "Đăng ký thành công với thông tin hợp lệ đầy đủ",
+    "fullName": "Trần Công Danh",
+    "email": "autotest01@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "success"
+  },
+  {
+    "no": 2,
+    "testCase": "TC_F1.1_02",
+    "description": "Đăng ký thành công với họ tên có dấu tiếng Việt",
+    "fullName": "Trần Công Danh",
+    "email": "autotest02@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "success"
+  },
+  {
+    "no": 3,
+    "testCase": "TC_F1.1_03",
+    "description": "Đăng ký thành công với mật khẩu đúng 6 ký tự (boundary min)",
+    "fullName": "Test Min Pass",
+    "email": "autotest03@fruitables.vn",
+    "password": "abc123",
+    "confirmPassword": "abc123",
+    "expectedResult": "success"
+  },
+  {
+    "no": 4,
+    "testCase": "TC_F1.1_04",
+    "description": "Đăng ký thành công với email dạng subdomain hợp lệ",
+    "fullName": "Test Subdomain",
+    "email": "autotest04@mail.fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "success"
+  },
+  {
+    "no": 5,
+    "testCase": "TC_F1.1_05",
+    "description": "Đăng ký thành công với Họ và tên đúng 1 ký tự (boundary min)",
+    "fullName": "A",
+    "email": "bva1.test@fruitables.vn",
+    "password": "Min1@2025",
+    "confirmPassword": "Min1@2025",
+    "expectedResult": "success"
+  },
+  {
+    "no": 6,
+    "testCase": "TC_F1.2_01",
+    "description": "Báo lỗi khi để trống tất cả các trường",
+    "fullName": "",
+    "email": "",
+    "password": "",
+    "confirmPassword": "",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 7,
+    "testCase": "TC_F1.2_02",
+    "description": "Báo lỗi khi để trống trường Họ và tên",
+    "fullName": "",
+    "email": "valid@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 8,
+    "testCase": "TC_F1.2_03",
+    "description": "Báo lỗi khi Email sai định dạng",
+    "fullName": "Test User",
+    "email": "invalidemailformat",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 9,
+    "testCase": "TC_F1.2_04",
+    "description": "Báo lỗi khi Email đã tồn tại trong hệ thống",
+    "fullName": "Test Duplicate",
+    "email": "existed@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 10,
+    "testCase": "TC_F1.2_05",
+    "description": "Báo lỗi khi mật khẩu 5 ký tự (dưới giới hạn tối thiểu 6)",
+    "fullName": "Test BVA",
+    "email": "testbva01@fruitables.vn",
+    "password": "abc12",
+    "confirmPassword": "abc12",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 11,
+    "testCase": "TC_F1.2_06",
+    "description": "Báo lỗi khi Xác nhận mật khẩu không khớp",
+    "fullName": "Test Mismatch",
+    "email": "testmismatch@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@456",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 12,
+    "testCase": "TC_F1.2_07",
+    "description": "Báo lỗi khi Họ và tên vượt quá 200 ký tự (boundary max+1 = 201 ký tự)",
+    "fullName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "email": "testbva02@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 13,
+    "testCase": "TC_F1.2_08",
+    "description": "Báo lỗi khi Họ và tên vượt quá 200 ký tự (được kiểm tra lần 2 tại thao tác submit lần 2)",
+    "fullName": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "email": "testbva03@fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 14,
+    "testCase": "TC_F1.2_09",
+    "description": "Báo lỗi khi Email chứa khoảng trắng",
+    "fullName": "Test Space Email",
+    "email": "test @fruitables.vn",
+    "password": "Test@123",
+    "confirmPassword": "Test@123",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 15,
+    "testCase": "TC_F1.2_10",
+    "description": "Báo lỗi khi để trống trường Email",
+    "fullName": "Trần Công Danh",
+    "email": "",
+    "password": "Khoa@2025",
+    "confirmPassword": "Khoa@2025",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 16,
+    "testCase": "TC_F1.2_11",
+    "description": "Báo lỗi khi để trống trường Mật khẩu",
+    "fullName": "Trần Công Danh",
+    "email": "thuha.test@fruitables.vn",
+    "password": "",
+    "confirmPassword": "",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 17,
+    "testCase": "TC_F1.2_12",
+    "description": "Báo lỗi khi Email chỉ chứa ký tự đặc biệt",
+    "fullName": "Trần Công Danh",
+    "email": "@@@.com",
+    "password": "Duc@2025",
+    "confirmPassword": "Duc@2025",
+    "expectedResult": "fail"
+  },
+  {
+    "no": 18,
+    "testCase": "TC_F1.2_13",
+    "description": "Báo lỗi khi Họ và tên toàn số và ký tự đặc biệt",
+    "fullName": "!!!123###",
+    "email": "special.test@fruitables.vn",
+    "password": "Special@99",
+    "confirmPassword": "Special@99",
+    "expectedResult": "fail"
+  }
+]
