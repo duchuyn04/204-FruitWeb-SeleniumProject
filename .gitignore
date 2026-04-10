@@ -510,3 +510,13 @@ prompt.md
 
 #skills
 skills/excel_auto/
+
+#AGENTS
+AGENTS.md
+
+generate_seed.py
+seed_orders.sql
+
+markdown/
+
+skills/
