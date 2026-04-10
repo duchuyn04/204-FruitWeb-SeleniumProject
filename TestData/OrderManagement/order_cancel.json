@@ -1,8 +1,8 @@
 [
   {
     "no": 19,
-    "tcId": "TC_F12.26_01",
-    "requirementId": "F12.26",
+    "testCase": "TC_F10.26_01",
+    "requirementId": "F10.26",
     "feature": "Order Cancel",
     "testName": "Modal xác nhận hủy đơn hiện ra khi nhấn nút Hủy đơn hàng",
     "adminEmail": "duchuy2004@gmail.com",
@@ -16,8 +16,8 @@
   },
   {
     "no": 20,
-    "tcId": "TC_F12.26_02",
-    "requirementId": "F12.26",
+    "testCase": "TC_F10.26_02",
+    "requirementId": "F10.26",
     "feature": "Order Cancel",
     "testName": "Trạng thái đơn chuyển thành Đã hủy sau khi xác nhận hủy",
     "adminEmail": "duchuy2004@gmail.com",
@@ -33,8 +33,8 @@
   },
   {
     "no": 50,
-    "tcId": "TC_F12.27_01",
-    "requirementId": "F12.27",
+    "testCase": "TC_F10.27_01",
+    "requirementId": "F10.27",
     "feature": "Order Cancel",
     "testName": "Click Hủy bỏ trong modal không thay đổi trạng thái đơn",
     "adminEmail": "duchuy2004@gmail.com",
@@ -48,8 +48,8 @@
   },
   {
     "no": 51,
-    "tcId": "TC_F12.27_02",
-    "requirementId": "F12.27",
+    "testCase": "TC_F10.27_02",
+    "requirementId": "F10.27",
     "feature": "Order Cancel",
     "testName": "Nhấn Escape đóng modal hủy đơn mà không thay đổi trạng thái",
     "adminEmail": "duchuy2004@gmail.com",

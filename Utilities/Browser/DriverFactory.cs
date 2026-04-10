@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
 
 namespace SeleniumProject.Utilities
 {
@@ -10,7 +7,8 @@ namespace SeleniumProject.Utilities
     {
         public static IWebDriver InitializeDriver(bool headless = false)
         {
-            new DriverManager().SetUpDriver(new ChromeConfig(), WebDriverManager.Helpers.VersionResolveStrategy.MatchingBrowser);
+            // Selenium Manager (tích hợp sẵn từ Selenium 4.6+) tự tìm ChromeDriver phù hợp
+            // mà không cần gọi internet — tránh lỗi SSL khi không có kết nối mạng
 
             var options = new ChromeOptions();
 

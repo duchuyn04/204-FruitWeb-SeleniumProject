@@ -1,8 +1,8 @@
 [
   {
     "no": 39,
-    "tcId": "TC_F12.31_01",
-    "requirementId": "F12.31",
+    "testCase": "TC_F10.31_01",
+    "requirementId": "F10.31",
     "feature": "Order Status History",
     "testName": "Section lịch sử trạng thái hiển thị đủ thông tin mỗi lần thay đổi",
     "adminEmail": "duchuy2004@gmail.com",
@@ -15,8 +15,8 @@
   },
   {
     "no": 40,
-    "tcId": "TC_F12.31_02",
-    "requirementId": "F12.31",
+    "testCase": "TC_F10.31_02",
+    "requirementId": "F10.31",
     "feature": "Order Status History",
     "testName": "Lịch sử ghi nhận đúng timestamp thời điểm thực hiện",
     "adminEmail": "duchuy2004@gmail.com",
@@ -30,8 +30,8 @@
   },
   {
     "no": 41,
-    "tcId": "TC_F12.31_03",
-    "requirementId": "F12.31",
+    "testCase": "TC_F10.31_03",
+    "requirementId": "F10.31",
     "feature": "Order Status History",
     "testName": "Lịch sử ghi nhận đúng tên Admin thực hiện hành động",
     "adminEmail": "duchuy2004@gmail.com",

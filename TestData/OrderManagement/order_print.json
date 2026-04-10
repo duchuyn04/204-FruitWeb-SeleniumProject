@@ -1,8 +1,8 @@
 [
   {
     "no": 52,
-    "tcId": "TC_F12.32_01",
-    "requirementId": "F12.32",
+    "testCase": "TC_F10.32_01",
+    "requirementId": "F10.32",
     "feature": "Order Print",
     "testName": "Nút In đơn hàng hiển thị trên trang chi tiết",
     "adminEmail": "duchuy2004@gmail.com",
@@ -14,8 +14,8 @@
   },
   {
     "no": 53,
-    "tcId": "TC_F12.32_02",
-    "requirementId": "F12.32",
+    "testCase": "TC_F10.32_02",
+    "requirementId": "F10.32",
     "feature": "Order Print",
     "testName": "Click nút In đơn hàng mở trình in hoặc xuất file",
     "adminEmail": "duchuy2004@gmail.com",

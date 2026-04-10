@@ -145,5 +145,36 @@ namespace SeleniumProject.Pages.OrderManagement
         // --- Helpers ---
         public bool HasRows() => _driver.FindElements(TableRows).Count > 0;
         public bool IsOnPage() => _driver.Url.Contains("/Admin/Order");
+
+        public bool IsPageHealthy()
+        {
+            try
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
+                var errors = _driver.FindElements(By.CssSelector(".field-validation-error, .alert-danger"));
+                return errors.Count == 0;
+            }
+            finally
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            }
+        }
+
+        public string DocKetQuaThucTe()
+        {
+            try
+            {
+                var toasts = _driver.FindElements(By.CssSelector(".toast-body, .alert, [class*='toast']"));
+                foreach (var t in toasts)
+                    if (t.Displayed && !string.IsNullOrWhiteSpace(t.Text))
+                        return "Toast: " + t.Text.Trim();
+
+                return $"URL={_driver.Url} | Total={GetTotalOrderCount()}";
+            }
+            catch
+            {
+                return $"URL={_driver.Url}";
+            }
+        }
     }
 }

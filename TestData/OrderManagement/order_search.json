@@ -1,8 +1,8 @@
 [
   {
     "no": 4,
-    "tcId": "TC_F12.13_01",
-    "requirementId": "F12.13",
+    "testCase": "TC_F10.13_01",
+    "requirementId": "F10.13",
     "feature": "Order Search",
     "testName": "Nhập ký tự đặc biệt vào ô tìm kiếm không gây crash",
     "adminEmail": "duchuy2004@gmail.com",
@@ -15,8 +15,8 @@
   },
   {
     "no": 5,
-    "tcId": "TC_F12.13_02",
-    "requirementId": "F12.13",
+    "testCase": "TC_F10.13_02",
+    "requirementId": "F10.13",
     "feature": "Order Search",
     "testName": "Nhập SQL injection vào ô tìm kiếm không ảnh hưởng CSDL",
     "adminEmail": "duchuy2004@gmail.com",
@@ -29,8 +29,8 @@
   },
   {
     "no": 6,
-    "tcId": "TC_F12.13_03",
-    "requirementId": "F12.13",
+    "testCase": "TC_F10.13_03",
+    "requirementId": "F10.13",
     "feature": "Order Search",
     "testName": "Nhập chuỗi ký tự rất dài không gây lỗi hệ thống",
     "adminEmail": "duchuy2004@gmail.com",
@@ -43,8 +43,8 @@
   },
   {
     "no": 21,
-    "tcId": "TC_F12.14_01",
-    "requirementId": "F12.14",
+    "testCase": "TC_F10.14_01",
+    "requirementId": "F10.14",
     "feature": "Order Search",
     "testName": "Tìm kiếm chính xác theo mã đơn hàng",
     "adminEmail": "duchuy2004@gmail.com",
@@ -57,8 +57,8 @@
   },
   {
     "no": 22,
-    "tcId": "TC_F12.14_02",
-    "requirementId": "F12.14",
+    "testCase": "TC_F10.14_02",
+    "requirementId": "F10.14",
     "feature": "Order Search",
     "testName": "Tìm kiếm không phân biệt hoa thường",
     "adminEmail": "duchuy2004@gmail.com",
@@ -71,8 +71,8 @@
   },
   {
     "no": 23,
-    "tcId": "TC_F12.14_03",
-    "requirementId": "F12.14",
+    "testCase": "TC_F10.14_03",
+    "requirementId": "F10.14",
     "feature": "Order Search",
     "testName": "Kết quả tìm kiếm hiển thị ngay khi đang gõ (real-time)",
     "adminEmail": "duchuy2004@gmail.com",
@@ -85,8 +85,8 @@
   },
   {
     "no": 58,
-    "tcId": "TC_F12.15_01",
-    "requirementId": "F12.15",
+    "testCase": "TC_F10.15_01",
+    "requirementId": "F10.15",
     "feature": "Order Search",
     "testName": "Tìm kiếm từ khóa không tồn tại hiển thị thông báo",
     "adminEmail": "duchuy2004@gmail.com",
@@ -99,8 +99,8 @@
   },
   {
     "no": 59,
-    "tcId": "TC_F12.15_02",
-    "requirementId": "F12.15",
+    "testCase": "TC_F10.15_02",
+    "requirementId": "F10.15",
     "feature": "Order Search",
     "testName": "Xóa từ khóa sau khi không tìm thấy kết quả khôi phục danh sách",
     "adminEmail": "duchuy2004@gmail.com",

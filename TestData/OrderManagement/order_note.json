@@ -1,8 +1,8 @@
 [
   {
     "no": 36,
-    "tcId": "TC_F12.28_01",
-    "requirementId": "F12.28",
+    "testCase": "TC_F10.28_01",
+    "requirementId": "F10.28",
     "feature": "Order Note",
     "testName": "Ghi chú mới xuất hiện ngay không cần reload trang",
     "adminEmail": "duchuy2004@gmail.com",
@@ -16,8 +16,8 @@
   },
   {
     "no": 37,
-    "tcId": "TC_F12.28_02",
-    "requirementId": "F12.28",
+    "testCase": "TC_F10.28_02",
+    "requirementId": "F10.28",
     "feature": "Order Note",
     "testName": "Textarea ghi chú hiển thị placeholder và bộ đếm ký tự 0/1000",
     "adminEmail": "duchuy2004@gmail.com",
@@ -30,8 +30,8 @@
   },
   {
     "no": 38,
-    "tcId": "TC_F12.28_03",
-    "requirementId": "F12.28",
+    "testCase": "TC_F10.28_03",
+    "requirementId": "F10.28",
     "feature": "Order Note",
     "testName": "Bộ đếm ký tự cập nhật real-time khi nhập nội dung",
     "adminEmail": "duchuy2004@gmail.com",

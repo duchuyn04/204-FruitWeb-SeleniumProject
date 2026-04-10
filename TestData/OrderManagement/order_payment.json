@@ -1,8 +1,8 @@
 [
   {
     "no": 16,
-    "tcId": "TC_F12.24_01",
-    "requirementId": "F12.24",
+    "testCase": "TC_F10.24_01",
+    "requirementId": "F10.24",
     "feature": "Order Payment",
     "testName": "Nút Xác nhận thu tiền hiển thị khi thanh toán Chờ thanh toán",
     "adminEmail": "duchuy2004@gmail.com",
@@ -16,8 +16,8 @@
   },
   {
     "no": 17,
-    "tcId": "TC_F12.24_02",
-    "requirementId": "F12.24",
+    "testCase": "TC_F10.24_02",
+    "requirementId": "F10.24",
     "feature": "Order Payment",
     "testName": "Modal xác nhận thu tiền hiện ra khi nhấn nút",
     "adminEmail": "duchuy2004@gmail.com",
@@ -31,8 +31,8 @@
   },
   {
     "no": 18,
-    "tcId": "TC_F12.24_03",
-    "requirementId": "F12.24",
+    "testCase": "TC_F10.24_03",
+    "requirementId": "F10.24",
     "feature": "Order Payment",
     "testName": "Trạng thái thanh toán chuyển Đã thanh toán sau khi xác nhận",
     "adminEmail": "duchuy2004@gmail.com",

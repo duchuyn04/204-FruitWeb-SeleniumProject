@@ -182,7 +182,25 @@ namespace SeleniumProject.Utilities
                     if (r == null) continue;
                     var c = r.GetCell(2); // cột C
                     if (c == null) continue;
-                    if (c.ToString()?.Trim() == testCaseId)
+
+                    string cellText = "";
+                    if (c.CellType == CellType.Formula)
+                    {
+                        if (c.CachedFormulaResultType == CellType.String)
+                            cellText = c.StringCellValue;
+                        else
+                            cellText = c.ToString();
+                    }
+                    else if (c.CellType == CellType.String)
+                    {
+                        cellText = c.StringCellValue;
+                    }
+                    else
+                    {
+                        cellText = c.ToString();
+                    }
+
+                    if (cellText?.Trim() == testCaseId)
                     {
                         dongTimThay = i; // 0-based
                         break;
@@ -191,6 +209,7 @@ namespace SeleniumProject.Utilities
 
                 if (dongTimThay == -1)
                 {
+                    TestContext.WriteLine($"[EXCEL TRACE] FAILED to find {testCaseId} in sheet {sheetName}");
                     workbook.Close();
                     return;
                 }
