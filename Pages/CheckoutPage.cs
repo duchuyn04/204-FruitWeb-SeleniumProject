@@ -171,47 +171,126 @@ namespace SeleniumProject.Pages
 
         /// <summary>
         /// Nếu trang Checkout có dropdown địa chỉ đã lưu (#addressSelect),
-        /// chọn option "+ Thêm địa chỉ mới" (value="0") để hiện form nhập địa chỉ mới.
+        /// chọn option "Thêm địa chỉ mới" để hiện form nhập địa chỉ mới.
+        ///
+        /// LƯU Ý: Selenium SelectElement.SelectByValue() KHÔNG trigger JS 'change' event.
+        /// Phải dùng JS dispatchEvent để kích hoạt handler mở panel form.
         /// </summary>
         public void SelectNewAddressOption()
         {
             try
             {
                 var els = _driver.FindElements(AddressSelect);
-                if (els.Count == 0) return; // Không có dropdown → form đã hiện sẵn
-
-                var sel = new SelectElement(els[0]);
-
-                // Ưu tiên chọn theo value="0" (+ Thêm địa chỉ mới)
-                var byValue = sel.Options.FirstOrDefault(o => o.GetAttribute("value") == "0");
-                if (byValue != null)
+                if (els.Count == 0)
                 {
-                    sel.SelectByValue("0");
+                    // Không có dropdown → form đã hiện sẵn (user chưa có địa chỉ lưu)
+                    return;
+                }
+
+                // Xác định value của option "Thêm địa chỉ mới"
+                var sel = new SelectElement(els[0]);
+                string? newAddressValue = null;
+
+                // Tìm option "mới" theo value phổ biến: "0", "new", "-1"
+                var newOpt = sel.Options.FirstOrDefault(o =>
+                    o.GetAttribute("value") == "0"
+                    || o.GetAttribute("value") == "new"
+                    || o.GetAttribute("value") == "-1");
+
+                if (newOpt != null)
+                {
+                    newAddressValue = newOpt.GetAttribute("value");
                 }
                 else
                 {
-                    // Fallback: tìm text chứa "mới"
+                    // Fallback: tìm theo text chứa "mới" hoặc "Thêm"
                     var byText = sel.Options.FirstOrDefault(o =>
                         o.Text.Contains("mới", StringComparison.OrdinalIgnoreCase) ||
                         o.Text.Contains("Thêm", StringComparison.OrdinalIgnoreCase));
                     if (byText != null)
-                        sel.SelectByText(byText.Text);
-                    else
-                        sel.SelectByIndex(sel.Options.Count - 1);
+                        newAddressValue = byText.GetAttribute("value");
                 }
 
-                Thread.Sleep(700); // Đợi form hiện ra (có animation)
+                if (newAddressValue == null)
+                {
+                    // Không tìm thấy option mới → chọn option cuối
+                    newAddressValue = sel.Options.Last().GetAttribute("value");
+                }
+
+                // Bước 1: Dùng JS set value + trigger 'change' event
+                // (Selenium SelectByValue() KHÔNG trigger JS change event của trang)
+                var js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript($@"
+                    var selectEl = document.getElementById('addressSelect');
+                    if (selectEl) {{
+                        selectEl.value = '{newAddressValue}';
+                        selectEl.dispatchEvent(new Event('change', {{ bubbles: true }}));
+                        selectEl.dispatchEvent(new Event('input',  {{ bubbles: true }}));
+                    }}
+                ");
+
+                // Bước 2: Polling chờ #FullNameInput hiển thị (tối đa 4 giây)
+                bool formVisible = false;
+                for (int i = 0; i < 13; i++)
+                {
+                    Thread.Sleep(300);
+                    var inputs = _driver.FindElements(FullNameInput);
+                    if (inputs.Count > 0 && inputs[0].Displayed)
+                    {
+                        formVisible = true;
+                        break;
+                    }
+                }
+
+                // Bước 3: Nếu vẫn chưa hiện → force show bằng JS
+                if (!formVisible)
+                {
+                    js.ExecuteScript(@"
+                        var input = document.getElementById('FullNameInput');
+                        if (input) {
+                            var node = input;
+                            for (var i = 0; i < 8; i++) {
+                                if (!node) break;
+                                node.classList.remove('d-none','collapse','hidden');
+                                node.classList.add('show');
+                                if (node.style) node.style.display = '';
+                                node = node.parentElement;
+                            }
+                        }
+                    ");
+                    Thread.Sleep(400);
+                }
             }
-            catch { /* Không có addressSelect → form đã hiện sẵn, bỏ qua */ }
+            catch
+            {
+                // Nếu exception → bỏ qua, form có thể đã hiện sẵn
+            }
         }
 
-        /// <summary>Xóa và nhập Họ tên</summary>
+
+        /// <summary>Xóa và nhập Họ tên. Dùng JS scroll + focus nếu element bị ẩn.</summary>
         public void EnterFullName(string name)
         {
-            var el = _wait.WaitForVisible(FullNameInput);
-            el.Clear();
-            if (!string.IsNullOrEmpty(name))
-                _wait.SlowType(FullNameInput, name);
+            try
+            {
+                var el = _wait.WaitForVisible(FullNameInput);
+                el.Clear();
+                if (!string.IsNullOrEmpty(name))
+                    _wait.SlowType(FullNameInput, name);
+            }
+            catch
+            {
+                // Fallback: dùng JS để focus và set value khi element tồn tại nhưng bị ẩn
+                var js = (IJavaScriptExecutor)_driver;
+                js.ExecuteScript(
+                    "var el = document.getElementById('FullNameInput');" +
+                    "if(el){ el.style.display='block'; el.value=''; }");
+                Thread.Sleep(300);
+                var el = _driver.FindElement(FullNameInput);
+                el.Clear();
+                if (!string.IsNullOrEmpty(name))
+                    el.SendKeys(name);
+            }
         }
 
         /// <summary>Xóa và nhập Số điện thoại</summary>
@@ -522,6 +601,89 @@ namespace SeleniumProject.Pages
         /// </summary>
         public bool OrderSummaryContains(string text)
             => GetOrderSummaryText().Contains(text, StringComparison.OrdinalIgnoreCase);
+
+        // =====================================================================
+        // STOCK HELPERS
+        // =====================================================================
+
+        /// <summary>
+        /// Vào trang chi tiết sản phẩm và đọc số tồn kho đang hiển thị.
+        /// Tìm text dạng "Còn X sản phẩm" hoặc "X sản phẩm".
+        /// Trả về -1 nếu không đọc được.
+        /// </summary>
+        public int GetStockFromProductPage(string productUrl)
+        {
+            _driver.Navigate().GoToUrl(productUrl);
+            Thread.Sleep(1000);
+
+            try
+            {
+                // Thử các selector phổ biến cho dòng tồn kho
+                var candidates = new[]
+                {
+                    ".product-stock", ".stock-quantity", "[class*='stock']",
+                    ".availability", "[class*='available']", ".qty-available"
+                };
+
+                string stockText = "";
+
+                foreach (var sel in candidates)
+                {
+                    var els = _driver.FindElements(By.CssSelector(sel));
+                    if (els.Count > 0 && !string.IsNullOrWhiteSpace(els[0].Text))
+                    {
+                        stockText = els[0].Text;
+                        break;
+                    }
+                }
+
+                // Fallback: quét toàn body tìm pattern "Còn X sản phẩm"
+                if (string.IsNullOrWhiteSpace(stockText))
+                {
+                    var bodyText = _driver.FindElement(By.TagName("body")).Text;
+                    // Tìm dòng có "sản phẩm" và số
+                    var lines = bodyText.Split('\n');
+                    foreach (var line in lines)
+                    {
+                        if ((line.Contains("Còn") || line.Contains("còn") || line.Contains("sản phẩm"))
+                            && line.Any(char.IsDigit))
+                        {
+                            stockText = line;
+                            break;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(stockText)) return -1;
+
+                // Trích số từ chuỗi: "Còn 42 sản phẩm" → 42
+                var digits = new string(stockText.Where(char.IsDigit).ToArray());
+                if (int.TryParse(digits, out int stock))
+                    return stock;
+
+                return -1;
+            }
+            catch { return -1; }
+        }
+
+        /// <summary>
+        /// Đặt số lượng sản phẩm trên trang chi tiết (input quantity).
+        /// Mặc định = 1 nếu không tìm thấy input.
+        /// </summary>
+        public void SetQuantity(int quantity)
+        {
+            try
+            {
+                var qtyInput = _driver.FindElements(By.CssSelector(
+                    "input[type='number'], input[name='quantity'], input[id*='qty'], input[id*='Qty'], input[id*='quantity']"));
+                if (qtyInput.Count > 0)
+                {
+                    qtyInput[0].Clear();
+                    qtyInput[0].SendKeys(quantity.ToString());
+                }
+            }
+            catch { /* Không tìm thấy input → mặc định 1 */ }
+        }
 
         // =====================================================================
         // CART HELPERS

@@ -222,36 +222,51 @@ namespace SeleniumProject.Utilities
                 stylePass.FillPattern = FillPattern.SolidForeground;
                 stylePass.Alignment = HorizontalAlignment.Center;
                 stylePass.VerticalAlignment = VerticalAlignment.Center;
+                stylePass.WrapText = true;
 
-                IFont fontBold = workbook.CreateFont();
-                fontBold.IsBold = true;
-                stylePass.SetFont(fontBold);
+                IFont fontPass = workbook.CreateFont();
+                fontPass.IsBold = true;
+                fontPass.Color = NPOI.HSSF.Util.HSSFColor.Black.Index; // ← BẮT BUỘC: đặt màu chữ đen
+                stylePass.SetFont(fontPass);
 
                 ICellStyle styleFail = workbook.CreateCellStyle();
                 styleFail.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
                 styleFail.FillPattern = FillPattern.SolidForeground;
                 styleFail.Alignment = HorizontalAlignment.Center;
                 styleFail.VerticalAlignment = VerticalAlignment.Center;
-                styleFail.SetFont(fontBold);
+                styleFail.WrapText = true;
+
+                IFont fontFail = workbook.CreateFont();
+                fontFail.IsBold = true;
+                fontFail.Color = NPOI.HSSF.Util.HSSFColor.White.Index; // chữ trắng nổi trên nền đỏ
+                styleFail.SetFont(fontFail);
 
                 // Ghi Actual Result (cột J = index 9)
                 var cellActual = dongGhi.GetCell(9) ?? dongGhi.CreateCell(9);
+                cellActual.SetCellType(CellType.String);
                 cellActual.SetCellValue(actualResult);
 
                 // Ghi Testscripts — tên method (cột K = index 10)
                 var cellScript = dongGhi.GetCell(10) ?? dongGhi.CreateCell(10);
+                cellScript.SetCellType(CellType.String);
                 cellScript.SetCellValue(tenMethod);
 
                 // Ghi Result (cột L = index 11)
                 var cellResult = dongGhi.GetCell(11) ?? dongGhi.CreateCell(11);
+                cellResult.SetCellType(CellType.String); // ← reset type về String trước khi ghi
                 cellResult.SetCellValue(isPassed ? "Passed" : "Failed");
                 cellResult.CellStyle = isPassed ? stylePass : styleFail;
 
-                // Nhúng ảnh vào cột M (index 12)
-                // Nếu chạy lại test nhiều lần: ảnh mới overlay lên ảnh cũ (ảnh mới hiển thị trên cùng)
+
+                // Xóa text ô M (cột 12) — dù pass hay fail để không còn text cũ
+                var cellM = dongGhi.GetCell(12) ?? dongGhi.CreateCell(12);
+                cellM.SetCellValue("");
+
+                // Nhúng ảnh vào cột M (index 12) — CHỈ khi Failed
+                // Ảnh mới sẽ overlay lên ảnh cũ (nằm trên cùng = ảnh mới nhất)
                 if (!isPassed && !string.IsNullOrEmpty(duongDanScreenshot) && File.Exists(duongDanScreenshot))
                 {
-                    // Đặt chiều cao hàng đủ lớn để thấy ảnh (~120px)
+                    // Đặt chiều cao hàng đủ lớn để thấy ảnh
                     dongGhi.HeightInPoints = 90;
 
                     // Load ảnh PNG vào workbook
@@ -259,7 +274,7 @@ namespace SeleniumProject.Utilities
                     int pictureIdx = workbook.AddPicture(anhBytes, PictureType.PNG);
 
                     // Tạo anchor: Col1=12(M), Row1=dongTimThay → Col2=13(N), Row2=dongTimThay+1
-                    IDrawing drawing = sheet.CreateDrawingPatriarch();
+                    IDrawing drawingObj = sheet.CreateDrawingPatriarch();
                     ICreationHelper helper = workbook.GetCreationHelper();
                     IClientAnchor anchor = helper.CreateClientAnchor();
                     anchor.Col1 = 12;
@@ -268,8 +283,14 @@ namespace SeleniumProject.Utilities
                     anchor.Row2 = dongTimThay + 1;
                     anchor.AnchorType = AnchorType.MoveAndResize;
 
-                    drawing.CreatePicture(anchor, pictureIdx);
+                    drawingObj.CreatePicture(anchor, pictureIdx);
                 }
+                else if (isPassed)
+                {
+                    // Passed → reset chiều cao hàng về bình thường
+                    dongGhi.HeightInPoints = 15;
+                }
+
 
                 // Lưu file
                 using (var writeStream = new FileStream(_filePath, FileMode.Create, FileAccess.Write))
