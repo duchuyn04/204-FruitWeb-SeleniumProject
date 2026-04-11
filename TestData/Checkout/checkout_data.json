@@ -33,7 +33,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "",
     "phone": "0901234567",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hà Nội",
+    "district": "Quận Ba Đình",
+    "ward": "Phường Phúc Xá"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_02",
@@ -44,7 +47,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hà Nội",
+    "district": "Quận Ba Đình",
+    "ward": "Phường Phúc Xá"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_03",
@@ -55,7 +61,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "081208302044",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hà Nội",
+    "district": "Quận Ba Đình",
+    "ward": "Phường Phúc Xá"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_04",
@@ -116,7 +125,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "abcd123456",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_09",
@@ -127,7 +139,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "090-123-4567",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_10",
@@ -138,7 +153,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     "phone": "0901234567",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_11",
@@ -149,7 +167,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
-    "streetAddress": "Số 1 Đường AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Phường 1"
+    "streetAddress": "Số 1 Đường AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Phường 1",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_12",
@@ -167,7 +188,10 @@
     "password": "anhdomixi",
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "phone": "0901234567",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_14",
@@ -178,7 +202,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_5_15",
@@ -189,7 +216,10 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
     "fullName": "Nguyễn Văn A",
     "phone": "09012345678",
-    "streetAddress": "123 Đường ABC"
+    "streetAddress": "123 Đường ABC",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé"
   },
   {
     "testCase": "TC_CHECKOUT_F5_7_01",

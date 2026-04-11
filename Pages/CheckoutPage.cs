@@ -463,6 +463,14 @@ namespace SeleniumProject.Pages
             catch { return false; }
         }
 
+        public bool IsFullNameInvalid()       => IsFieldInvalid(FullNameInput);
+        public bool IsPhoneInvalid()          => IsFieldInvalid(PhoneInput);
+        public bool IsStreetAddressInvalid()  => IsFieldInvalid(StreetAddressInput);
+        public bool IsProvinceInvalid()       => IsFieldInvalid(ProvinceSelect);
+        public bool IsDistrictInvalid()       => IsFieldInvalid(DistrictSelect);
+        public bool IsWardInvalid()           => IsFieldInvalid(WardSelect);
+
+
         /// <summary>Sau khi click Đặt hàng, nếu có lỗi thì vẫn ở trang Checkout</summary>
         public bool IsStillOnCheckoutPage()
         {

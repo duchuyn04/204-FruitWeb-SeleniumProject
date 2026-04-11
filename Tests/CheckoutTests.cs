@@ -118,14 +118,14 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName("");
             _checkoutPage.EnterPhone(data["phone"]);
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hà Nội");
-            _checkoutPage.SelectDistrict("Quận Ba Đình");
-            _checkoutPage.SelectWard("Phường Phúc Xá");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
-            bool hasError = messages.Any() || _checkoutPage.IsFieldInvalid(By.Id("FullNameInput"));
+            bool hasError = messages.Any() || _checkoutPage.IsFullNameInvalid();
 
             CurrentActualResult = hasError
                 ? $"Hệ thống chặn lại, báo lỗi: {(messages.Any() ? string.Join(", ", messages) : "focus đỏ vào ô Họ tên")}."
@@ -147,14 +147,14 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone("");
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hà Nội");
-            _checkoutPage.SelectDistrict("Quận Ba Đình");
-            _checkoutPage.SelectWard("Phường Phúc Xá");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
-            bool hasError = messages.Any() || _checkoutPage.IsFieldInvalid(By.Id("Mobile"));
+            bool hasError = messages.Any() || _checkoutPage.IsPhoneInvalid();
 
             CurrentActualResult = hasError
                 ? $"Hệ thống chặn lại, báo lỗi: {(messages.Any() ? string.Join(", ", messages) : "focus đỏ vào ô SĐT")}."
@@ -176,15 +176,15 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]); // 12 số
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hà Nội");
-            _checkoutPage.SelectDistrict("Quận Ba Đình");
-            _checkoutPage.SelectWard("Phường Phúc Xá");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any(m => m.Contains("10") || m.Contains("11") || m.Contains("số") || m.Contains("điện thoại"))
-                || _checkoutPage.IsFieldInvalid(By.Id("Mobile"));
+                || _checkoutPage.IsPhoneInvalid();
 
             CurrentActualResult = hasError
                 ? $"Hệ thống chặn lại, báo lỗi SĐT sai độ dài: {(messages.Any() ? string.Join(", ", messages) : "field invalid")}."
@@ -210,7 +210,7 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
-            bool hasError = messages.Any() || _checkoutPage.IsFieldInvalid(By.Id("StreetAddressInput"));
+            bool hasError = messages.Any() || _checkoutPage.IsStreetAddressInvalid();
 
             CurrentActualResult = hasError
                 ? $"Hệ thống chặn lại, báo lỗi: {(messages.Any() ? string.Join(", ", messages) : "focus đỏ vào ô Địa chỉ")}."
@@ -238,7 +238,7 @@ namespace SeleniumProject.Tests.Checkout
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("provinceSelect"))
+                || _checkoutPage.IsProvinceInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
@@ -268,7 +268,7 @@ namespace SeleniumProject.Tests.Checkout
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("districtSelect"))
+                || _checkoutPage.IsDistrictInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
@@ -299,7 +299,7 @@ namespace SeleniumProject.Tests.Checkout
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("wardSelect"))
+                || _checkoutPage.IsWardInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
@@ -322,9 +322,9 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]); // "abcd123456"
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
@@ -332,7 +332,7 @@ namespace SeleniumProject.Tests.Checkout
             bool hasError = messages.Any(m =>
                 m.Contains("điện thoại", StringComparison.OrdinalIgnoreCase) ||
                 m.Contains("10") || m.Contains("11") || m.Contains("số"))
-                || _checkoutPage.IsFieldInvalid(By.Id("Mobile"))
+                || _checkoutPage.IsPhoneInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
@@ -355,14 +355,14 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]); // "090-123-4567"
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
-            bool hasError = messages.Any() || _checkoutPage.IsFieldInvalid(By.Id("Mobile")) || _checkoutPage.IsStillOnCheckoutPage();
+            bool hasError = messages.Any() || _checkoutPage.IsPhoneInvalid() || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
                 ? $"Hệ thống báo lỗi SĐT chứa ký tự đặc biệt: {(messages.Any() ? string.Join(", ", messages) : "field invalid / vẫn ở Checkout")}."
@@ -384,16 +384,16 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]); // 101 ký tự
             _checkoutPage.EnterPhone(data["phone"]);
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
             // Hệ thống không cho >100 ký tự hoặc truncate
             bool handled = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("FullNameInput"))
+                || _checkoutPage.IsFullNameInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = handled
@@ -416,15 +416,15 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]);
             _checkoutPage.EnterStreetAddress(data["streetAddress"]); // 201 ký tự
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
             bool handled = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("StreetAddressInput"))
+                || _checkoutPage.IsStreetAddressInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = handled
@@ -474,15 +474,15 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName("   "); // chỉ khoảng trắng
             _checkoutPage.EnterPhone(data["phone"]);
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
             var messages = _checkoutPage.GetValidationMessages();
             bool hasError = messages.Any()
-                || _checkoutPage.IsFieldInvalid(By.Id("FullNameInput"))
+                || _checkoutPage.IsFullNameInvalid()
                 || _checkoutPage.IsStillOnCheckoutPage();
 
             CurrentActualResult = hasError
@@ -505,9 +505,9 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]); // "0901234567" (10 số)
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
@@ -534,9 +534,9 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.EnterFullName(data["fullName"]);
             _checkoutPage.EnterPhone(data["phone"]); // "09012345678" (11 số)
             _checkoutPage.EnterStreetAddress(data["streetAddress"]);
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
-            _checkoutPage.SelectDistrict("Quận 1");
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
