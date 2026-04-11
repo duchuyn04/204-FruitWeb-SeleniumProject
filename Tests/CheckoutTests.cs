@@ -558,12 +558,12 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_01_DanhSachQuanHuyenThayDoiTheoTinh()
         {
             CurrentTestCaseId = "TC_F5.6_01";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_01");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
 
             // Sau khi chọn Tỉnh, danh sách Quận/Huyện phải được load
@@ -581,14 +581,14 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_02_DanhSachPhuongXaThayDoiTheoQuan()
         {
             CurrentTestCaseId = "TC_F5.6_02";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_02");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
-            _checkoutPage.SelectDistrict("Quận 1");
+            _checkoutPage.SelectDistrict(data["district"]);
             Thread.Sleep(1000);
 
             // Sau khi chọn Quận, danh sách Phường/Xã phải được load
@@ -606,7 +606,7 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_03_DropdownQuanHuyenDisableTruocKhiChonTinh()
         {
             CurrentTestCaseId = "TC_F5.6_03";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_03");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
@@ -629,12 +629,12 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_04_DropdownPhuongXaDisableTruocKhiChonQuan()
         {
             CurrentTestCaseId = "TC_F5.6_04";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_04");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
             // Chưa chọn Quận → Ward phải disabled
             var wardSelect = Driver.FindElement(By.Id("wardSelect"));
@@ -654,21 +654,21 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_05_DoiTinhThiQuanVaPhuongBiReset()
         {
             CurrentTestCaseId = "TC_F5.6_05";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_05");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            // Chọn Hồ Chí Minh → Quận 1 → Phường Bến Nghé
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            // Chọn tỉnh → quận → phường ban đầu
+            _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
-            _checkoutPage.SelectDistrict("Quận 1");
+            _checkoutPage.SelectDistrict(data["district"]);
             Thread.Sleep(1000);
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectWard(data["ward"]);
             Thread.Sleep(500);
 
-            // Đổi sang Hà Nội → Quận và Phường phải reset
-            _checkoutPage.SelectProvince("Thành phố Hà Nội");
+            // Đổi sang tỉnh khác → Quận và Phường phải reset
+            _checkoutPage.SelectProvince(data["provinceChange"]);
             Thread.Sleep(1000);
 
             var districtSelect = new SelectElement(Driver.FindElement(By.Id("districtSelect")));
@@ -690,20 +690,20 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_6_06_DoiQuanThiPhuongBiReset()
         {
             CurrentTestCaseId = "TC_F5.6_06";
-            var data = DocDuLieu("TC_CHECKOUT_F5_5_05");
+            var data = DocDuLieu("TC_CHECKOUT_F5_6_06");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            _checkoutPage.SelectProvince("Thành phố Hồ Chí Minh");
+            _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
-            _checkoutPage.SelectDistrict("Quận 1");
+            _checkoutPage.SelectDistrict(data["district"]);
             Thread.Sleep(1000);
-            _checkoutPage.SelectWard("Phường Bến Nghé");
+            _checkoutPage.SelectWard(data["ward"]);
             Thread.Sleep(500);
 
             // Đổi sang quận khác → Phường phải reset
-            _checkoutPage.SelectDistrict("Quận 3");
+            _checkoutPage.SelectDistrict(data["districtChange"]);
             Thread.Sleep(1000);
 
             var wardSelect = new SelectElement(Driver.FindElement(By.Id("wardSelect")));
@@ -1151,14 +1151,14 @@ namespace SeleniumProject.Tests.Checkout
         public void TC_CHECKOUT_F5_9_02_TongCongBangTamTinhCongPhiShip()
         {
             CurrentTestCaseId = "TC_F5.9_02";
-            var data = DocDuLieu("TC_CHECKOUT_F5_9_01");
+            var data = DocDuLieu("TC_CHECKOUT_F5_9_02");
             _checkoutPage.Login(data["email"], data["password"]);
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             _checkoutPage.SelectNewAddressOption();
 
-            _checkoutPage.SelectProvince("Thành phố Hà Nội");
-            _checkoutPage.SelectDistrict("Quận Ba Đình");
-            _checkoutPage.SelectWard("Phường Phúc Xá");
+            _checkoutPage.SelectProvince(data["province"]);
+            _checkoutPage.SelectDistrict(data["district"]);
+            _checkoutPage.SelectWard(data["ward"]);
             Thread.Sleep(1000);
 
             var summaryText = _checkoutPage.GetOrderSummaryText();
