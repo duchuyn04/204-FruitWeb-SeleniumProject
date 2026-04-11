@@ -241,12 +241,75 @@
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
   },
   {
+    "testCase": "TC_CHECKOUT_F5_6_01",
+    "testCaseId": "F5.6_01",
+    "description": "Kiểm tra danh sách Quận/Huyện thay đổi theo Tỉnh",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hồ Chí Minh"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_6_02",
+    "testCaseId": "F5.6_02",
+    "description": "Kiểm tra danh sách Phường/Xã thay đổi theo Quận",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_6_03",
+    "testCaseId": "F5.6_03",
+    "description": "Kiểm tra dropdown Quận/Huyện disabled trước khi chọn Tỉnh",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_6_04",
+    "testCaseId": "F5.6_04",
+    "description": "Kiểm tra dropdown Phường/Xã disabled trước khi chọn Quận",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hồ Chí Minh"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_6_05",
+    "testCaseId": "F5.6_05",
+    "description": "Kiểm tra đổi Tỉnh thì Quận và Phường bị reset",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé",
+    "provinceChange": "Thành phố Hà Nội"
+  },
+  {
+    "testCase": "TC_CHECKOUT_F5_6_06",
+    "testCaseId": "F5.6_06",
+    "description": "Kiểm tra đổi Quận thì Phường bị reset",
+    "email": "anhdomixi@gmail.com",
+    "password": "anhdomixi",
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hồ Chí Minh",
+    "district": "Quận 1",
+    "ward": "Phường Bến Nghé",
+    "districtChange": "Quận 3"
+  },
+  {
     "testCase": "TC_CHECKOUT_F5_9_02",
     "testCaseId": "F5.9_02",
     "description": "Kiểm tra Tổng = Tạm tính + Phí ship",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc"
+    "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "province": "Thành phố Hà Nội",
+    "district": "Quận Ba Đình",
+    "ward": "Phường Phúc Xá"
   },
   {
     "testCase": "TC_CHECKOUT_F5_10_01",
