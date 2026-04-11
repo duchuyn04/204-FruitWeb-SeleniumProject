@@ -134,23 +134,14 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.Open();
             Wait.WaitForUrlContains("/Admin/Order");
 
-            string expectedColsJson = data["expectedColumns"];
-            List<string>? expectedColumns = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(expectedColsJson);
-            if (expectedColumns == null)
-            {
-                expectedColumns = new List<string>();
-            }
+            List<string> expectedColumns = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(data["expectedColumns"]) ?? new();
 
-            List<string> headersText = _orderListPage.GetTableHeaders();
+            bool allColsPresent = _orderListPage.HasRequiredColumns(expectedColumns);
 
-            CurrentActualResult = $"Các cột hiển thị: {string.Join(", ", headersText)}";
+            CurrentActualResult = $"Các cột hiển thị: {string.Join(", ", _orderListPage.GetTableHeaders())}";
 
-            foreach (string expectedCol in expectedColumns)
-            {
-                bool daTimThayCot = headersText.Exists(h => h.Contains(expectedCol));
-                Assert.That(daTimThayCot, Is.True,
-                    $"[TC_F10.3_02] Bảng thiếu tiêu đề cột: {expectedCol}");
-            }
+            Assert.That(allColsPresent, Is.True,
+                "[TC_F10.3_02] Bảng thiếu ít nhất một tiêu đề cột yêu cầu");
         }
 
         // ============================================

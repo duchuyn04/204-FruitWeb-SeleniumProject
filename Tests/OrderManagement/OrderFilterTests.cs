@@ -41,22 +41,10 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Chờ xử lý"));
             Thread.Sleep(1000);
 
-            var rows = _orderListPage.GetAllRows();
-            int rowCount = rows.Count;
+            string filterStatus1 = data.GetValueOrDefault("filterStatusValue", "Chờ xử lý");
+            bool allMatch = _orderListPage.AllRowsMatchStatus(filterStatus1);
 
-            // Kiểm tra tất cả badge trạng thái đều là "Chờ xử lý"
-            bool allMatch = true;
-            for (int i = 0; i < rowCount; i++)
-            {
-                string badge = _orderListPage.GetStatusBadgeOfRow(i);
-                if (!badge.Contains("Chờ xử lý"))
-                {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            CurrentActualResult = $"Số hàng sau lọc: {rowCount} | Tất cả là Chờ xử lý: {allMatch}";
+            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterStatus1}: {allMatch}";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.16_01] Có hàng không phải trạng thái 'Chờ xử lý' sau khi lọc");
@@ -77,21 +65,10 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectStatus(data.GetValueOrDefault("filterStatusValue", "Đã hủy"));
             Thread.Sleep(1000);
 
-            var rows = _orderListPage.GetAllRows();
-            int rowCount = rows.Count;
+            string filterStatus2 = data.GetValueOrDefault("filterStatusValue", "Đã hủy");
+            bool allMatch = _orderListPage.AllRowsMatchStatus(filterStatus2);
 
-            bool allMatch = true;
-            for (int i = 0; i < rowCount; i++)
-            {
-                string badge = _orderListPage.GetStatusBadgeOfRow(i);
-                if (!badge.Contains("Đã hủy"))
-                {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            CurrentActualResult = $"Số hàng sau lọc: {rowCount} | Tất cả là Đã hủy: {allMatch}";
+            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterStatus2}: {allMatch}";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.16_02] Có hàng không phải trạng thái 'Đã hủy' sau khi lọc");
@@ -144,21 +121,10 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán"));
             Thread.Sleep(1000);
 
-            var rows = _orderListPage.GetAllRows();
-            int rowCount = rows.Count;
+            string filterPay1 = data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán");
+            bool allMatch = _orderListPage.AllRowsMatchPaymentStatus(filterPay1);
 
-            bool allMatch = true;
-            for (int i = 0; i < rowCount; i++)
-            {
-                string badge = _orderListPage.GetPaymentBadgeOfRow(i);
-                if (!badge.Contains("Chờ thanh toán"))
-                {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            CurrentActualResult = $"Số hàng sau lọc: {rowCount} | Tất cả là Chờ thanh toán: {allMatch}";
+            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterPay1}: {allMatch}";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.17_01] Có hàng không phải trạng thái thanh toán 'Chờ thanh toán' sau khi lọc");
@@ -179,21 +145,10 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectPaymentStatus(data.GetValueOrDefault("filterPaymentStatusValue", "Đã thanh toán"));
             Thread.Sleep(1000);
 
-            var rows = _orderListPage.GetAllRows();
-            int rowCount = rows.Count;
+            string filterPay2 = data.GetValueOrDefault("filterPaymentStatusValue", "Đã thanh toán");
+            bool allMatch = _orderListPage.AllRowsMatchPaymentStatus(filterPay2);
 
-            bool allMatch = true;
-            for (int i = 0; i < rowCount; i++)
-            {
-                string badge = _orderListPage.GetPaymentBadgeOfRow(i);
-                if (!badge.Contains("Đã thanh toán"))
-                {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            CurrentActualResult = $"Số hàng sau lọc: {rowCount} | Tất cả là Đã thanh toán: {allMatch}";
+            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterPay2}: {allMatch}";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.17_02] Có hàng không phải trạng thái thanh toán 'Đã thanh toán' sau khi lọc");
@@ -302,22 +257,9 @@ namespace SeleniumProject.Tests.OrderManagement
             _orderListPage.SelectPaymentStatus(filterPayment);
             Thread.Sleep(1000);
 
-            var rows = _orderListPage.GetAllRows();
-            int rowCount = rows.Count;
+            bool allMatch = _orderListPage.AllRowsMatchBothFilters(filterStatus, filterPayment);
 
-            bool allMatch = true;
-            for (int i = 0; i < rowCount; i++)
-            {
-                string statusBadge = _orderListPage.GetStatusBadgeOfRow(i);
-                string paymentBadge = _orderListPage.GetPaymentBadgeOfRow(i);
-                if (!statusBadge.Contains(filterStatus) || !paymentBadge.Contains(filterPayment))
-                {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            CurrentActualResult = $"Số đơn lọc được: {rowCount} | Cả 2 điều kiện đúng: {allMatch}";
+            CurrentActualResult = $"Số đơn lọc được: {_orderListPage.GetAllRows().Count} | Cả 2 điều kiện đúng: {allMatch}";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.19_01] Có hàng không thỏa mãn đồng thời cả 2 điều kiện lọc");
@@ -372,11 +314,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            string pageSource = Driver.PageSource.ToLower();
-            bool hasErrorMsg = pageSource.Contains("không hợp lệ") || pageSource.Contains("invalid")
-                || pageSource.Contains("lỗi") || rowCount == 0;
+            bool hasErrorMsg = _orderListPage.HasErrorOrEmptyResult(new[] { "không hợp lệ", "invalid", "lỗi" });
 
-            CurrentActualResult = $"Số đơn trả về: {rowCount} | Báo lỗi hoặc rỗng: {hasErrorMsg} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Số đơn trả về: {_orderListPage.GetAllRows().Count} | Báo lỗi hoặc rỗng: {hasErrorMsg} | Trang ổn: {pageHealthy}";
 
             // Mong đợi: hệ thống không crash và trả về 0 kết quả hoặc báo lỗi
             Assert.That(pageHealthy, Is.True,

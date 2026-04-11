@@ -185,5 +185,49 @@ namespace SeleniumProject.Pages.OrderManagement
             foreach (var h in headers) result.Add(h.Text.Trim());
             return result;
         }
+
+        // Kiểm tra tất cả hàng đều có trạng thái đơn khớp expectedStatus
+        public bool AllRowsMatchStatus(string expectedStatus)
+        {
+            var badges = _driver.FindElements(StatusBadges);
+            return badges.All(b => b.Text.Trim().Contains(expectedStatus));
+        }
+
+        // Kiểm tra tất cả hàng đều có trạng thái thanh toán khớp expectedStatus
+        public bool AllRowsMatchPaymentStatus(string expectedStatus)
+        {
+            var badges = _driver.FindElements(PaymentBadges);
+            return badges.All(b => b.Text.Trim().Contains(expectedStatus));
+        }
+
+        // Kiểm tra tất cả hàng đều khớp đồng thời status + payment
+        public bool AllRowsMatchBothFilters(string expectedStatus, string expectedPayment)
+        {
+            var statusBadges  = _driver.FindElements(StatusBadges).ToList();
+            var paymentBadges = _driver.FindElements(PaymentBadges).ToList();
+            int count = Math.Min(statusBadges.Count, paymentBadges.Count);
+            for (int i = 0; i < count; i++)
+            {
+                if (!statusBadges[i].Text.Contains(expectedStatus) ||
+                    !paymentBadges[i].Text.Contains(expectedPayment))
+                    return false;
+            }
+            return true;
+        }
+
+        // Kiểm tra kết quả lọc ngày sai: hoặc có thông báo lỗi, hoặc không có hàng nào
+        public bool HasErrorOrEmptyResult(string[] errorKeywords)
+        {
+            string src = _driver.PageSource.ToLower();
+            bool hasError = errorKeywords.Any(k => src.Contains(k.ToLower()));
+            return hasError || GetAllRows().Count == 0;
+        }
+
+        // Kiểm tra bảng có đủ cột yêu cầu
+        public bool HasRequiredColumns(List<string> expectedCols)
+        {
+            var headers = GetTableHeaders();
+            return expectedCols.All(col => headers.Exists(h => h.Contains(col)));
+        }
     }
 }
