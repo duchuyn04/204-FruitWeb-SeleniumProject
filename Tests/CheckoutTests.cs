@@ -76,23 +76,7 @@ namespace SeleniumProject.Tests.Checkout
         {
             CurrentTestCaseId = "TC_F5.4_01";
             var data = DocDuLieu("TC_CHECKOUT_F5_4_01");
-            Driver.Navigate().GoToUrl(data["productUrl"]);
-            Thread.Sleep(1000);
-            try
-            {
-                var buyBtn = Driver.FindElements(By.CssSelector("button.btn-buy-now"));
-                if (buyBtn.Count > 0) { buyBtn[0].Click(); Thread.Sleep(800); }
-                else
-                {
-                    var addBtn = Driver.FindElements(By.CssSelector("button.btn-add-cart"));
-                    if (addBtn.Count > 0) addBtn[0].Click();
-                    Thread.Sleep(800);
-                }
-            }
-            catch { }
-
-            Driver.Navigate().GoToUrl("http://localhost:5270/Checkout");
-            Thread.Sleep(1000);
+            _checkoutPage.NavigateToCheckoutAsGuest(data["productUrl"], data["checkoutUrl"]);
 
             bool isOnCheckoutPage = Driver.Url.Contains("/Checkout") && !Driver.Url.Contains("/Account/Login");
             CurrentActualResult = isOnCheckoutPage
@@ -567,13 +551,13 @@ namespace SeleniumProject.Tests.Checkout
             Thread.Sleep(1000);
 
             // Sau khi chọn Tỉnh, danh sách Quận/Huyện phải được load
-            var districtOptions = Driver.FindElements(By.CssSelector("#districtSelect option"));
+            int districtCount = _checkoutPage.GetDistrictOptionCount();
 
-            CurrentActualResult = districtOptions.Count > 1
-                ? $"Danh sách Quận/Huyện được cập nhật theo Tỉnh đã chọn ({districtOptions.Count} options)."
+            CurrentActualResult = districtCount > 1
+                ? $"Danh sách Quận/Huyện được cập nhật theo Tỉnh đã chọn ({districtCount} options)."
                 : "Danh sách Quận/Huyện KHÔNG được cập nhật sau khi chọn Tỉnh.";
 
-            Assert.That(districtOptions.Count, Is.GreaterThan(1),
+            Assert.That(districtCount, Is.GreaterThan(1),
                 "[F5.6_01] Danh sách Quận/Huyện phải được cập nhật khi chọn Tỉnh/TP");
         }
 
@@ -592,13 +576,13 @@ namespace SeleniumProject.Tests.Checkout
             Thread.Sleep(1000);
 
             // Sau khi chọn Quận, danh sách Phường/Xã phải được load
-            var wardOptions = Driver.FindElements(By.CssSelector("#wardSelect option"));
+            int wardCount = _checkoutPage.GetWardOptionCount();
 
-            CurrentActualResult = wardOptions.Count > 1
-                ? $"Danh sách Phường/Xã được cập nhật theo Quận đã chọn ({wardOptions.Count} options)."
+            CurrentActualResult = wardCount > 1
+                ? $"Danh sách Phường/Xã được cập nhật theo Quận đã chọn ({wardCount} options)."
                 : "Danh sách Phường/Xã KHÔNG được cập nhật sau khi chọn Quận.";
 
-            Assert.That(wardOptions.Count, Is.GreaterThan(1),
+            Assert.That(wardCount, Is.GreaterThan(1),
                 "[F5.6_02] Danh sách Phường/Xã phải được cập nhật khi chọn Quận/Huyện");
         }
 
@@ -612,10 +596,7 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectNewAddressOption();
 
             // Chưa chọn Tỉnh → Quận phải disabled hoặc chỉ có placeholder
-            var districtSelect = Driver.FindElement(By.Id("districtSelect"));
-            bool isDisabled = !districtSelect.Enabled
-                || districtSelect.GetAttribute("disabled") != null
-                || Driver.FindElements(By.CssSelector("#districtSelect option")).Count <= 1;
+            bool isDisabled = _checkoutPage.IsDistrictDropdownEmpty();
 
             CurrentActualResult = isDisabled
                 ? "Dropdown Quận/Huyện bị disabled hoặc chỉ có placeholder khi chưa chọn Tỉnh/TP."
@@ -637,10 +618,7 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectProvince(data["province"]);
             Thread.Sleep(1000);
             // Chưa chọn Quận → Ward phải disabled
-            var wardSelect = Driver.FindElement(By.Id("wardSelect"));
-            bool isDisabled = !wardSelect.Enabled
-                || wardSelect.GetAttribute("disabled") != null
-                || Driver.FindElements(By.CssSelector("#wardSelect option")).Count <= 1;
+            bool isDisabled = _checkoutPage.IsWardDropdownEmpty();
 
             CurrentActualResult = isDisabled
                 ? "Dropdown Phường/Xã bị disabled khi chưa chọn Quận/Huyện."
@@ -671,14 +649,12 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectProvince(data["provinceChange"]);
             Thread.Sleep(1000);
 
-            var districtSelect = new SelectElement(Driver.FindElement(By.Id("districtSelect")));
-            var wardSelect    = new SelectElement(Driver.FindElement(By.Id("wardSelect")));
-            bool districtReset = districtSelect.SelectedOption.GetAttribute("value") == "" || districtSelect.SelectedOption.Text.Contains("Chọn");
-            bool wardReset     = wardSelect.SelectedOption.GetAttribute("value") == ""     || wardSelect.SelectedOption.Text.Contains("Chọn");
+            bool districtReset = _checkoutPage.IsDistrictResetToPlaceholder();
+            bool wardReset     = _checkoutPage.IsWardResetToPlaceholder();
 
             CurrentActualResult = (districtReset && wardReset)
                 ? "Dropdown Quận/Huyện và Phường/Xã đều reset về placeholder sau khi đổi Tỉnh."
-                : $"Dropdown KHÔNG reset đúng. Quận: '{districtSelect.SelectedOption.Text}', Phường: '{wardSelect.SelectedOption.Text}'.";
+                : "Dropdown KHÔNG reset đúng sau khi đổi Tỉnh.";
 
             Assert.That(districtReset, Is.True,
                 "[F5.6_05] Dropdown Quận/Huyện phải reset về placeholder sau khi đổi Tỉnh");
@@ -706,19 +682,18 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectDistrict(data["districtChange"]);
             Thread.Sleep(1000);
 
-            var wardSelect = new SelectElement(Driver.FindElement(By.Id("wardSelect")));
-            bool wardReset = wardSelect.SelectedOption.GetAttribute("value") == "" || wardSelect.SelectedOption.Text.Contains("Chọn");
-            var wardOptions = Driver.FindElements(By.CssSelector("#wardSelect option"));
+            bool wardReset  = _checkoutPage.IsWardResetToPlaceholder();
+            int  wardCount  = _checkoutPage.GetWardOptionCount();
 
-            CurrentActualResult = (wardReset && wardOptions.Count > 1)
-                ? $"Dropdown Phường/Xã reset về placeholder và load {wardOptions.Count} options mới theo Quận 3."
-                : $"Dropdown Phường/Xã KHÔNG reset đúng. Selected: '{wardSelect.SelectedOption.Text}', Options: {wardOptions.Count}.";
+            CurrentActualResult = (wardReset && wardCount > 1)
+                ? $"Dropdown Phường/Xã reset về placeholder và load {wardCount} options mới."
+                : $"Dropdown Phường/Xã KHÔNG reset đúng. Options: {wardCount}.";
 
             Assert.That(wardReset, Is.True,
                 "[F5.6_06] Dropdown Phường/Xã phải reset về placeholder sau khi đổi Quận");
 
             // Danh sách Phường mới phải load theo Quận 3
-            Assert.That(wardOptions.Count, Is.GreaterThan(1),
+            Assert.That(wardCount, Is.GreaterThan(1),
                 "[F5.6_06] Danh sách Phường mới phải load sau khi đổi Quận");
         }
 
@@ -961,13 +936,7 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
 
-            _checkoutPage.OpenCart();
-            Thread.Sleep(800);
-            var cartBody = Driver.FindElement(By.TagName("body")).Text;
-            bool cartEmpty = cartBody.Contains("trống", StringComparison.OrdinalIgnoreCase)
-                || cartBody.Contains("empty", StringComparison.OrdinalIgnoreCase)
-                || cartBody.Contains("0 sản phẩm", StringComparison.OrdinalIgnoreCase)
-                || Driver.FindElements(By.CssSelector(".cart-item, .cart-product")).Count == 0;
+            bool cartEmpty = _checkoutPage.IsCartEmpty();
 
             CurrentActualResult = cartEmpty
                 ? "Giỏ hàng không còn sản phẩm sau khi đặt hàng thành công."
@@ -986,27 +955,22 @@ namespace SeleniumProject.Tests.Checkout
             CurrentTestCaseId = "TC_F5.15_01";
             var data = DocDuLieu("TC_CHECKOUT_F5_15_01");
             _checkoutPage.Login(data["email"], data["password"]);
-
-            Driver.Navigate().GoToUrl(data["productUrl"]);
-            Thread.Sleep(1000);
+            _checkoutPage.NavigateToProductPage(data["productUrl"]);
 
             // Click "Mua ngay" → đến thẳng /Checkout
-            var buyNowBtn = Driver.FindElements(By.CssSelector("button.btn-buy-now, a.btn-buy-now, [id*='buy-now'], [class*='buy-now']"));
-            Assert.That(buyNowBtn.Count, Is.GreaterThan(0),
+            bool clicked = _checkoutPage.ClickBuyNow();
+            Assert.That(clicked, Is.True,
                 "[F5.15_01] Phải tồn tại nút 'Mua ngay' trên trang sản phẩm");
 
-            buyNowBtn[0].Click();
-            Thread.Sleep(1200);
-
-            bool onCheckout = Driver.Url.Contains("/Checkout");
-            bool notCart = !Driver.Url.Contains("/Cart");
+            bool onCheckout = _checkoutPage.GetCurrentUrl().Contains("/Checkout");
+            bool notCart    = !_checkoutPage.GetCurrentUrl().Contains("/Cart");
 
             CurrentActualResult = (onCheckout && notCart)
-                ? $"Mua ngay dẫn thẳng đến /Checkout không qua /Cart. URL: {Driver.Url}."
-                : $"Mua ngay KHÔNG dẫn thẳng đến /Checkout. URL thực: {Driver.Url}.";
+                ? $"Mua ngay dẫn thẳng đến /Checkout không qua /Cart. URL: {_checkoutPage.GetCurrentUrl()}."
+                : $"Mua ngay KHÔNG dẫn thẳng đến /Checkout. URL thực: {_checkoutPage.GetCurrentUrl()}.";
 
             Assert.That(onCheckout, Is.True,
-                $"[F5.15_01] Mua ngay phải dẫn thẳng đến /Checkout, không qua /Cart.\nURL thực: {Driver.Url}");
+                $"[F5.15_01] Mua ngay phải dẫn thẳng đến /Checkout, không qua /Cart.\nURL thực: {_checkoutPage.GetCurrentUrl()}");
             Assert.That(notCart, Is.True,
                 "[F5.15_01] Không được đi qua trang /Cart");
         }
@@ -1034,7 +998,7 @@ namespace SeleniumProject.Tests.Checkout
 
             bool onConfirmation = _checkoutPage.IsOnConfirmationPage();
 
-            var pageText = Driver.FindElement(By.TagName("body")).Text;
+            var pageText = _checkoutPage.GetPageBodyText();
             // Xác nhận có hiển thị: Mã đơn hàng, sản phẩm, địa chỉ, PT thanh toán, tổng tiền
             bool hasOrderInfo = pageText.Contains("Cảm ơn", StringComparison.OrdinalIgnoreCase)
                 || pageText.Contains("thành công", StringComparison.OrdinalIgnoreCase)
@@ -1042,7 +1006,7 @@ namespace SeleniumProject.Tests.Checkout
 
             CurrentActualResult = (onConfirmation && hasOrderInfo)
                 ? "Trang xác nhận hiển thị đúng thông tin đơn hàng (cảm ơn, thành công)."
-                : $"Trang xác nhận KHÔNG hiển thị đúng. URL: {Driver.Url}. Text đầu: {pageText[..Math.Min(150, pageText.Length)]}.";
+                : $"Trang xác nhận KHÔNG hiển thị đúng. URL: {_checkoutPage.GetCurrentUrl()}. Text đầu: {pageText[..Math.Min(150, pageText.Length)]}.";
 
             Assert.That(onConfirmation, Is.True,
                 "[F5.16_01] Phải chuyển đến trang /Checkout/Confirmation");
@@ -1090,7 +1054,7 @@ namespace SeleniumProject.Tests.Checkout
             if (!onLogin)
             {
                 // Thủ công navigate về Login nếu hệ thống không redirect
-                Driver.Navigate().GoToUrl("http://localhost:5270/Account/Login?ReturnUrl=/Checkout");
+                Driver.Navigate().GoToUrl(data["loginWithReturnUrl"]);
                 Thread.Sleep(800);
             }
 
@@ -1255,9 +1219,7 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.SelectWard(data["ward"]);
 
             // Tick checkbox "Lưu địa chỉ này cho lần mua sau"
-            var saveCheckbox = Driver.FindElements(By.CssSelector("input[id*='save'], input[id*='Save'], input[name*='save'], input[name*='Save']"));
-            if (saveCheckbox.Count > 0 && !saveCheckbox[0].Selected)
-                saveCheckbox[0].Click();
+            _checkoutPage.TickSaveAddressIfPresent();
 
             _checkoutPage.SelectPaymentCod();
             _checkoutPage.ClickPlaceOrder();
@@ -1269,13 +1231,13 @@ namespace SeleniumProject.Tests.Checkout
             // Vào lần mua tiếp theo – kiểm tra dropdown địa chỉ đã lưu xuất hiện
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             Thread.Sleep(1000);
-            var savedDropdown = Driver.FindElements(By.CssSelector("select[id*='saved'], select[id*='Saved'], select[id*='address'], #savedAddressSelect"));
+            bool hasSavedDropdown = _checkoutPage.HasSavedAddressDropdown();
 
-            CurrentActualResult = savedDropdown.Count > 0
+            CurrentActualResult = hasSavedDropdown
                 ? "Dropdown địa chỉ đã lưu xuất hiện trong lần mua tiếp theo."
                 : "Dropdown địa chỉ đã lưu KHÔNG xuất hiện trong lần mua tiếp theo.";
 
-            Assert.That(savedDropdown.Count, Is.GreaterThan(0),
+            Assert.That(hasSavedDropdown, Is.True,
                 "[F5.17_01] Dropdown địa chỉ đã lưu phải xuất hiện trong lần mua tiếp theo");
         }
 
@@ -1289,18 +1251,18 @@ namespace SeleniumProject.Tests.Checkout
             Thread.Sleep(1500);
 
             // Dropdown địa chỉ đã lưu có id="addressSelect" trong Checkout/Index.cshtml
-            var savedDropdown = Driver.FindElements(By.Id("addressSelect"));
-            Assert.That(savedDropdown.Count, Is.GreaterThan(0),
+            bool hasDropdown = _checkoutPage.HasSavedAddressDropdown();
+            Assert.That(hasDropdown, Is.True,
                 "[F5.17_02] Dropdown 'addressSelect' phải tồn tại khi user có địa chỉ lưu");
 
             // Phải có ít nhất 1 option địa chỉ thực (ngoài option placeholder)
-            var options = Driver.FindElements(By.CssSelector("#addressSelect option"));
+            int optionCount = _checkoutPage.GetSavedAddressOptionCount();
 
-            CurrentActualResult = options.Count > 1
-                ? $"Dropdown địa chỉ đã lưu hiển thị {options.Count - 1} địa chỉ (ngoài placeholder)."
+            CurrentActualResult = optionCount > 1
+                ? $"Dropdown địa chỉ đã lưu hiển thị {optionCount - 1} địa chỉ (ngoài placeholder)."
                 : "Dropdown địa chỉ đã lưu KHÔNG có địa chỉ (chỉ có placeholder).";
 
-            Assert.That(options.Count, Is.GreaterThan(1),
+            Assert.That(optionCount, Is.GreaterThan(1),
                 "[F5.17_02] Dropdown địa chỉ đã lưu phải hiển thị ít nhất 1 địa chỉ (ngoài placeholder)");
         }
 
@@ -1316,39 +1278,31 @@ namespace SeleniumProject.Tests.Checkout
             _checkoutPage.NavigateToCheckoutWithProduct(data["productUrl"]);
             Thread.Sleep(1500);
 
-            // Dropdown địa chỉ đã lưu có id="addressSelect"
-            var savedDropdown = Driver.FindElements(By.Id("addressSelect"));
-            if (savedDropdown.Count == 0)
+            // Kiểm tra dropdown địa chỉ đã lưu tồn tại
+            if (!_checkoutPage.HasSavedAddressDropdown())
             {
                 CurrentActualResult = "Không tìm thấy dropdown 'addressSelect' – cần chạy F5.17_01 trước.";
                 Assert.Fail("[F5.18_01] Không tìm thấy dropdown 'addressSelect' – cần chạy F5.17_01 trước");
                 return;
             }
 
-            // Chọn option đầu tiên có value (bỏ qua placeholder)
-            var sel = new SelectElement(savedDropdown[0]);
-            var nonEmptyOptions = sel.Options.Where(o => !string.IsNullOrEmpty(o.GetAttribute("value")) && o.GetAttribute("value") != "new").ToList();
-            if (nonEmptyOptions.Count == 0)
+            // Chọn địa chỉ đầu tiên có giá trị thực
+            bool selected = _checkoutPage.SelectFirstSavedAddress();
+            if (!selected)
             {
                 CurrentActualResult = "Không có địa chỉ trong dropdown – cần chạy F5.17_01 trước.";
                 Assert.Fail("[F5.18_01] Không có địa chỉ trong dropdown – cần chạy F5.17_01 trước");
                 return;
             }
 
-            nonEmptyOptions[0].Click();
-            Thread.Sleep(1500); // Chờ JavaScript điền form
-
-            // Sau khi chọn địa chỉ, panel hiển thị địa chỉ phải xuất hiện (id=selectedAddressDisplay)
-            // Hoặc kiểm tra các hidden input đã được điền
-            var displayPanel = Driver.FindElements(By.Id("selectedAddressDisplay"));
-            bool panelVisible = displayPanel.Count > 0 && displayPanel[0].Displayed;
+            // Sau khi chọn địa chỉ, panel hiển thị địa chỉ phải xuất hiện
+            bool panelVisible = _checkoutPage.IsSavedAddressDisplayVisible();
 
             CurrentActualResult = panelVisible
                 ? "Panel địa chỉ đã lưu (selectedAddressDisplay) hiển thị sau khi chọn."
                 : "Panel địa chỉ đã lưu KHÔNG hiển thị rõ ràng, nhưng có địa chỉ trong dropdown.";
 
-            // Kiểm tra các hidden field hoặc display panel đã có dữ liệu
-            Assert.That(panelVisible || nonEmptyOptions.Count > 0, Is.True,
+            Assert.That(panelVisible || selected, Is.True,
                 "[F5.18_01] Chọn địa chỉ đã lưu phải hiển thị thông tin địa chỉ (panel selectedAddressDisplay)");
         }
 
@@ -1375,7 +1329,7 @@ namespace SeleniumProject.Tests.Checkout
             Assert.That(Driver.Url, Does.Contain("/Checkout/Confirmation"),
                 "[F5.21_01] URL phải chứa /Checkout/Confirmation");
 
-            var pageText = Driver.FindElement(By.TagName("body")).Text;
+            var pageText = _checkoutPage.GetPageBodyText();
             bool hasMaOrder = pageText.Contains("Mã đơn hàng", StringComparison.OrdinalIgnoreCase)
                 || pageText.Contains("Order", StringComparison.OrdinalIgnoreCase)
                 || pageText.Contains("#", StringComparison.OrdinalIgnoreCase);
@@ -1412,27 +1366,20 @@ namespace SeleniumProject.Tests.Checkout
                 "[F5.22_01] Phải đến trang xác nhận trước");
 
             // Tìm và click nút "Tiếp tục mua sắm" hoặc "Về trang chủ"
-            var continueBtn = Driver.FindElements(By.CssSelector(
-                "a[href*='/Shop'], a[href*='/'], button[id*='continue'], a[id*='continue']"))
-                .FirstOrDefault(e => e.Displayed &&
-                    (e.Text.Contains("mua sắm", StringComparison.OrdinalIgnoreCase)
-                  || e.Text.Contains("trang chủ", StringComparison.OrdinalIgnoreCase)
-                  || e.Text.Contains("Shop", StringComparison.OrdinalIgnoreCase)));
-
-            Assert.That(continueBtn, Is.Not.Null,
+            bool clicked = _checkoutPage.ClickContinueShopping();
+            Assert.That(clicked, Is.True,
                 "[F5.22_01] Phải tồn tại nút 'Tiếp tục mua sắm' hoặc 'Về trang chủ' trên trang xác nhận");
-            continueBtn!.Click();
-            Thread.Sleep(1000);
 
-            bool onShopOrHome = Driver.Url.Contains("/Shop") || Driver.Url == "http://localhost:5270/"
-                || Driver.Url.EndsWith("/") || Driver.Url.Contains("/Home");
+            string currentUrl = _checkoutPage.GetCurrentUrl();
+            bool onShopOrHome = currentUrl.Contains("/Shop")
+                || currentUrl.EndsWith("/") || currentUrl.Contains("/Home");
 
             CurrentActualResult = onShopOrHome
-                ? $"Nút 'Tiếp tục mua sắm' dẫn về trang chủ/Shop. URL: {Driver.Url}."
-                : $"Nút 'Tiếp tục mua sắm' dẫn đến sai trang. URL thực: {Driver.Url}.";
+                ? $"Nút 'Tiếp tục mua sắm' dẫn về trang chủ/Shop. URL: {currentUrl}."
+                : $"Nút 'Tiếp tục mua sắm' dẫn đến sai trang. URL thực: {currentUrl}.";
 
             Assert.That(onShopOrHome, Is.True,
-                $"[F5.22_01] Phải chuyển về trang chủ hoặc Shop.\nURL thực: {Driver.Url}");
+                $"[F5.22_01] Phải chuyển về trang chủ hoặc Shop.\nURL thực: {currentUrl}");
         }
 
         // =========================================================

@@ -20,6 +20,7 @@
     "testCaseId": "F5.4_01",
     "description": "Khách vãng lai điền thủ công form địa chỉ giao hàng",
     "productUrl": "http://localhost:5270/Shop/Detail/nho-den-uc",
+    "checkoutUrl": "http://localhost:5270/Checkout",
     "fullName": "Nguyễn Văn A",
     "phone": "0901234567",
     "streetAddress": "123 Đường ABC"
@@ -465,7 +466,8 @@
     "description": "Kiểm tra redirect về Checkout sau khi đăng nhập thành công",
     "email": "anhdomixi@gmail.com",
     "password": "anhdomixi",
-    "checkoutUrl": "http://localhost:5270/Checkout"
+    "checkoutUrl": "http://localhost:5270/Checkout",
+    "loginWithReturnUrl": "http://localhost:5270/Account/Login?ReturnUrl=/Checkout"
   },
   {
     "testCase": "TC_CHECKOUT_F5_24_01",

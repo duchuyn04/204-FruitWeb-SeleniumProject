@@ -717,5 +717,199 @@ namespace SeleniumProject.Pages
             }
             catch { return false; }
         }
+
+        // =====================================================================
+        // PRODUCT PAGE HELPERS
+        // =====================================================================
+
+        /// <summary>Điều hướng đến trang sản phẩm (không đăng nhập)</summary>
+        public void NavigateToProductPage(string url)
+        {
+            _driver.Navigate().GoToUrl(url);
+            Thread.Sleep(1000);
+        }
+
+        /// <summary>
+        /// Click nút "Mua ngay" trên trang sản phẩm.
+        /// Trả về true nếu tìm thấy và click thành công.
+        /// </summary>
+        public bool ClickBuyNow()
+        {
+            var btns = _driver.FindElements(By.CssSelector(
+                "button.btn-buy-now, a.btn-buy-now, [id*='buy-now'], [class*='buy-now']"));
+            if (btns.Count == 0) return false;
+            btns[0].Click();
+            Thread.Sleep(1200);
+            return true;
+        }
+
+        /// <summary>
+        /// Điều hướng đến trang sản phẩm rồi vào Checkout với tư cách Guest (không đăng nhập).
+        /// </summary>
+        public void NavigateToCheckoutAsGuest(string productUrl, string checkoutUrl)
+        {
+            _driver.Navigate().GoToUrl(productUrl);
+            Thread.Sleep(1000);
+            try
+            {
+                var buyBtn = _driver.FindElements(BuyNowButton);
+                if (buyBtn.Count > 0) { buyBtn[0].Click(); Thread.Sleep(800); }
+                else
+                {
+                    var addBtn = _driver.FindElements(AddToCartButton);
+                    if (addBtn.Count > 0) addBtn[0].Click();
+                    Thread.Sleep(800);
+                }
+            }
+            catch { }
+            _driver.Navigate().GoToUrl(checkoutUrl);
+            Thread.Sleep(1000);
+        }
+
+        // =====================================================================
+        // DROPDOWN STATE HELPERS (F5.6)
+        // =====================================================================
+
+        /// <summary>Số option trong dropdown Quận/Huyện (bao gồm placeholder)</summary>
+        public int GetDistrictOptionCount()
+            => _driver.FindElements(By.CssSelector("#districtSelect option")).Count;
+
+        /// <summary>Số option trong dropdown Phường/Xã (bao gồm placeholder)</summary>
+        public int GetWardOptionCount()
+            => _driver.FindElements(By.CssSelector("#wardSelect option")).Count;
+
+        /// <summary>
+        /// True nếu dropdown Quận/Huyện bị disabled hoặc chỉ có placeholder (chưa chọn Tỉnh).
+        /// </summary>
+        public bool IsDistrictDropdownEmpty()
+        {
+            try
+            {
+                var el = _driver.FindElement(DistrictSelect);
+                return !el.Enabled
+                    || el.GetAttribute("disabled") != null
+                    || GetDistrictOptionCount() <= 1;
+            }
+            catch { return true; }
+        }
+
+        /// <summary>
+        /// True nếu dropdown Phường/Xã bị disabled hoặc chỉ có placeholder (chưa chọn Quận).
+        /// </summary>
+        public bool IsWardDropdownEmpty()
+        {
+            try
+            {
+                var el = _driver.FindElement(WardSelect);
+                return !el.Enabled
+                    || el.GetAttribute("disabled") != null
+                    || GetWardOptionCount() <= 1;
+            }
+            catch { return true; }
+        }
+
+        /// <summary>True nếu Quận/Huyện đã reset về placeholder (value="" hoặc text chứa "Chọn")</summary>
+        public bool IsDistrictResetToPlaceholder()
+        {
+            try
+            {
+                var sel = new SelectElement(_driver.FindElement(DistrictSelect));
+                return sel.SelectedOption.GetAttribute("value") == ""
+                    || sel.SelectedOption.Text.Contains("Chọn");
+            }
+            catch { return false; }
+        }
+
+        /// <summary>True nếu Phường/Xã đã reset về placeholder (value="" hoặc text chứa "Chọn")</summary>
+        public bool IsWardResetToPlaceholder()
+        {
+            try
+            {
+                var sel = new SelectElement(_driver.FindElement(WardSelect));
+                return sel.SelectedOption.GetAttribute("value") == ""
+                    || sel.SelectedOption.Text.Contains("Chọn");
+            }
+            catch { return false; }
+        }
+
+        // =====================================================================
+        // PAGE TEXT HELPERS
+        // =====================================================================
+
+        /// <summary>Lấy toàn bộ text của trang (body)</summary>
+        public string GetPageBodyText()
+        {
+            try { return _driver.FindElement(By.TagName("body")).Text; }
+            catch { return string.Empty; }
+        }
+
+        // =====================================================================
+        // SAVED ADDRESS HELPERS (F5.17 / F5.18)
+        // =====================================================================
+
+        /// <summary>Tick checkbox "Lưu địa chỉ này" nếu đang unchecked</summary>
+        public void TickSaveAddressIfPresent()
+        {
+            var checkboxes = _driver.FindElements(By.CssSelector(
+                "input[id*='save'], input[id*='Save'], input[name*='save'], input[name*='Save']"));
+            if (checkboxes.Count > 0 && !checkboxes[0].Selected)
+                checkboxes[0].Click();
+        }
+
+        /// <summary>True nếu dropdown địa chỉ đã lưu (#addressSelect) tồn tại</summary>
+        public bool HasSavedAddressDropdown()
+            => _driver.FindElements(AddressSelect).Count > 0;
+
+        /// <summary>Số option trong dropdown #addressSelect (bao gồm placeholder)</summary>
+        public int GetSavedAddressOptionCount()
+            => _driver.FindElements(By.CssSelector("#addressSelect option")).Count;
+
+        /// <summary>
+        /// Chọn địa chỉ đầu tiên có giá trị thực (bỏ qua placeholder và "new").
+        /// Trả về true nếu chọn được.
+        /// </summary>
+        public bool SelectFirstSavedAddress()
+        {
+            var dropdown = _driver.FindElements(AddressSelect);
+            if (dropdown.Count == 0) return false;
+            var sel = new SelectElement(dropdown[0]);
+            var nonEmpty = sel.Options
+                .Where(o => !string.IsNullOrEmpty(o.GetAttribute("value"))
+                         && o.GetAttribute("value") != "new")
+                .ToList();
+            if (nonEmpty.Count == 0) return false;
+            nonEmpty[0].Click();
+            Thread.Sleep(1500);
+            return true;
+        }
+
+        /// <summary>True nếu panel hiển thị địa chỉ đã lưu (#selectedAddressDisplay) đang visible</summary>
+        public bool IsSavedAddressDisplayVisible()
+        {
+            var panel = _driver.FindElements(By.Id("selectedAddressDisplay"));
+            return panel.Count > 0 && panel[0].Displayed;
+        }
+
+        // =====================================================================
+        // CONFIRMATION PAGE – CONTINUE SHOPPING
+        // =====================================================================
+
+        /// <summary>
+        /// Tìm và click nút "Tiếp tục mua sắm" / "Về trang chủ" trên trang xác nhận.
+        /// Trả về true nếu tìm thấy và click được.
+        /// </summary>
+        public bool ClickContinueShopping()
+        {
+            var btn = _driver.FindElements(By.CssSelector(
+                    "a[href*='/Shop'], a[href*='/'], button[id*='continue'], a[id*='continue']"))
+                .FirstOrDefault(e => e.Displayed
+                    && (e.Text.Contains("mua sắm", StringComparison.OrdinalIgnoreCase)
+                     || e.Text.Contains("trang chủ", StringComparison.OrdinalIgnoreCase)
+                     || e.Text.Contains("Shop", StringComparison.OrdinalIgnoreCase)));
+            if (btn == null) return false;
+            btn.Click();
+            Thread.Sleep(1000);
+            return true;
+        }
     }
 }
