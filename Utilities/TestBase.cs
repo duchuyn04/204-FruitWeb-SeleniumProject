@@ -217,8 +217,8 @@ namespace SeleniumProject.Utilities
                         CurrentActualResult = ExtractWebState();
                     }
 
-                    // Thêm kết luận thành công / thất bại vào cuối actual result
-                    CurrentActualResult += loi ? " → Thất bại" : " → Thành công";
+                    // Thêm kết luận thành công / thất bại lên đầu actual result
+                    CurrentActualResult = (loi ? "Thất bại\n" : "Thành công\n") + CurrentActualResult;
 
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
 
