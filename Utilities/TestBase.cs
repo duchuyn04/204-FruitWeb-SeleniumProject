@@ -220,6 +220,11 @@ namespace SeleniumProject.Utilities
                     // Thêm kết luận thành công / thất bại lên đầu actual result
                     CurrentActualResult = (loi ? "Thất bại\n" : "Thành công\n") + CurrentActualResult;
 
+                    // Chuyển True/False sang tiếng Việt
+                    CurrentActualResult = CurrentActualResult
+                        .Replace("True", "Có")
+                        .Replace("False", "Không");
+
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
 
                     // Ghi vào sheet tương ứng module theo đúng hàng Test Case ID
