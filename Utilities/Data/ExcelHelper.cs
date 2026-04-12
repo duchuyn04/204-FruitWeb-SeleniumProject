@@ -154,7 +154,8 @@ namespace SeleniumProject.Utilities
             bool isPassed,
             string actualResult,
             string duongDanScreenshot = "",
-            string sheetName = "")
+            string sheetName = "",
+            string screenshotMode = "embed")
         {
             if (!File.Exists(_filePath)) return;
             if (string.IsNullOrEmpty(testCaseId)) return;
@@ -262,9 +263,36 @@ namespace SeleniumProject.Utilities
                 var cellM = dongGhi.GetCell(12) ?? dongGhi.CreateCell(12);
                 cellM.SetCellValue("");
 
-                // Nhúng ảnh vào cột M (index 12) — CHỈ khi Failed
-                // Ảnh mới sẽ overlay lên ảnh cũ (nằm trên cùng = ảnh mới nhất)
-                if (!isPassed && !string.IsNullOrEmpty(duongDanScreenshot) && File.Exists(duongDanScreenshot))
+                bool coAnh = !isPassed
+                    && !string.IsNullOrEmpty(duongDanScreenshot)
+                    && File.Exists(duongDanScreenshot);
+
+                if (coAnh && screenshotMode == "hyperlink")
+                {
+                    // Chế độ hyperlink: ghi đường dẫn dạng link click-được
+                    dongGhi.HeightInPoints = 15; // không cần cao hàng
+
+                    ICreationHelper creationHelper = workbook.GetCreationHelper();
+                    IHyperlink link = creationHelper.CreateHyperlink(HyperlinkType.File);
+                    link.Address = duongDanScreenshot;
+
+                    cellM.SetCellValue("Ảnh lỗi");
+                    cellM.Hyperlink = link;
+
+                    // Style hyperlink: chữ xanh, gạch dưới
+                    ICellStyle styleLink = workbook.CreateCellStyle();
+                    IFont fontLink = workbook.CreateFont();
+                    fontLink.Color = NPOI.HSSF.Util.HSSFColor.Blue.Index;
+                    fontLink.IsItalic = true;
+                    fontLink.Underline = FontUnderlineType.Single;
+                    styleLink.SetFont(fontLink);
+                    styleLink.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightYellow.Index;
+                    styleLink.FillPattern = FillPattern.SolidForeground;
+                    styleLink.Alignment = HorizontalAlignment.Center;
+                    styleLink.VerticalAlignment = VerticalAlignment.Center;
+                    cellM.CellStyle = styleLink;
+                }
+                else if (coAnh) // embed (mặc định)
                 {
                     // Đặt chiều cao hàng đủ lớn để thấy ảnh
                     dongGhi.HeightInPoints = 90;

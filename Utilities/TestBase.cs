@@ -161,6 +161,14 @@ namespace SeleniumProject.Utilities
             }
         }
 
+        // Cách ghi screenshot vào Excel:
+        // "embed"     — nhúng ảnh trực tiếp vào ô M (mặc định)
+        // "hyperlink" — chỉ ghi đường dẫn dạng hyperlink, file nhẹ hơn
+        protected static string ScreenshotMode
+        {
+            get { return Config["ScreenshotMode"] ?? "embed"; }
+        }
+
         // Đường dẫn lưu ảnh chụp màn hình khi test lỗi
         private static readonly string ScreenshotDir = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
@@ -217,14 +225,15 @@ namespace SeleniumProject.Utilities
 
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
 
-                    // Ghi vào sheet TC_Product Management theo đúng hàng Test Case ID
+                    // Ghi vào sheet tương ứng module theo đúng hàng Test Case ID
                     excel.GhiKetQuaVaoSheet(
                         testCaseId:          CurrentTestCaseId,
                         tenMethod:           tenTest,
                         isPassed:            !loi,
                         actualResult:        CurrentActualResult,
                         duongDanScreenshot:  duongDanScreenshot,
-                        sheetName:           CurrentSheetName
+                        sheetName:           CurrentSheetName,
+                        screenshotMode:      ScreenshotMode
                     );
                 }
                 catch (Exception excelEx)
