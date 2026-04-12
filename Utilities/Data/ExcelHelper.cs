@@ -154,8 +154,7 @@ namespace SeleniumProject.Utilities
             bool isPassed,
             string actualResult,
             string duongDanScreenshot = "",
-            string sheetName = "",
-            string screenshotMode = "embed")
+            string sheetName = "")
         {
             if (!File.Exists(_filePath)) return;
             if (string.IsNullOrEmpty(testCaseId)) return;
@@ -262,61 +261,23 @@ namespace SeleniumProject.Utilities
                 // Xóa text ô M (cột 12) — dù pass hay fail để không còn text cũ
                 var cellM = dongGhi.GetCell(12) ?? dongGhi.CreateCell(12);
                 cellM.SetCellValue("");
+                cellM.Hyperlink = null; // Xóa hyperlink cũ ngay lập tức
+
+                // ===== XÓA ẢNH VÀ DRAWING CŨ TRƯỚC KHI THÊM MỚI =====
+                XoaAnhCu(sheet, dongTimThay);
 
                 bool coAnh = !isPassed
                     && !string.IsNullOrEmpty(duongDanScreenshot)
                     && File.Exists(duongDanScreenshot);
 
-                if (coAnh && screenshotMode == "hyperlink")
+                if (coAnh)
                 {
-                    // Chế độ hyperlink: ghi đường dẫn dạng link click-được
-                    dongGhi.HeightInPoints = 15; // không cần cao hàng
-
-                    ICreationHelper creationHelper = workbook.GetCreationHelper();
-                    IHyperlink link = creationHelper.CreateHyperlink(HyperlinkType.File);
-                    link.Address = duongDanScreenshot;
-
-                    cellM.SetCellValue("Ảnh lỗi");
-                    cellM.Hyperlink = link;
-
-                    // Style hyperlink: chữ xanh, gạch dưới
-                    ICellStyle styleLink = workbook.CreateCellStyle();
-                    IFont fontLink = workbook.CreateFont();
-                    fontLink.Color = NPOI.HSSF.Util.HSSFColor.Blue.Index;
-                    fontLink.IsItalic = true;
-                    fontLink.Underline = FontUnderlineType.Single;
-                    styleLink.SetFont(fontLink);
-                    styleLink.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightYellow.Index;
-                    styleLink.FillPattern = FillPattern.SolidForeground;
-                    styleLink.Alignment = HorizontalAlignment.Center;
-                    styleLink.VerticalAlignment = VerticalAlignment.Center;
-                    cellM.CellStyle = styleLink;
+                    ThemAnhVaHyperlink(workbook, sheet, dongGhi, dongTimThay, cellM, duongDanScreenshot);
                 }
-                else if (coAnh) // embed (mặc định)
+                else
                 {
-                    // Đặt chiều cao hàng đủ lớn để thấy ảnh
-                    dongGhi.HeightInPoints = 90;
-
-                    // Load ảnh PNG vào workbook
-                    byte[] anhBytes = File.ReadAllBytes(duongDanScreenshot);
-                    int pictureIdx = workbook.AddPicture(anhBytes, PictureType.PNG);
-
-                    // Tạo anchor: Col1=12(M), Row1=dongTimThay → Col2=13(N), Row2=dongTimThay+1
-                    IDrawing drawingObj = sheet.CreateDrawingPatriarch();
-                    ICreationHelper helper = workbook.GetCreationHelper();
-                    IClientAnchor anchor = helper.CreateClientAnchor();
-                    anchor.Col1 = 12;
-                    anchor.Row1 = dongTimThay;
-                    anchor.Col2 = 13;
-                    anchor.Row2 = dongTimThay + 1;
-                    anchor.AnchorType = AnchorType.MoveAndResize;
-
-                    drawingObj.CreatePicture(anchor, pictureIdx);
-                }
-                else if (isPassed)
-                {
-                    // Passed → reset chiều cao hàng về bình thường
-                    dongGhi.HeightInPoints = 15;
+                    // Reset cell về trạng thái mặc định (có border)
+                    ResetCellScreenshot(workbook, cellM, dongGhi);
                 }
 
 
@@ -326,6 +287,144 @@ namespace SeleniumProject.Utilities
 
                 workbook.Close();
             }
+        }
+
+        // ===== PRIVATE HELPER METHODS =====
+
+        /// <summary>
+        /// Xóa tất cả ảnh và drawing cũ tại row chỉ định
+        /// </summary>
+        private void XoaAnhCu(ISheet sheet, int rowIndex)
+        {
+            var xssfSheet = sheet as XSSFSheet;
+            if (xssfSheet == null) return;
+
+            var patriarch = xssfSheet.GetDrawingPatriarch() as XSSFDrawing;
+            if (patriarch == null) return;
+
+            var ctDrawing = patriarch.GetCTDrawing();
+            var toRemove = ctDrawing.CellAnchors
+                .OfType<NPOI.OpenXmlFormats.Dml.Spreadsheet.CT_TwoCellAnchor>()
+                .Where(a => a.from != null && a.from.row == rowIndex)
+                .ToList<NPOI.OpenXmlFormats.Dml.Spreadsheet.IEG_Anchor>();
+
+            foreach (var anchor in toRemove)
+                ctDrawing.CellAnchors.Remove(anchor);
+        }
+
+        /// <summary>
+        /// Thêm ảnh screenshot và hyperlink vào cell
+        /// </summary>
+        private void ThemAnhVaHyperlink(XSSFWorkbook workbook, ISheet sheet, IRow row, int rowIndex, ICell cell, string imagePath)
+        {
+            // Tăng chiều cao hàng
+            row.HeightInPoints = 100;
+
+            // Đọc và thêm ảnh vào workbook
+            byte[] imageBytes = File.ReadAllBytes(imagePath);
+            int pictureIdx = workbook.AddPicture(imageBytes, PictureType.PNG);
+
+            // Tạo drawing và anchor cho ảnh
+            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            ICreationHelper helper = workbook.GetCreationHelper();
+            XSSFClientAnchor anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+            
+            anchor.Col1 = 12;  // Cột M
+            anchor.Row1 = rowIndex;
+            anchor.Col2 = 13;  // Đến cột N
+            anchor.Row2 = rowIndex + 1;
+            anchor.AnchorType = AnchorType.DontMoveAndResize;
+            anchor.Dy1 = 0;
+            anchor.Dy2 = (int)(100 * 9525 * 0.7); // 70% chiều cao cho ảnh
+
+            drawing.CreatePicture(anchor, pictureIdx);
+
+            // Ghi text và hyperlink
+            cell.SetCellType(CellType.String);
+            cell.SetCellValue("Ảnh lỗi");
+
+            XSSFHyperlink hyperlink = new XSSFHyperlink(HyperlinkType.File);
+            hyperlink.Address = imagePath;
+            cell.Hyperlink = hyperlink;
+
+            // Áp dụng style
+            cell.CellStyle = TaoStyleScreenshot(workbook);
+        }
+
+        /// <summary>
+        /// Tạo style cho cell screenshot: nền vàng, text xanh gạch chân, viền đen
+        /// </summary>
+        private ICellStyle TaoStyleScreenshot(XSSFWorkbook workbook)
+        {
+            ICellStyle style = workbook.CreateCellStyle();
+            
+            // Nền vàng
+            style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+            style.FillPattern = FillPattern.SolidForeground;
+            
+            // Font xanh, gạch chân
+            IFont font = workbook.CreateFont();
+            font.Underline = FontUnderlineType.Single;
+            font.Color = NPOI.HSSF.Util.HSSFColor.Blue.Index;
+            font.FontHeightInPoints = 11;
+            style.SetFont(font);
+            
+            // Căn giữa
+            style.Alignment = HorizontalAlignment.Center;
+            style.VerticalAlignment = VerticalAlignment.Bottom;
+            
+            // Viền đen
+            style.BorderTop = BorderStyle.Thin;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BorderLeft = BorderStyle.Thin;
+            style.BorderRight = BorderStyle.Thin;
+            style.TopBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.BottomBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.LeftBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.RightBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            
+            return style;
+        }
+
+        /// <summary>
+        /// Reset cell screenshot về trạng thái mặc định (khi test pass hoặc không có ảnh)
+        /// </summary>
+        private void ResetCellScreenshot(XSSFWorkbook workbook, ICell cell, IRow row)
+        {
+            // Xóa hyperlink từ cell
+            if (cell.Hyperlink != null)
+            {
+                cell.Hyperlink = null;
+            }
+            
+            // Xóa hyperlink từ sheet's hyperlink list
+            var sheet = cell.Sheet as XSSFSheet;
+            if (sheet != null)
+            {
+                // RemoveHyperlink cần row và column index
+                sheet.RemoveHyperlink(row.RowNum, cell.ColumnIndex);
+            }
+            
+            // Xóa text
+            cell.SetCellValue("");
+            
+            // Tạo style mới với border
+            ICellStyle style = workbook.CreateCellStyle();
+            
+            // Thêm viền đen
+            style.BorderTop = BorderStyle.Thin;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BorderLeft = BorderStyle.Thin;
+            style.BorderRight = BorderStyle.Thin;
+            style.TopBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.BottomBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.LeftBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            style.RightBorderColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            
+            cell.CellStyle = style;
+            
+            // Reset chiều cao hàng về mặc định
+            row.HeightInPoints = -1;
         }
     }
 }
