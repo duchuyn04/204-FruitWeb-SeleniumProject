@@ -217,6 +217,9 @@ namespace SeleniumProject.Utilities
                         CurrentActualResult = ExtractWebState();
                     }
 
+                    // Thêm kết luận thành công / thất bại vào cuối actual result
+                    CurrentActualResult += loi ? " → Thất bại" : " → Thành công";
+
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
 
                     // Ghi vào sheet tương ứng module theo đúng hàng Test Case ID
