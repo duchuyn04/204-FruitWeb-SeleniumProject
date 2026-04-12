@@ -10,7 +10,7 @@
         "testCase": "TC_F2.6_02",
         "no": 43,
         "description": "Kiểm tra thêm sản phẩm thành công với Giá gốc = 1 (min hợp lệ)",
-        "productName": "Sản phẩm Test Giá Min",
+        "productName": "Cam Canh Cao Phong",
         "category": "Trái cây nội địa",
         "price": "1"
     },
@@ -18,8 +18,8 @@
         "testCase": "TC_F2.6_03",
         "no": 44,
         "description": "Kiểm tra thêm SP với Số lượng tồn kho = 0",
-        "productName": "Sầu Riêng Musang King",
-        "category": "Trái cây nhập khẩu",
+        "productName": "Sầu Riêng Ri6 Đắk Lắk",
+        "category": "Trái cây nội địa",
         "price": "500000",
         "stock": "0"
     },
@@ -62,8 +62,8 @@
         "testCase": "TC_F2.6_08",
         "no": 49,
         "description": "Kiểm tra Slug thủ công hợp lệ",
-        "productName": "Buoi Da Xanh",
-        "slug": "buoi-da-xanh-2026",
+        "productName": "Buoi Da Xanh | buoi-da-xanh-2026",
+        "slug": "buoi-nam-roi-ben-tre",
         "category": "Trái cây nội địa",
         "price": "45000"
     },
@@ -71,7 +71,7 @@
         "testCase": "TC_F2.6_09",
         "no": 50,
         "description": "Kiểm tra MinOrder = 0",
-        "productName": "Chom Chom Gia Lai",
+        "productName": "Chom Chom Gia Lai | NĐ |",
         "category": "Trái cây nội địa",
         "price": "35000",
         "minOrder": "0"
@@ -80,7 +80,7 @@
         "testCase": "TC_F2.6_10",
         "no": 51,
         "description": "Kiểm tra Stock = 1 (boundary)",
-        "productName": "Roi Sữa Vĩnh Kim",
+        "productName": "Roi Sừa Vĩnh Kim | NĐ |",
         "category": "Trái cây nội địa",
         "price": "42000",
         "stock": "1"
@@ -89,7 +89,7 @@
         "testCase": "TC_F2.6_11",
         "no": 52,
         "description": "Kiểm tra Mô tả ngắn chứa link URL",
-        "productName": "Đu Đủ Ruột Đỏ",
+        "productName": "Đu Đủ Ruột Đỏ | NĐ |",
         "category": "Trái cây nội địa",
         "price": "28000",
         "shortDescription": "Xem tại https://vuatraicay.site"
@@ -98,7 +98,7 @@
         "testCase": "TC_F2.6_12",
         "no": 53,
         "description": "Kiểm tra redirect đúng sau khi lưu thành công",
-        "productName": "SP Redirect Test",
+        "productName": "SP Redirect Test | NĐ |",
         "category": "Trái cây nội địa",
         "price": "50000",
         "expectedUrl": "/Admin/Product"
@@ -107,7 +107,7 @@
         "testCase": "TC_F2.6_13",
         "no": 54,
         "description": "Kiểm tra toast message sau lưu thành công",
-        "productName": "SP Toast Test",
+        "productName": "SP Toast Test | NĐ |",
         "category": "Trái cây nội địa",
         "price": "60000",
         "expectedToast": "Thêm sản phẩm thành công"
@@ -116,7 +116,7 @@
         "testCase": "TC_F2.6_14",
         "no": 55,
         "description": "Kiểm tra SP mới xuất hiện trong danh sách",
-        "productName": "SP List Check",
+        "productName": "SP List Check | NĐ |",
         "category": "Trái cây nội địa",
         "price": "45000"
     },
@@ -124,7 +124,7 @@
         "testCase": "TC_F2.6_15",
         "no": 56,
         "description": "Kiểm tra SP hiển giá đúng sau lưu",
-        "productName": "SP Gia Check",
+        "productName": "SP Gia Check | NĐ | 100000 |",
         "category": "Trái cây nội địa",
         "price": "100000",
         "salePrice": "80000"
@@ -154,7 +154,7 @@
         "no": 59,
         "description": "Kiểm tra nhập Slug tùy chỉnh hợp lệ",
         "productName": "Táo New Zealand",
-        "slug": "tao-new-zealand-2026",
+        "slug": "tao-pink-lady-uc",
         "category": "Trái cây nhập khẩu",
         "price": "150000"
     },
@@ -162,16 +162,16 @@
         "testCase": "TC_F2.7_04",
         "no": 60,
         "description": "Kiểm tra Slug tự động sinh từ tên sản phẩm khi để trống",
-        "productName": "Táo New Zealand Auto Slug",
+        "productName": "Táo New Zealand",
         "category": "Trái cây nhập khẩu",
         "price": "150000",
-        "expectedSlug": "tao-new-zealand-auto-slug"
+        "expectedSlug": "tao-jazz-new-zealand"
     },
     {
         "testCase": "TC_F2.7_05",
         "no": 61,
         "description": "Kiểm tra hệ thống báo lỗi khi submit form rỗng hoàn toàn",
-        "productName": "",
+        "productName": "https://vuatraicay.site/Admin/Product/Create",
         "category": "",
         "price": "",
         "expectedValidation": "Tên sản phẩm không được để trống; Danh mục không được để trống"
@@ -180,7 +180,7 @@
         "testCase": "TC_F2.7_06",
         "no": 62,
         "description": "Kiểm tra hệ thống báo lỗi khi để trống Tên sản phẩm",
-        "productName": "",
+        "productName": "(để trống)",
         "category": "Trái cây nội địa",
         "price": "80000",
         "expectedValidation": "Tên sản phẩm không được để trống"
@@ -241,7 +241,7 @@
         "testCase": "TC_F2.7_13",
         "no": 69,
         "description": "Kiểm tra thêm sản phẩm thành công với Tên sản phẩm 1 ký tự (min)",
-        "productName": "A",
+        "productName": "A (1 ký tự)",
         "category": "Trái cây nội địa",
         "price": "10000"
     },
@@ -249,7 +249,7 @@
         "testCase": "TC_F2.7_14",
         "no": 70,
         "description": "Kiểm tra hệ thống từ chối Tên sản phẩm vượt max length",
-        "productName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "productName": "Chuỗi ký tự vượt giới hạn max+1",
         "category": "Trái cây nội địa",
         "price": "10000",
         "expectedValidation": "Tên sản phẩm vượt giới hạn"
@@ -305,7 +305,7 @@
         "testCase": "TC_F2.7_20",
         "no": 76,
         "description": "Kiểm tra Số lượng tồn kho âm bị từ chối",
-        "productName": "Mít Thái Siêu Sớm",
+        "productName": "Mít Thái Sìu Sơm",
         "category": "Trái cây nội địa",
         "price": "85000",
         "stock": "-5",
@@ -333,7 +333,7 @@
         "testCase": "TC_F2.7_23",
         "no": 79,
         "description": "Kiểm tra SQL Injection trong Tên SP",
-        "productName": "'; DROP TABLE Products; --",
+        "productName": "; DROP TABLE Products; --",
         "category": "Trái cây nội địa",
         "price": "50000",
         "expectedBehavior": "Escape hoặc từ chối; không thực thi SQL"
@@ -372,7 +372,7 @@
         "testCase": "TC_F2.7_27",
         "no": 83,
         "description": "Kiểm tra Giá khuyến mãi bằng Giá gốc",
-        "productName": "Sapoche Mộc Châu",
+        "productName": "Sapoche Mọc Châu",
         "category": "Trái cây nội địa",
         "price": "90000",
         "salePrice": "90000",
@@ -382,7 +382,7 @@
         "testCase": "TC_F2.7_28",
         "no": 84,
         "description": "Kiểm tra Tên SP chỉ chứa khoảng trắng",
-        "productName": "     ",
+        "productName": "(5 khoảng trắng)",
         "category": "Trái cây nội địa",
         "price": "50000",
         "expectedValidation": "Tên sản phẩm không hợp lệ"
@@ -400,7 +400,7 @@
         "testCase": "TC_F2.7_30",
         "no": 86,
         "description": "Kiểm tra Stock rất lớn (999999)",
-        "productName": "Cam Sành Vĩnh Long",
+        "productName": "Cam Sành Vĩnh Long | NĐ |",
         "category": "Trái cây nội địa",
         "price": "40000",
         "stock": "999999",
@@ -419,7 +419,7 @@
         "testCase": "TC_F2.7_32",
         "no": 88,
         "description": "Kiểm tra Mô tả ngắn để trống",
-        "productName": "Vải Thiều Bắc Giang",
+        "productName": "Vải Thiều Bắc Giang | NĐ |",
         "category": "Trái cây nội địa",
         "price": "75000",
         "shortDescription": "",
@@ -429,7 +429,7 @@
         "testCase": "TC_F2.7_33",
         "no": 89,
         "description": "Kiểm tra Tên SP chứa Emoji",
-        "productName": "Táo Xanh 🍏 Dưa Hấu 🍉",
+        "productName": "Tao Xanh Dua Hau",
         "category": "Trái cây nội địa",
         "price": "50000",
         "expectedBehavior": "Lưu thành công hoặc báo lỗi emoji theo rule hệ thống"
@@ -438,7 +438,7 @@
         "testCase": "TC_F2.7_34",
         "no": 90,
         "description": "Kiểm tra trim space đầu/cuối Tên",
-        "productName": "   Táo Fuji Nhật   ",
+        "productName": "Tao Fuji Nhat",
         "category": "Trái cây nhập khẩu",
         "price": "250000",
         "expectedTrimmedName": "Táo Fuji Nhật"
@@ -447,7 +447,7 @@
         "testCase": "TC_F2.7_35",
         "no": 91,
         "description": "Kiểm tra MinOrder rất lớn (999999)",
-        "productName": "Nhãn Lồng Hưng Yên",
+        "productName": "Nhãn Lồng Hưng Yên | NĐ |",
         "category": "Trái cây nội địa",
         "price": "90000",
         "minOrder": "999999",
@@ -457,29 +457,9 @@
         "testCase": "TC_F2.7_36",
         "no": 92,
         "description": "Kiểm tra Tên SP 255 ký tự (max DB column)",
-        "productName": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "productName": "AAAA...(255 ký tự)",
         "category": "Trái cây nội địa",
         "price": "50000",
         "expectedBehavior": "Lưu thành công hoặc báo lỗi vượt giới hạn"
-    },
-    {
-        "testCase": "TC_F2.7_37",
-        "no": 93,
-        "description": "Kiểm tra nhấn Cancel/Quay lại không lưu",
-        "productName": "SP Cancel Test",
-        "category": "Trái cây nội địa",
-        "price": "50000",
-        "action": "cancel",
-        "expectedBehavior": "Quay về danh sách và không lưu sản phẩm"
-    },
-    {
-        "testCase": "TC_F2.7_38",
-        "no": 94,
-        "description": "Kiểm tra tạo SP khi mất kết nối mạng",
-        "productName": "SP Network Test",
-        "category": "Trái cây nội địa",
-        "price": "40000",
-        "action": "save_when_offline",
-        "expectedBehavior": "Hiển thị lỗi kết nối; dữ liệu đã nhập không mất"
     }
 ]

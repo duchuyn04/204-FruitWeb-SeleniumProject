@@ -1,207 +1,207 @@
 [
-  {
-    "testCase": "TC_F2.2_01",
-    "no": 1,
-    "description": "Kiểm tra SP đã xóa mềm không xuất hiện trong kết quả",
-    "searchKeyword": "",
-    "expectedProductCount": 4
-  },
-  {
-    "testCase": "TC_F2.3_01",
-    "no": 2,
-    "description": "Kiểm tra tìm kiếm sản phẩm với từ khóa hợp lệ - khớp chính xác tên",
-    "searchKeyword": "Táo Fuji Mỹ",
-    "expectedProductName": "Táo Fuji Mỹ",
-    "expectedMinCount": 1
-  },
-  {
-    "testCase": "TC_F2.3_02",
-    "no": 3,
-    "description": "Kiểm tra tìm kiếm với từ khóa một phần - trả về nhiều kết quả",
-    "searchKeyword": "Táo",
-    "expectedProductName": "Táo",
-    "expectedMinCount": 2
-  },
-  {
-    "testCase": "TC_F2.3_03",
-    "no": 4,
-    "description": "Kiểm tra để trống ô tìm kiếm - hiển thị toàn bộ sản phẩm",
-    "searchKeyword": "",
-    "expectedMinCount": 4
-  },
-  {
-    "testCase": "TC_F2.3_04",
-    "no": 5,
-    "description": "Kiểm tra tìm kiếm không phân biệt hoa thường (case-insensitive)",
-    "searchKeyword": "táo fuji mỹ",
-    "expectedProductName": "Táo Fuji Mỹ",
-    "expectedMinCount": 1
-  },
-  {
-    "testCase": "TC_F2.3_05",
-    "no": 6,
-    "description": "Kiểm tra tìm kiếm với khoảng trắng đầu/cuối - hệ thống tự trim",
-    "searchKeyword": "  Sầu riêng  ",
-    "expectedProductName": "Sầu riêng",
-    "expectedMinCount": 1
-  },
-  {
-    "testCase": "TC_F2.3_06",
-    "no": 7,
-    "description": "Kiểm tra tìm kiếm với 1 ký tự - hệ thống vẫn phản hồi",
-    "searchKeyword": "T",
-    "expectedMinCount": 1
-  },
-  {
-    "testCase": "TC_F2.3_07",
-    "no": 8,
-    "description": "Kiểm tra tìm kiếm bằng slug sản phẩm - xác nhận hành vi",
-    "searchKeyword": "tao-fuji-my"
-  },
-  {
-    "testCase": "TC_F2.3_08",
-    "no": 9,
-    "description": "Kiểm tra tìm kiếm chuỗi rất dài (255 ký tự) - không crash",
-    "searchKeyword": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-  },
-  {
-    "testCase": "TC_F2.3_09",
-    "no": 10,
-    "description": "Kiểm tra xóa từ khóa tìm kiếm - danh sách trở về ban đầu",
-    "searchKeyword": "Táo",
-    "expectedMinCountAfterClear": 4
-  },
-  {
-    "testCase": "TC_F2.3_10",
-    "no": 11,
-    "description": "Kiểm tra URL cập nhật query string khi tìm kiếm",
-    "searchKeyword": "Sầu riêng",
-    "expectedUrlParam": "search="
-  },
-  {
-    "testCase": "TC_F2.3_11",
-    "no": 12,
-    "description": "Kiểm tra bộ đếm sản phẩm cập nhật đúng sau tìm kiếm",
-    "searchKeyword": "Táo",
-    "expectedProductName": "Táo"
-  },
-  {
-    "testCase": "TC_F2.3_12",
-    "no": 13,
-    "description": "Kiểm tra tìm kiếm với ký tự tiếng Việt có dấu",
-    "searchKeyword": "Mãng cầu xiêm",
-    "expectedProductName": "Mãng cầu xiêm",
-    "expectedMinCount": 1
-  },
-  {
-    "testCase": "TC_F2.3_13",
-    "no": 14,
-    "description": "Kiểm tra tìm kiếm chỉ có khoảng trắng - xử lý như rỗng",
-    "searchKeyword": "   ",
-    "expectedMinCount": 4
-  },
-  {
-    "testCase": "TC_F2.3_14",
-    "no": 15,
-    "description": "Kiểm tra tìm kiếm trực tiếp qua URL query string",
-    "directUrl": "/Admin/Product?search=Táo Gala&page=1",
-    "expectedProductName": "Táo Gala",
-    "expectedSearchInputValue": "Táo Gala"
-  },
-  {
-    "testCase": "TC_F2.3_15",
-    "no": 16,
-    "description": "Regression: Thêm SP mới search tìm thấy SP vừa thêm",
-    "newProductName": "Chuối Laba Regression Test",
-    "searchKeyword": "Chuối Laba Regression",
-    "category": "Trái cây nội địa",
-    "price": "45000",
-    "stock": "100",
-    "unit": "kg",
-    "shortDescription": "Chuối Laba test regression",
-    "imagePath": "TestData\\Images\\chuoi.jpg"
-  },
-  {
-    "testCase": "TC_F2.3_16",
-    "no": 17,
-    "description": "Regression: Xóa SP search không còn tìm thấy SP đã xóa",
-    "deleteProductName": "Chuối Laba Regression Test",
-    "searchKeyword": "Chuối Laba Regression Test"
-  },
-  {
-    "testCase": "TC_F2.3_17",
-    "no": 18,
-    "description": "Kiểm tra tìm kiếm kết hợp lọc theo danh mục",
-    "searchKeyword": "Táo",
-    "categoryFilter": "Táo",
-    "expectedProductName": "Táo"
-  },
-  {
-    "testCase": "TC_F2.3_18",
-    "no": 19,
-    "description": "Kiểm tra tìm kiếm kết hợp sắp xếp - kết quả giữ đúng thứ tự",
-    "searchKeyword": "Táo",
-    "sortOption": "Tên A-Z"
-  },
-  {
-    "testCase": "TC_F2.3_19",
-    "no": 20,
-    "description": "Decision Table: Search rỗng + Category tất cả + Sort mặc định hiện toàn bộ",
-    "searchKeyword": "",
-    "expectedMinCount": 4
-  },
-  {
-    "testCase": "TC_F2.3_20",
-    "no": 21,
-    "description": "Decision Table: Search có giá trị + Category cụ thể + Sort giá thấp-cao",
-    "searchKeyword": "Táo",
-    "categoryFilter": "Táo",
-    "sortOption": "Giá thấp đến cao"
-  },
-  {
-    "testCase": "TC_F2.3_21",
-    "no": 22,
-    "description": "State Transition: Tìm → sort → clear search → sort vẫn giữ",
-    "searchKeyword": "Táo",
-    "sortOption": "Tên A-Z"
-  },
-  {
-    "testCase": "TC_F2.3_22",
-    "no": 23,
-    "description": "Use Case: Luồng đầy đủ search → filter → sort → clear all",
-    "searchKeyword": "Táo",
-    "categoryFilter": "Táo",
-    "sortOption": "Tên A-Z",
-    "expectedMinCountAfterClear": 4
-  },
-  {
-    "testCase": "TC_F2.3_23",
-    "no": 24,
-    "description": "Tìm kiếm với từ khóa ngắn 2-3 ký tự (Equivalence Partitioning: short)",
-    "searchKeyword": "Sầu"
-  },
-  {
-    "testCase": "TC_F2.3_24",
-    "no": 25,
-    "description": "Tìm kiếm với từ khóa trung bình 10-20 ký tự (Equivalence Partitioning: medium)",
-    "searchKeyword": "Mãng cầu xiêm"
-  },
-  {
-    "testCase": "TC_F2.3_25",
-    "no": 26,
-    "description": "Tìm kiếm với từ khóa chỉ có số (Equivalence Partitioning: numeric)",
-    "searchKeyword": "12345"
-  },
-  {
-    "testCase": "TC_F2.3_26",
-    "no": 27,
-    "description": "Look & Feel: Placeholder ô tìm kiếm hiển thị đúng",
-    "expectedPlaceholder": "Tìm kiếm sản phẩm..."
-  },
-  {
-    "testCase": "TC_F2.3_27",
-    "no": 28,
-    "description": "Look & Feel: Loading indicator hiển thị khi đang tìm kiếm",
-    "searchKeyword": "Táo"
-  }
+    {
+        "testCase": "TC_F2.2_01",
+        "no": 1,
+        "description": "Kiểm tra SP đã xóa mềm không xuất hiện trong kết quả",
+        "searchKeyword": "",
+        "expectedProductCount": 4
+    },
+    {
+        "testCase": "TC_F2.3_01",
+        "no": 2,
+        "description": "Kiểm tra tìm kiếm sản phẩm với từ khóa hợp lệ - khớp chính xác tên",
+        "searchKeyword": "Cam Sành",
+        "expectedProductName": "Cam Sành",
+        "expectedMinCount": 1
+    },
+    {
+        "testCase": "TC_F2.3_02",
+        "no": 3,
+        "description": "Kiểm tra tìm kiếm với từ khóa một phần - trả về nhiều kết quả",
+        "searchKeyword": "Bưởi",
+        "expectedProductName": "Bưởi",
+        "expectedMinCount": 2
+    },
+    {
+        "testCase": "TC_F2.3_03",
+        "no": 4,
+        "description": "Kiểm tra để trống ô tìm kiếm - hiển thị toàn bộ sản phẩm",
+        "searchKeyword": "",
+        "expectedMinCount": 4
+    },
+    {
+        "testCase": "TC_F2.3_04",
+        "no": 5,
+        "description": "Kiểm tra tìm kiếm không phân biệt hoa thường (case-insensitive)",
+        "searchKeyword": "cam sành",
+        "expectedProductName": "Cam Sành",
+        "expectedMinCount": 1
+    },
+    {
+        "testCase": "TC_F2.3_05",
+        "no": 6,
+        "description": "Kiểm tra tìm kiếm với khoảng trắng đầu/cuối - hệ thống tự trim",
+        "searchKeyword": "  Dâu Tây  ",
+        "expectedProductName": "Dâu Tây",
+        "expectedMinCount": 1
+    },
+    {
+        "testCase": "TC_F2.3_06",
+        "no": 7,
+        "description": "Kiểm tra tìm kiếm với 1 ký tự - hệ thống vẫn phản hồi",
+        "searchKeyword": "B",
+        "expectedMinCount": 1
+    },
+    {
+        "testCase": "TC_F2.3_07",
+        "no": 8,
+        "description": "Kiểm tra tìm kiếm bằng slug sản phẩm - xác nhận hành vi",
+        "searchKeyword": "cam-sanh-mien-tay"
+    },
+    {
+        "testCase": "TC_F2.3_08",
+        "no": 9,
+        "description": "Kiểm tra tìm kiếm chuỗi rất dài (255 ký tự) - không crash",
+        "searchKeyword": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    {
+        "testCase": "TC_F2.3_09",
+        "no": 10,
+        "description": "Kiểm tra xóa từ khóa tìm kiếm - danh sách trở về ban đầu",
+        "searchKeyword": "Cam",
+        "expectedMinCountAfterClear": 4
+    },
+    {
+        "testCase": "TC_F2.3_10",
+        "no": 11,
+        "description": "Kiểm tra URL cập nhật query string khi tìm kiếm",
+        "searchKeyword": "Nho",
+        "expectedUrlParam": "search="
+    },
+    {
+        "testCase": "TC_F2.3_11",
+        "no": 12,
+        "description": "Kiểm tra bộ đếm sản phẩm cập nhật đúng sau tìm kiếm",
+        "searchKeyword": "Chuối",
+        "expectedProductName": "Chuối"
+    },
+    {
+        "testCase": "TC_F2.3_12",
+        "no": 13,
+        "description": "Kiểm tra tìm kiếm với ký tự tiếng Việt có dấu",
+        "searchKeyword": "Dứa Mật",
+        "expectedProductName": "Dứa Mật",
+        "expectedMinCount": 1
+    },
+    {
+        "testCase": "TC_F2.3_13",
+        "no": 14,
+        "description": "Kiểm tra tìm kiếm chỉ có khoảng trắng - xử lý như rỗng",
+        "searchKeyword": "   ",
+        "expectedMinCount": 4
+    },
+    {
+        "testCase": "TC_F2.3_14",
+        "no": 15,
+        "description": "Kiểm tra tìm kiếm trực tiếp qua URL query string",
+        "directUrl": "/Admin/Product?search=Dâu Tây&page=1",
+        "expectedProductName": "Dâu Tây",
+        "expectedSearchInputValue": "Dâu Tây"
+    },
+    {
+        "testCase": "TC_F2.3_15",
+        "no": 16,
+        "description": "Regression: Thêm SP mới search tìm thấy SP vừa thêm",
+        "newProductName": "Chuối Laba",
+        "searchKeyword": "",
+        "category": "Trái cây nội địa",
+        "price": "45000",
+        "stock": "100",
+        "unit": "kg",
+        "shortDescription": "Chuối Laba test regression",
+        "imagePath": "TestData\\Images\\chuoi.jpg"
+    },
+    {
+        "testCase": "TC_F2.3_16",
+        "no": 17,
+        "description": "Regression: Xóa SP search không còn tìm thấy SP đã xóa",
+        "deleteProductName": "SP Regression Test",
+        "searchKeyword": ""
+    },
+    {
+        "testCase": "TC_F2.3_17",
+        "no": 18,
+        "description": "Kiểm tra tìm kiếm kết hợp lọc theo danh mục",
+        "searchKeyword": "Bưởi",
+        "categoryFilter": "Trái cây nhập khẩu",
+        "expectedProductName": "Bưởi"
+    },
+    {
+        "testCase": "TC_F2.3_18",
+        "no": 19,
+        "description": "Kiểm tra tìm kiếm kết hợp sắp xếp - kết quả giữ đúng thứ tự",
+        "searchKeyword": "Bưởi",
+        "sortOption": "Tên A-Z"
+    },
+    {
+        "testCase": "TC_F2.3_19",
+        "no": 20,
+        "description": "Decision Table: Search rỗng + Category tất cả + Sort mặc định hiện toàn bộ",
+        "searchKeyword": "",
+        "expectedMinCount": 4
+    },
+    {
+        "testCase": "TC_F2.3_20",
+        "no": 21,
+        "description": "Decision Table: Search có giá trị + Category cụ thể + Sort giá thấp-cao",
+        "searchKeyword": "Bưởi",
+        "categoryFilter": "Trái cây nội địa",
+        "sortOption": "Giá thấp đến cao"
+    },
+    {
+        "testCase": "TC_F2.3_21",
+        "no": 22,
+        "description": "State Transition: Tìm → sort → clear search → sort vẫn giữ",
+        "searchKeyword": "Bưởi",
+        "sortOption": "Tên A-Z"
+    },
+    {
+        "testCase": "TC_F2.3_22",
+        "no": 23,
+        "description": "Use Case: Luồng đầy đủ search → filter → sort → clear all",
+        "searchKeyword": "Trái cây nội địa",
+        "categoryFilter": "Trái cây nội địa",
+        "sortOption": "Tên A-Z",
+        "expectedMinCountAfterClear": 4
+    },
+    {
+        "testCase": "TC_F2.3_23",
+        "no": 24,
+        "description": "Tìm kiếm với từ khóa ngắn 2-3 ký tự (Equivalence Partitioning: short)",
+        "searchKeyword": "Bơ"
+    },
+    {
+        "testCase": "TC_F2.3_24",
+        "no": 25,
+        "description": "Tìm kiếm với từ khóa trung bình 10-20 ký tự (Equivalence Partitioning: medium)",
+        "searchKeyword": "Cam Sành Miền Tây"
+    },
+    {
+        "testCase": "TC_F2.3_25",
+        "no": 26,
+        "description": "Tìm kiếm với từ khóa chỉ có số (Equivalence Partitioning: numeric)",
+        "searchKeyword": "12345"
+    },
+    {
+        "testCase": "TC_F2.3_26",
+        "no": 27,
+        "description": "Look & Feel: Placeholder ô tìm kiếm hiển thị đúng",
+        "expectedPlaceholder": "Tìm kiếm sản phẩm..."
+    },
+    {
+        "testCase": "TC_F2.3_27",
+        "no": 28,
+        "description": "Look & Feel: Loading indicator hiển thị khi đang tìm kiếm",
+        "searchKeyword": "Cam"
+    }
 ]
