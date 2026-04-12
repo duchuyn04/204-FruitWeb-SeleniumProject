@@ -94,9 +94,10 @@ namespace SeleniumProject.Pages.OrderManagement
             el.SendKeys(date);
         }
 
-        // --- Bảng ---
+        // Chỉ lấy hàng có mã đơn thực (có <a> link trong cột đầu)
+        // Tránh đếm nhầm hàng "Không tìm thấy đơn hàng nào." khi bảng trống
         public IReadOnlyCollection<IWebElement> GetAllRows()
-            => _driver.FindElements(TableRows);
+            => _driver.FindElements(OrderCodeLinks);
 
         public IWebElement GetFirstRow()
             => _driver.FindElements(TableRows)[0];
