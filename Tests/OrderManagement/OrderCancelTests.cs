@@ -51,7 +51,9 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool isModalVisible = _orderDetailPage.IsCancelModalVisible();
 
-            CurrentActualResult = $"Modal hủy đơn hiển thị: {isModalVisible}";
+            CurrentActualResult = isModalVisible
+                ? "Sau khi nhấn nút Hủy đơn hàng, modal xác nhận hủy xuất hiện."
+                : "Sau khi nhấn nút Hủy đơn hàng, modal xác nhận không xuất hiện (không đúng kỳ vọng).";
 
             Assert.That(isModalVisible, Is.True,
                 "[TC_F10.26_01] Modal xác nhận hủy đơn không hiện ra sau khi click nút Hủy đơn hàng");
@@ -84,7 +86,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             string newStatus = _orderDetailPage.GetOrderStatus();
 
-            CurrentActualResult = $"Trạng thái sau khi hủy: {newStatus}";
+            CurrentActualResult = $"Sau khi xác nhận hủy, trạng thái đơn chuyển thành '{newStatus}'.";
 
             Assert.That(newStatus, Does.Contain("Đã hủy"),
                 $"[TC_F10.26_02] Trạng thái không chuyển thành 'Đã hủy', hiện tại: {newStatus}");
@@ -118,7 +120,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             string statusAfter = _orderDetailPage.GetOrderStatus();
 
-            CurrentActualResult = $"Trước: {statusBefore} | Sau khi bấm Hủy bỏ: {statusAfter}";
+            CurrentActualResult = $"Trạng thái trước khi mở modal: '{statusBefore}'. Sau khi nhấn Hủy bỏ trong modal, trạng thái vẫn là: '{statusAfter}'.";
 
             Assert.That(statusAfter, Is.EqualTo(statusBefore),
                 $"[TC_F10.27_01] Trạng thái đã thay đổi sau khi click Hủy bỏ: {statusAfter}");
@@ -153,7 +155,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string statusAfter = _orderDetailPage.GetOrderStatus();
             bool isModalClosed = !_orderDetailPage.IsCancelModalVisible();
 
-            CurrentActualResult = $"Trước: {statusBefore} | Sau Escape: {statusAfter} | Modal đã đóng: {isModalClosed}";
+            CurrentActualResult = $"Trạng thái trước khi mở modal: '{statusBefore}'. Sau khi nhấn Escape, modal đóng: {isModalClosed}, trạng thái đơn vẫn là: '{statusAfter}'.";
 
             Assert.That(isModalClosed, Is.True,
                 "[TC_F10.27_02] Modal không đóng sau khi nhấn Escape");

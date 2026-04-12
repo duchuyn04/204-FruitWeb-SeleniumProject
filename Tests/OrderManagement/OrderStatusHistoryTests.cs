@@ -50,7 +50,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool hasSectionHistory = _orderDetailPage.HasHistorySection();
             string orderCode = _orderDetailPage.GetOrderCode();
 
-            CurrentActualResult = $"Đơn: {orderCode} | Section lịch sử tồn tại: {hasSectionHistory}";
+            CurrentActualResult = hasSectionHistory
+                ? $"Đơn hàng '{orderCode}' có section lịch sử trạng thái xuất hiện trên trang chi tiết."
+                : $"Đơn hàng '{orderCode}' không tìm thấy section lịch sử trạng thái.";
 
             Assert.That(hasSectionHistory, Is.True,
                 "[TC_F10.31_01] Không tìm thấy section Lịch sử trạng thái trên trang chi tiết");
@@ -85,7 +87,9 @@ namespace SeleniumProject.Tests.OrderManagement
             string currentYear = timeBefore.Year.ToString();
             bool hasCurrentYearTimestamp = _orderDetailPage.HasTimestampForYear(currentYear);
 
-            CurrentActualResult = $"Thời điểm duyệt: {timeBefore:HH:mm} | Có timestamp năm {currentYear}: {hasCurrentYearTimestamp}";
+            CurrentActualResult = hasCurrentYearTimestamp
+                ? $"Sau khi duyệt lúc {timeBefore:HH:mm}, lịch sử ghi nhận timestamp có chứa năm {currentYear}."
+                : $"Sau khi duyệt lúc {timeBefore:HH:mm}, không tìm thấy timestamp có năm {currentYear} trong lịch sử.";
 
             Assert.That(hasCurrentYearTimestamp, Is.True,
                 $"[TC_F10.31_02] Không tìm thấy timestamp năm {currentYear} trong lịch sử trạng thái");
@@ -119,7 +123,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool hasAdminName = _orderDetailPage.PageContains(expectedAdminName)
                 || _orderDetailPage.PageContains(expectedAdminName.Split('@')[0]);
 
-            CurrentActualResult = $"Admin thực hiện: {expectedAdminName} | Tên hiển thị trong lịch sử: {hasAdminName}";
+            CurrentActualResult = hasAdminName
+                ? $"Sau khi duyệt, tên admin '{expectedAdminName}' được ghi nhận trong lịch sử trạng thái."
+                : $"Sau khi duyệt, không tìm thấy tên admin '{expectedAdminName}' trong lịch sử trạng thái.";
 
             Assert.That(hasAdminName, Is.True,
                 $"[TC_F10.31_03] Tên Admin '{expectedAdminName}' không được ghi nhận trong lịch sử trạng thái");

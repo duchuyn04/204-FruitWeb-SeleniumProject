@@ -49,7 +49,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();
 
-            CurrentActualResult = $"Trạng thái đơn: {orderStatus} | Nút Duyệt hiển thị: {isApproveVisible}";
+            CurrentActualResult = isApproveVisible
+                ? $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn hiển thị."
+                : $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn không hiển thị (không đúng kỳ vọng).";
 
             Assert.That(isApproveVisible, Is.True,
                 "[TC_F10.22_01] Nút 'Duyệt đơn & Chuẩn bị hàng' không hiển thị khi đơn ở trạng thái Chờ xử lý");
@@ -82,7 +84,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string newStatus = _orderDetailPage.GetOrderStatus();
             bool isApproveHidden = !_orderDetailPage.IsApproveButtonVisible();
 
-            CurrentActualResult = $"Trạng thái sau duyệt: {newStatus} | Nút duyệt đã ẩn: {isApproveHidden}";
+            CurrentActualResult = $"Sau khi duyệt đơn, trạng thái chuyển thành '{newStatus}'. Nút Duyệt đơn đã ẩn đi: {isApproveHidden}.";
 
             Assert.That(newStatus, Does.Contain("Đang xử lý"),
                 $"[TC_F10.22_02] Trạng thái không chuyển thành 'Đang xử lý', hiện tại: {newStatus}");
@@ -116,7 +118,9 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool hasHistorySection = _orderDetailPage.HasHistorySection();
 
-            CurrentActualResult = $"Section lịch sử tồn tại: {hasHistorySection} | Trạng thái mới: {_orderDetailPage.GetOrderStatus()}";
+            CurrentActualResult = hasHistorySection
+                ? $"Sau khi duyệt đơn, section lịch sử trạng thái xuất hiện. Trạng thái hiện tại: {_orderDetailPage.GetOrderStatus()}."
+                : $"Sau khi duyệt đơn, không tìm thấy section lịch sử trạng thái.";
 
             Assert.That(hasHistorySection, Is.True,
                 "[TC_F10.22_03] Không tìm thấy section Lịch sử trạng thái sau khi duyệt đơn");
@@ -143,7 +147,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();
 
-            CurrentActualResult = $"Trạng thái đơn: {orderStatus} | Nút Duyệt hiển thị: {isApproveVisible}";
+            CurrentActualResult = isApproveVisible
+                ? $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn vẫn hiển thị (không đúng kỳ vọng)."
+                : $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn đã được ẩn đúng.";
 
             Assert.That(isApproveVisible, Is.False,
                 "[TC_F10.23_01] Nút 'Duyệt đơn' vẫn hiển thị trên đơn đã hủy");
@@ -170,7 +176,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isApproveVisible = _orderDetailPage.IsApproveButtonVisible();
             string orderStatus = _orderDetailPage.GetOrderStatus();
 
-            CurrentActualResult = $"Trạng thái đơn: {orderStatus} | Nút Duyệt hiển thị: {isApproveVisible}";
+            CurrentActualResult = isApproveVisible
+                ? $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn vẫn hiển thị (không đúng kỳ vọng)."
+                : $"Đơn hàng đang ở trạng thái '{orderStatus}', nút Duyệt đơn đã được ẩn đúng.";
 
             Assert.That(isApproveVisible, Is.False,
                 "[TC_F10.23_02] Nút 'Duyệt đơn' vẫn hiển thị trên đơn đang xử lý");

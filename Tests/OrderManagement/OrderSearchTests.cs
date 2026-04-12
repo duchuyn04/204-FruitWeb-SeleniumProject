@@ -47,8 +47,8 @@ namespace SeleniumProject.Tests.OrderManagement
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
 
             CurrentActualResult = isHealthy
-                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả."
-                : "LỖI BẢO MẬT: Web bị vỡ trang hoặc hiện mã lỗi khi nhập XSS!";
+                ? $"Hệ thống xử lý an toàn, trả về {soLuongTimThay} kết quả khi nhập chuỗi XSS."
+                : "LỖI BẢO MẬT: Trang bị vỡ hoặc hiện mã lỗi khi nhập chuỗi XSS!";
 
             Assert.That(isHealthy, Is.True,
                 "[TC_F10.13_01] Trang bị crash hoặc lỗi hiển thị khi tiêm mã XSS");
@@ -75,7 +75,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
 
             CurrentActualResult = isHealthy
-                ? $"Xử lý an toàn. Tổng trả về: {soLuongTimThay} kết quả."
+                ? $"Hệ thống xử lý an toàn, trả về {soLuongTimThay} kết quả khi nhập chuỗi SQL Injection."
                 : "LỖI BẢO MẬT: Nhập SQL Injection gây lỗi phía Server/UI!";
 
             Assert.That(isHealthy, Is.True,
@@ -102,8 +102,8 @@ namespace SeleniumProject.Tests.OrderManagement
             int soLuongTimThay = _orderListPage.GetTotalOrderCount();
 
             CurrentActualResult = isHealthy
-                ? $"Web ổn định khi nhập chuỗi siêu dài. Kết quả trả về: {soLuongTimThay}"
-                : "LỖI: Trình duyệt bị treo hoặc Server sập do chuỗi quá dài";
+                ? $"Hệ thống ổn định khi nhập chuỗi ký tự rất dài, trả về {soLuongTimThay} kết quả."
+                : "LỖI: Trình duyệt bị treo hoặc Server sập do chuỗi quá dài.";
 
             Assert.That(isHealthy, Is.True,
                 "[TC_F10.13_03] Nhập dữ liệu quá dài gây vỡ/crash");
@@ -130,7 +130,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int resultCount = _orderListPage.GetAllRows().Count;
             string firstResultCode = _orderListPage.GetOrderCodeOfRow(0);
 
-            CurrentActualResult = $"Tìm kiếm: '{firstOrderCode}' | Kết quả: {resultCount} | Mã đơn đầu tiên: {firstResultCode}";
+            CurrentActualResult = $"Tìm kiếm với từ khóa '{firstOrderCode}', hệ thống trả về {resultCount} kết quả. Mã đơn đầu tiên trong danh sách: '{firstResultCode}'.";
 
             Assert.That(resultCount, Is.GreaterThan(0),
                 $"[TC_F10.14_01] Không có kết quả nào khi tìm kiếm mã đơn: {firstOrderCode}");
@@ -160,7 +160,7 @@ namespace SeleniumProject.Tests.OrderManagement
             Thread.Sleep(1500);
             int lowerCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Kết quả 'ORD': {upperCount} | Kết quả 'ord': {lowerCount}";
+            CurrentActualResult = $"Tìm kiếm 'ORD' (viết hoa) trả về {upperCount} kết quả. Tìm kiếm 'ord' (viết thường) trả về {lowerCount} kết quả.";
 
             Assert.That(lowerCount, Is.EqualTo(upperCount),
                 $"[TC_F10.14_02] Kết quả tìm kiếm hoa/thường khác nhau: HOA={upperCount}, thường={lowerCount}");
@@ -189,7 +189,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             int totalAfter = _orderListPage.GetTotalOrderCount();
 
-            CurrentActualResult = $"Tổng ban đầu: {totalBefore} | Sau khi xóa tìm kiếm: {totalAfter}";
+            CurrentActualResult = $"Ban đầu hiển thị {totalBefore} đơn. Sau khi xóa nội dung ô tìm kiếm, danh sách trả về {totalAfter} đơn.";
 
             Assert.That(totalAfter, Is.EqualTo(totalBefore),
                 $"[TC_F10.14_03] Sau khi xóa tìm kiếm, số đơn ({totalAfter}) không khớp với ban đầu ({totalBefore})");
@@ -214,7 +214,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int resultCount = _orderListPage.GetAllRows().Count;
             bool pageHealthy = _orderListPage.IsPageHealthy();
 
-            CurrentActualResult = $"Tìm kiếm: '{notExistCode}' | Số kết quả: {resultCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Tìm kiếm mã không tồn tại '{notExistCode}', hệ thống trả về {resultCount} kết quả.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.15_01] Trang bị lỗi khi tìm kiếm mã đơn không tồn tại");
@@ -241,7 +241,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int resultCount = _orderListPage.GetAllRows().Count;
             bool pageHealthy = _orderListPage.IsPageHealthy();
 
-            CurrentActualResult = $"Tìm kiếm: '{randomKeyword}' | Số kết quả: {resultCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Tìm kiếm từ khóa ngẫu nhiên '{randomKeyword}', hệ thống trả về {resultCount} kết quả.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.15_02] Trang bị lỗi khi tìm kiếm từ khóa ngẫu nhiên");

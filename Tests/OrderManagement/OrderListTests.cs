@@ -114,7 +114,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int totalCount = _orderListPage.GetTotalOrderCount();
             string firstOrderCode = _orderListPage.GetOrderCodeOfRow(0);
 
-            CurrentActualResult = $"Tổng: {totalCount} | Đơn đầu tiên: {firstOrderCode}";
+            CurrentActualResult = $"Danh sách tải thành công, tổng có {totalCount} đơn hàng. Mã đơn đầu tiên hiển thị: {firstOrderCode}.";
 
             Assert.That(totalCount, Is.GreaterThanOrEqualTo(0),
                 "[TC_F10.3_01] Lỗi load dữ liệu danh sách");
@@ -138,7 +138,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool allColsPresent = _orderListPage.HasRequiredColumns(expectedColumns);
 
-            CurrentActualResult = $"Các cột hiển thị: {string.Join(", ", _orderListPage.GetTableHeaders())}";
+            CurrentActualResult = $"Bảng danh sách hiển thị các cột: {string.Join(", ", _orderListPage.GetTableHeaders())}.";
 
             Assert.That(allColsPresent, Is.True,
                 "[TC_F10.3_02] Bảng thiếu ít nhất một tiêu đề cột yêu cầu");
@@ -161,7 +161,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isHealthy = _orderListPage.IsPageHealthy();
 
             string ketQuaTrang = _orderListPage.DocKetQuaThucTe();
-            CurrentActualResult = $"{ketQuaTrang} | Sức khỏe DB/UI: {isHealthy}";
+            CurrentActualResult = ketQuaTrang;
 
             Assert.That(isHealthy, Is.True,
                 "[TC_F10.3_03] Phát hiện lỗi vỡ giao diện hoặc lỗi Server");
@@ -188,7 +188,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string currentUrl = Driver.Url;
             bool isOnDetailPage = currentUrl.Contains("/Admin/Order/Detail");
 
-            CurrentActualResult = $"Mã đơn click: {firstOrderCode} | URL sau click: {currentUrl}";
+            CurrentActualResult = $"Sau khi click mã đơn '{firstOrderCode}', hệ thống chuyển tới URL: {currentUrl}.";
 
             Assert.That(isOnDetailPage, Is.True,
                 $"[TC_F10.4_01] Click mã đơn '{firstOrderCode}' không dẫn đến trang chi tiết, URL: {currentUrl}");
@@ -215,7 +215,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string currentUrl = Driver.Url;
             bool isOnDetailPage = currentUrl.Contains("/Admin/Order/Detail");
 
-            CurrentActualResult = $"Mã đơn: {firstOrderCode} | URL sau click icon: {currentUrl}";
+            CurrentActualResult = $"Sau khi click icon xem chi tiết đơn '{firstOrderCode}', hệ thống chuyển tới URL: {currentUrl}.";
 
             Assert.That(isOnDetailPage, Is.True,
                 $"[TC_F10.4_02] Click icon xem chi tiết không dẫn đến trang chi tiết, URL: {currentUrl}");
@@ -238,7 +238,7 @@ namespace SeleniumProject.Tests.OrderManagement
             int pageSize = int.Parse(data.GetValueOrDefault("pageSize", "10"));
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Số đơn trên trang hiện tại: {rowCount} | Giới hạn: {pageSize}";
+            CurrentActualResult = $"Trang hiện tại hiển thị {rowCount} đơn hàng, giới hạn mỗi trang là {pageSize} đơn.";
 
             Assert.That(rowCount, Is.LessThanOrEqualTo(pageSize),
                 $"[TC_F10.5_01] Trang hiển thị {rowCount} đơn, vượt quá giới hạn {pageSize} đơn/trang");
@@ -266,7 +266,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             string firstCodePage2 = _orderListPage.GetOrderCodeOfRow(0);
 
-            CurrentActualResult = $"Trang 1 - mã đầu: {firstCodePage1} | Trang 2 - mã đầu: {firstCodePage2}";
+            CurrentActualResult = $"Mã đơn đầu tiên ở trang 1 là '{firstCodePage1}', mã đầu tiên ở trang 2 là '{firstCodePage2}'.";
 
             Assert.That(firstCodePage2, Is.Not.EqualTo(firstCodePage1),
                 $"[TC_F10.5_02] Mã đơn đầu tiên ở trang 2 ({firstCodePage2}) trùng với trang 1 ({firstCodePage1})");

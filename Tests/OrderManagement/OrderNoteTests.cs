@@ -48,7 +48,9 @@ namespace SeleniumProject.Tests.OrderManagement
             string charCounter = _orderDetailPage.GetNoteCharCount();
             string expectedCounter = data.GetValueOrDefault("expectedCounterInitial", "0/1000");
 
-            CurrentActualResult = $"Textarea hiển thị: {textareaExists} | Bộ đếm: {charCounter}";
+            CurrentActualResult = textareaExists
+                ? $"Textarea ghi chú nội bộ hiển thị, bộ đếm ký tự hiện thị: {charCounter}."
+                : "Textarea ghi chú nội bộ không xuất hiện trên trang.";
 
             Assert.That(textareaExists, Is.True,
                 "[TC_F10.28_01] Không tìm thấy textarea ghi chú nội bộ");
@@ -78,7 +80,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string charCounter = _orderDetailPage.GetNoteCharCount();
             int expectedCount = noteText.Length;
 
-            CurrentActualResult = $"Nhập: '{noteText}' ({expectedCount} ký tự) | Bộ đếm hiển thị: {charCounter}";
+            CurrentActualResult = $"Sau khi nhập '{noteText}' ({expectedCount} ký tự), bộ đếm hiển thị: {charCounter}.";
 
             Assert.That(charCounter, Does.Contain(expectedCount.ToString()),
                 $"[TC_F10.28_02] Bộ đếm không khớp với số ký tự đã nhập ({expectedCount}), hiển thị: {charCounter}");
@@ -111,7 +113,9 @@ namespace SeleniumProject.Tests.OrderManagement
             string urlAfter = Driver.Url;
             bool noteAppearedInPage = _orderDetailPage.PageContains(noteText);
 
-            CurrentActualResult = $"URL thay đổi: {urlBefore != urlAfter} | Ghi chú hiển thị ngay: {noteAppearedInPage}";
+            CurrentActualResult = noteAppearedInPage
+                ? $"Sau khi lưu ghi chú, nội dung xuất hiện ngay trên trang mà không reload (URL không đổi: {urlBefore == urlAfter})."
+                : "Ghi chú đã lưu nhưng không xuất hiện ngay trên trang, cần reload mới thấy.";
 
             Assert.That(urlAfter, Is.EqualTo(urlBefore),
                 "[TC_F10.28_03] Trang bị reload sau khi thêm ghi chú (URL đã thay đổi)");

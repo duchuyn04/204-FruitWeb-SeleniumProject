@@ -49,7 +49,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isPaymentBtnVisible = _orderDetailPage.IsConfirmPaymentButtonVisible();
             string paymentStatus = _orderDetailPage.GetPaymentStatus();
 
-            CurrentActualResult = $"Trạng thái thanh toán: {paymentStatus} | Nút thu tiền hiển thị: {isPaymentBtnVisible}";
+            CurrentActualResult = isPaymentBtnVisible
+                ? $"Đơn có trạng thái thanh toán '{paymentStatus}', nút Xác nhận đã thu tiền hiển thị."
+                : $"Đơn có trạng thái thanh toán '{paymentStatus}', nút Xác nhận đã thu tiền không hiển thị (không đúng kỳ vọng).";
 
             Assert.That(isPaymentBtnVisible, Is.True,
                 "[TC_F10.24_01] Nút 'Xác nhận đã thu tiền' không hiển thị khi thanh toán là Chờ thanh toán");
@@ -78,7 +80,9 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool isModalVisible = _orderDetailPage.IsPaymentModalVisible();
 
-            CurrentActualResult = $"Modal xác nhận thu tiền hiển thị: {isModalVisible}";
+            CurrentActualResult = isModalVisible
+                ? "Sau khi nhấn nút Xác nhận đã thu tiền, modal xác nhận xuất hiện."
+                : "Sau khi nhấn nút Xác nhận đã thu tiền, modal không xuất hiện (không đúng kỳ vọng).";
 
             Assert.That(isModalVisible, Is.True,
                 "[TC_F10.24_02] Modal xác nhận thu tiền không hiện ra sau khi click nút");
@@ -112,7 +116,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string newPaymentStatus = _orderDetailPage.GetPaymentStatus();
             bool isPaymentBtnHidden = !_orderDetailPage.IsConfirmPaymentButtonVisible();
 
-            CurrentActualResult = $"Trạng thái thanh toán sau xác nhận: {newPaymentStatus} | Nút thu tiền đã ẩn: {isPaymentBtnHidden}";
+            CurrentActualResult = $"Sau khi xác nhận thu tiền, trạng thái thanh toán chuyển thành '{newPaymentStatus}'. Nút thu tiền đã ẩn: {isPaymentBtnHidden}.";
 
             Assert.That(newPaymentStatus, Does.Contain("Đã thanh toán"),
                 $"[TC_F10.24_03] Trạng thái thanh toán không chuyển thành 'Đã thanh toán', hiện tại: {newPaymentStatus}");

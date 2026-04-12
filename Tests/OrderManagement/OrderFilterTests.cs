@@ -44,7 +44,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string filterStatus1 = data.GetValueOrDefault("filterStatusValue", "Chờ xử lý");
             bool allMatch = _orderListPage.AllRowsMatchStatus(filterStatus1);
 
-            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterStatus1}: {allMatch}";
+            CurrentActualResult = $"Lọc theo trạng thái '{filterStatus1}', danh sách trả về {_orderListPage.GetAllRows().Count} đơn, toàn bộ đúng trạng thái: {allMatch}.";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.16_01] Có hàng không phải trạng thái 'Chờ xử lý' sau khi lọc");
@@ -68,7 +68,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string filterStatus2 = data.GetValueOrDefault("filterStatusValue", "Đã hủy");
             bool allMatch = _orderListPage.AllRowsMatchStatus(filterStatus2);
 
-            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterStatus2}: {allMatch}";
+            CurrentActualResult = $"Lọc theo trạng thái '{filterStatus2}', danh sách trả về {_orderListPage.GetAllRows().Count} đơn, toàn bộ đúng trạng thái: {allMatch}.";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.16_02] Có hàng không phải trạng thái 'Đã hủy' sau khi lọc");
@@ -100,7 +100,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             int totalAfter = _orderListPage.GetTotalOrderCount();
 
-            CurrentActualResult = $"Tổng ban đầu: {totalBefore} | Sau lọc: {filteredCount} | Sau reset: {totalAfter}";
+            CurrentActualResult = $"Ban đầu có {totalBefore} đơn. Sau khi lọc theo trạng thái còn {filteredCount} đơn. Sau khi reset về Tất cả, danh sách trả về {totalAfter} đơn.";
 
             Assert.That(totalAfter, Is.EqualTo(totalBefore),
                 $"[TC_F10.16_03] Sau khi chọn 'Tất cả', số đơn ({totalAfter}) không khớp với ban đầu ({totalBefore})");
@@ -124,7 +124,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string filterPay1 = data.GetValueOrDefault("filterPaymentStatusValue", "Chờ thanh toán");
             bool allMatch = _orderListPage.AllRowsMatchPaymentStatus(filterPay1);
 
-            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterPay1}: {allMatch}";
+            CurrentActualResult = $"Lọc theo thanh toán '{filterPay1}', danh sách trả về {_orderListPage.GetAllRows().Count} đơn, toàn bộ đúng trạng thái: {allMatch}.";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.17_01] Có hàng không phải trạng thái thanh toán 'Chờ thanh toán' sau khi lọc");
@@ -148,7 +148,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string filterPay2 = data.GetValueOrDefault("filterPaymentStatusValue", "Đã thanh toán");
             bool allMatch = _orderListPage.AllRowsMatchPaymentStatus(filterPay2);
 
-            CurrentActualResult = $"Số hàng sau lọc: {_orderListPage.GetAllRows().Count} | Tất cả là {filterPay2}: {allMatch}";
+            CurrentActualResult = $"Lọc theo thanh toán '{filterPay2}', danh sách trả về {_orderListPage.GetAllRows().Count} đơn, toàn bộ đúng trạng thái: {allMatch}.";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.17_02] Có hàng không phải trạng thái thanh toán 'Đã thanh toán' sau khi lọc");
@@ -176,7 +176,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             int totalAfter = _orderListPage.GetTotalOrderCount();
 
-            CurrentActualResult = $"Tổng ban đầu: {totalBefore} | Sau reset: {totalAfter}";
+            CurrentActualResult = $"Ban đầu có {totalBefore} đơn. Sau khi reset bộ lọc thanh toán về Tất cả, danh sách trả về {totalAfter} đơn.";
 
             Assert.That(totalAfter, Is.EqualTo(totalBefore),
                 $"[TC_F10.17_03] Sau khi chọn 'Tất cả', số đơn ({totalAfter}) không khớp với ban đầu ({totalBefore})");
@@ -204,7 +204,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Từ {fromDate} đến {toDate} | Số đơn: {rowCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Lọc từ ngày {fromDate} đến ngày {toDate}, hệ thống trả về {rowCount} đơn hàng.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.18_01] Trang bị lỗi khi lọc khoảng ngày hợp lệ");
@@ -231,7 +231,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Từ ngày {fromDate}, Đến ngày: trống | Số đơn: {rowCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Chỉ nhập Từ ngày {fromDate}, bỏ trống Đến ngày; hệ thống trả về {rowCount} đơn hàng.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.18_02] Trang bị lỗi khi chỉ nhập Từ ngày mà không có Đến ngày");
@@ -259,7 +259,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool allMatch = _orderListPage.AllRowsMatchBothFilters(filterStatus, filterPayment);
 
-            CurrentActualResult = $"Số đơn lọc được: {_orderListPage.GetAllRows().Count} | Cả 2 điều kiện đúng: {allMatch}";
+            CurrentActualResult = $"Kết hợp lọc trạng thái đơn và trạng thái thanh toán, hệ thống trả về {_orderListPage.GetAllRows().Count} đơn. Toàn bộ thỏa cả 2 điều kiện: {allMatch}.";
 
             Assert.That(allMatch, Is.True,
                 "[TC_F10.19_01] Có hàng không thỏa mãn đồng thời cả 2 điều kiện lọc");
@@ -288,7 +288,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Số đơn với 3 bộ lọc: {rowCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Kết hợp 3 bộ lọc (trạng thái đơn, thanh toán, khoảng ngày), hệ thống trả về {rowCount} đơn hàng.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.19_02] Trang bị lỗi khi áp dụng 3 bộ lọc cùng lúc");
@@ -316,7 +316,7 @@ namespace SeleniumProject.Tests.OrderManagement
 
             bool hasErrorMsg = _orderListPage.HasErrorOrEmptyResult(new[] { "không hợp lệ", "invalid", "lỗi" });
 
-            CurrentActualResult = $"Số đơn trả về: {_orderListPage.GetAllRows().Count} | Báo lỗi hoặc rỗng: {hasErrorMsg} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Nhập Từ ngày sau Đến ngày, hệ thống trả về {_orderListPage.GetAllRows().Count} đơn. Hệ thống báo lỗi hoặc trả về rỗng: {hasErrorMsg}.";
 
             // Mong đợi: hệ thống không crash và trả về 0 kết quả hoặc báo lỗi
             Assert.That(pageHealthy, Is.True,
@@ -345,7 +345,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool pageHealthy = _orderListPage.IsPageHealthy();
             int rowCount = _orderListPage.GetAllRows().Count;
 
-            CurrentActualResult = $"Lọc cùng ngày {sameDate} | Số đơn: {rowCount} | Trang ổn: {pageHealthy}";
+            CurrentActualResult = $"Lọc với Từ ngày = Đến ngày ({sameDate}), hệ thống trả về {rowCount} đơn hàng.";
 
             Assert.That(pageHealthy, Is.True,
                 "[TC_F10.20_02] Trang bị lỗi khi Từ ngày = Đến ngày");

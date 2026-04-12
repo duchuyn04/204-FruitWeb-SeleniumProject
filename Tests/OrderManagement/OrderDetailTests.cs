@@ -48,7 +48,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string actualOrderCodeOnDetail = _orderDetailPage.GetOrderCode();
 
             string ketQuaHeThong = _orderDetailPage.DocKetQuaThucTe();
-            CurrentActualResult = $"{ketQuaHeThong} | Đoạn Header: {actualOrderCodeOnDetail}";
+            CurrentActualResult = $"{ketQuaHeThong} Mã đơn hiển thị trên trang chi tiết: {actualOrderCodeOnDetail}.";
 
             bool isOrderCodeMatch = actualOrderCodeOnDetail.Contains(expectedOrderCode);
             Assert.That(isOrderCodeMatch, Is.True,
@@ -85,7 +85,7 @@ namespace SeleniumProject.Tests.OrderManagement
             string orderStatus = _orderDetailPage.GetOrderStatus();
             string paymentStatus = _orderDetailPage.GetPaymentStatus();
 
-            CurrentActualResult = $"URL: {currentUrl} | Trạng thái đơn: {orderStatus} | Thanh toán: {paymentStatus} | Có section khách: {hasCustomerSection}";
+            CurrentActualResult = $"URL trang chi tiết: {currentUrl}. Trạng thái đơn: {orderStatus}, trạng thái thanh toán: {paymentStatus}. Section thông tin khách hàng hiển thị: {hasCustomerSection}.";
 
             Assert.That(hasCustomerSection, Is.True,
                 "[TC_F10.8_02] Không tìm thấy section thông tin khách hàng trên trang chi tiết");
@@ -110,7 +110,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isValidUrl = System.Text.RegularExpressions.Regex.IsMatch(
                 currentUrl, @"/Admin/Order/Detail/\d+$");
 
-            CurrentActualResult = $"URL hiện tại: {currentUrl} | Hợp lệ: {isValidUrl}";
+            CurrentActualResult = isValidUrl
+                ? $"URL trang chi tiết đúng định dạng /Admin/Order/Detail/{{id}}: {currentUrl}."
+                : $"URL không đúng định dạng, URL hiện tại: {currentUrl}.";
 
             Assert.That(isValidUrl, Is.True,
                 $"[TC_F10.8_03] URL không đúng định dạng /Admin/Order/Detail/{{id}}: {currentUrl}");
@@ -138,7 +140,9 @@ namespace SeleniumProject.Tests.OrderManagement
                 || pageSource.Contains("không tồn tại")
                 || !currentUrl.Contains("/Admin/Order/Detail/999999");
 
-            CurrentActualResult = $"URL: {currentUrl} | Trang báo 404 hoặc redirect: {is404}";
+            CurrentActualResult = is404
+                ? $"Truy cập URL không tồn tại, hệ thống trả về 404 hoặc redirect (URL hiện tại: {currentUrl})."
+                : $"Truy cập URL không tồn tại nhưng hệ thống vẫn cho phép vào, URL hiện tại: {currentUrl}.";
 
             Assert.That(is404, Is.True,
                 "[TC_F10.9_01] Hệ thống không trả về lỗi 404 khi truy cập ID không tồn tại");
@@ -166,7 +170,9 @@ namespace SeleniumProject.Tests.OrderManagement
                 || pageSource.Contains("không hợp lệ")
                 || !currentUrl.Contains("/Admin/Order/Detail/abcxyz");
 
-            CurrentActualResult = $"URL: {currentUrl} | Trang báo lỗi: {isErrorPage}";
+            CurrentActualResult = isErrorPage
+                ? $"Truy cập URL với ID ký tự ngẫu nhiên, hệ thống trả về lỗi hoặc redirect (URL hiện tại: {currentUrl})."
+                : $"Truy cập URL với ID ký tự ngẫu nhiên nhưng hệ thống không báo lỗi, URL hiện tại: {currentUrl}.";
 
             Assert.That(isErrorPage, Is.True,
                 "[TC_F10.9_02] Hệ thống không trả về lỗi khi truy cập ID là chuỗi ký tự");
@@ -197,7 +203,9 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isBackOnList = currentUrl.Contains("/Admin/Order")
                 && !currentUrl.Contains("/Admin/Order/Detail");
 
-            CurrentActualResult = $"URL sau khi quay lại: {currentUrl} | Về danh sách: {isBackOnList}";
+            CurrentActualResult = isBackOnList
+                ? $"Sau khi nhấn nút Quay lại, hệ thống chuyển về trang danh sách đơn hàng (URL: {currentUrl})."
+                : $"Sau khi nhấn nút Quay lại, không chuyển về danh sách đơn hàng (URL: {currentUrl}).";
 
             Assert.That(isBackOnList, Is.True,
                 $"[TC_F10.10_01] Nút Quay lại không điều hướng về trang danh sách, URL hiện tại: {currentUrl}");
@@ -222,7 +230,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool isDisplayed = _orderDetailPage.IsBackButtonDisplayed();
             bool isEnabled = _orderDetailPage.IsBackButtonEnabled();
 
-            CurrentActualResult = $"Nút tồn tại: {exists} | Hiển thị: {isDisplayed} | Click được: {isEnabled}";
+            CurrentActualResult = $"Nút Quay lại tồn tại: {exists}, hiển thị: {isDisplayed}, có thể click: {isEnabled}.";
 
             Assert.That(exists, Is.True, "[TC_F10.10_02] Không tìm thấy nút Quay lại");
             Assert.That(isDisplayed, Is.True, "[TC_F10.10_02] Nút Quay lại đang bị ẩn");
@@ -247,7 +255,9 @@ namespace SeleniumProject.Tests.OrderManagement
             string orderCode = _orderDetailPage.GetOrderCode();
             bool hasGuestLabel = _orderDetailPage.PageContains("Khách vãng lai");
 
-            CurrentActualResult = $"Đơn: {orderCode} | Có nhãn Khách vãng lai: {hasGuestLabel}";
+            CurrentActualResult = hasGuestLabel
+                ? $"Đơn hàng '{orderCode}' hiển thị nhãn 'Khách vãng lai' đúng như kỳ vọng."
+                : $"Đơn hàng '{orderCode}' không hiển thị nhãn 'Khách vãng lai' (không đúng kỳ vọng).";
 
             Assert.That(hasGuestLabel, Is.True,
                 "[TC_F10.11_01] Đơn của khách vãng lai không hiển thị nhãn 'Khách vãng lai'");
@@ -272,7 +282,9 @@ namespace SeleniumProject.Tests.OrderManagement
             string orderCode = _orderDetailPage.GetOrderCode();
             bool hasGuestLabel = _orderDetailPage.PageContains("Khách vãng lai");
 
-            CurrentActualResult = $"Đơn: {orderCode} | Nhãn khách vãng lai: {hasGuestLabel}";
+            CurrentActualResult = hasGuestLabel
+                ? $"Đơn hàng '{orderCode}' vẫn hiển thị nhãn 'Khách vãng lai' dù là khách đã đăng ký (không đúng kỳ vọng)."
+                : $"Đơn hàng '{orderCode}' hiển thị tên thực của khách, không có nhãn 'Khách vãng lai'.";
 
             Assert.That(hasGuestLabel, Is.False,
                 "[TC_F10.11_02] Đơn của khách đã đăng ký vẫn hiển thị nhãn 'Khách vãng lai'");

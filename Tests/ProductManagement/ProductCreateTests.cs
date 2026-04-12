@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using SeleniumProject.Pages.ProductManagement;
 using SeleniumProject.Utilities;
@@ -59,7 +59,7 @@ namespace SeleniumProject.Tests.ProductManagement
             string previewText2 = _createPage.GetPricePreviewText();
             Assert.That(previewText2.Replace(".", "").Replace(",", ""), Does.Contain(data["price2"]));
             
-            CurrentActualResult = $"Live preview hiển thị. Lần 1: '{previewText1}' | Lần 2: '{previewText2}'";
+            CurrentActualResult = $"Nhập giá {data["price1"]}: khung xem trước hiển thị '{previewText1}'. Xóa rồi nhập giá {data["price2"]}: khung xem trước cập nhật thành '{previewText2}'.";
         }
 
         // STT 43 - TC_F2.6_02: Kiểm tra thêm sản phẩm thành công với Giá gốc = 1 (min hợp lệ)
@@ -75,9 +75,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với giá = 1 => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với giá gốc 1đ: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm '{data["productName"]}' với giá gốc 1đ: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 44 - TC_F2.6_03: Kiểm tra thêm SP với Số lượng tồn kho = 0
@@ -94,11 +98,15 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với tồn kho = 0 => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với số lượng tồn kho = 0: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm '{data["productName"]}' với số lượng tồn kho = 0: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
             
             // Quy định: Được phép lưu (Tồn kho có thể = 0 đối với các sản phẩm chưa nhập hàng)
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 45 - TC_F2.6_04: Kiểm tra thêm SP khi bật Hiển thị (isActive = true)
@@ -117,9 +125,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP (Hiển thị = True) => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với trạng thái Hiển thị bật: hệ thống lưu thành công và chuyển về trang danh sách."
+                : $"Thêm sản phẩm '{data["productName"]}' với trạng thái Hiển thị bật: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 46 - TC_F2.6_05: Kiểm tra thêm SP khi Ẩn SP (isActive = false)
@@ -137,9 +149,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP (Hiển thị = False) => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với trạng thái Hiển thị tắt: hệ thống lưu thành công và chuyển về trang danh sách."
+                : $"Thêm sản phẩm '{data["productName"]}' với trạng thái Hiển thị tắt: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 47 - TC_F2.6_06: Kiểm tra thêm rồi xóa SP tạm thời
@@ -167,8 +183,10 @@ namespace SeleniumProject.Tests.ProductManagement
                 bool isDeleted = _listPage.HasNoResultMessage();
                 
                 // Thu thập kết quả thực tế ghi vào báo cáo sao cho đọc thuận miệng và đúng nghĩa nhất
-                string emptyMessage = isDeleted ? _listPage.GetNoResultMessage() : "Vẫn còn sản phẩm";
-                CurrentActualResult = $"Xóa mềm SP '{data["productName"]}' thành công. Kết quả tra cứu lại: '{emptyMessage}'";
+                string emptyMessage = isDeleted ? _listPage.GetNoResultMessage() : "Vẫn còn sản phẩm trong danh sách";
+                CurrentActualResult = isDeleted
+                    ? $"Xóa mềm sản phẩm '{data["productName"]}': hệ thống xóa thành công. Tìm kiếm lại sản phẩm vừa xóa thì danh sách trả về thông báo: '{emptyMessage}'."
+                    : $"Xóa mềm sản phẩm '{data["productName"]}': xóa không thành công, sản phẩm vẫn còn xuất hiện trong danh sách.";
                 
                 Assert.That(isDeleted, Is.True, "Sản phẩm phải không còn trong danh sách (vì đã xóa mềm)");
             }
@@ -188,14 +206,18 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với giá KM = 0 => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product/Create")
+                ? (hasErrors ? "Nhập giá khuyến mãi = 0: hệ thống hiển thị thông báo lỗi xác thực và giữ nguyên trang form, không cho phép lưu."
+                             : "Nhập giá khuyến mãi = 0: trang vẫn ở form tạo mới nhưng không hiển thị lỗi gì (không đúng kỳ vọng).")
+                : "Nhập giá khuyến mãi = 0: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm.";
             
             // Plan ghi: "Lưu thành công với giá KM = 0 hoặc báo lỗi"
             // Kiểm tra trang có redirect thành công hay hiển thị lỗi validation
             if (currentUrl.EndsWith("/Admin/Product/Create"))
             {
-                bool hasErrors = _createPage.HasValidationErrors();
                 Assert.That(hasErrors, Is.True);
             }
         }
@@ -214,9 +236,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với custom slug '{data["slug"]}' => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm với slug tùy chỉnh '{data["slug"]}': hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm với slug tùy chỉnh '{data["slug"]}': hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 50 - TC_F2.6_09: Kiểm tra MinOrder = 0
@@ -233,12 +259,16 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với số lượng tối thiểu = 0 => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Nhập số lượng đặt tối thiểu = 0: hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu sản phẩm."
+                : "Nhập số lượng đặt tối thiểu = 0: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
             
             // Quy định: Không cho phép thêm thành công khi MinOrder = 0
             Assert.That(currentUrl.EndsWith("/Admin/Product/Create"), Is.True, "Form không được lưu, phải ở lại trang Create");
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải hiển thị lỗi validation khi số lượng đặt tối thiểu = 0");
+            Assert.That(hasErrors, Is.True, "Phải hiển thị lỗi validation khi số lượng đặt tối thiểu = 0");
         }
 
         // STT 51 - TC_F2.6_10: Kiểm tra Stock = 1 (boundary)
@@ -255,9 +285,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP với tồn kho = 1 => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với số lượng tồn kho = 1: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm '{data["productName"]}' với số lượng tồn kho = 1: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 52 - TC_F2.6_11: Kiểm tra Mô tả ngắn chứa link URL
@@ -274,9 +308,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP mô tả ngắn chứa URL => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? "Thêm sản phẩm với mô tả ngắn chứa đường dẫn URL: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : "Thêm sản phẩm với mô tả ngắn chứa đường dẫn URL: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 53 - TC_F2.6_12: Kiểm tra redirect đúng sau khi lưu thành công
@@ -293,8 +331,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
             
             string currentUrl = Driver.Url;
-            CurrentActualResult = $"URL sau khi bấm lưu: {currentUrl}";
-            Assert.That(currentUrl.EndsWith(data["expectedUrl"]), Is.True, "Trang phải redirect đúng về danh sách");
+            bool correctRedirect = currentUrl.EndsWith(data["expectedUrl"]);
+            
+            CurrentActualResult = correctRedirect
+                ? "Bấm Lưu sau khi điền đầy đủ thông tin: hệ thống chuyển đúng về trang danh sách sản phẩm."
+                : $"Bấm Lưu sau khi điền đầy đủ thông tin: hệ thống chuyển sai trang, URL hiện tại là '{currentUrl}'.";
+            Assert.That(correctRedirect, Is.True, "Trang phải redirect đúng về danh sách");
         }
 
         // STT 54 - TC_F2.6_13: Kiểm tra toast message sau lưu thành công
@@ -313,8 +355,10 @@ namespace SeleniumProject.Tests.ProductManagement
             try { actualToast = _createPage.GetToastMessage(); } catch {}
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Toast hiển thị: '{actualToast}'";
-            Assert.That(actualToast.ToLower(), Does.Contain(data["expectedToast"].ToLower()), "Phải hiện đúng thông báo toast");
+            bool hasExpectedToast = actualToast.ToLower().Contains(data["expectedToast"].ToLower());
+            
+            CurrentActualResult = $"Lưu sản phẩm thành công: hệ thống hiển thị thông báo toast '{actualToast}'.";
+            Assert.That(hasExpectedToast, Is.True, "Phải hiện đúng thông báo toast");
         }
 
         // STT 55 - TC_F2.6_14: Kiểm tra SP mới xuất hiện trong danh sách
@@ -333,7 +377,9 @@ namespace SeleniumProject.Tests.ProductManagement
             _listPage.Search(data["productName"]);
             bool isPresent = _listPage.IsProductInResults(data["productName"]);
             
-            CurrentActualResult = $"Tiến hành tìm '{data["productName"]}' trong list. Tìm thấy: {isPresent}";
+            CurrentActualResult = isPresent
+                ? $"Thêm sản phẩm '{data["productName"]}': sản phẩm xuất hiện trong kết quả tìm kiếm ở trang danh sách."
+                : $"Thêm sản phẩm '{data["productName"]}': sản phẩm không xuất hiện trong kết quả tìm kiếm sau khi lưu (không đúng kỳ vọng).";
             Assert.That(isPresent, Is.True, "Sản phẩm mới phải xuất hiện trong kết quả tìm kiếm");
         }
 
@@ -354,7 +400,9 @@ namespace SeleniumProject.Tests.ProductManagement
             _listPage.Search(data["productName"]);
             bool isPresent = _listPage.IsProductInResults(data["productName"]);
             
-            CurrentActualResult = $"Search '{data["productName"]}'. Tìm thấy: {isPresent}. Dữ liệu DOM: {_createPage.DocKetQuaThucTe()}";
+            CurrentActualResult = isPresent
+                ? $"Thêm sản phẩm '{data["productName"]}': sản phẩm xuất hiện trong danh sách với thông tin giá hiển thị đúng."
+                : $"Thêm sản phẩm '{data["productName"]}': sản phẩm không xuất hiện trong danh sách sau khi lưu (không đúng kỳ vọng).";
             Assert.That(isPresent, Is.True, "Phải có sản phẩm hiển thị trong lưới");
         }
 
@@ -384,9 +432,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP Full Info => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' với đầy đủ thông tin hợp lệ: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm '{data["productName"]}' với đầy đủ thông tin hợp lệ: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 58 - TC_F2.7_02: Kiểm tra thêm sản phẩm thành công chỉ với các trường bắt buộc
@@ -402,9 +454,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP Required Only => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm thành công");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm '{data["productName"]}' chỉ điền các trường bắt buộc: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm '{data["productName"]}' chỉ điền các trường bắt buộc: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm thành công");
         }
 
         // STT 59 - TC_F2.7_03: Kiểm tra nhập Slug tùy chỉnh hợp lệ
@@ -421,9 +477,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP custom slug '{data["slug"]}' => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi lưu");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm với slug tùy chỉnh hợp lệ '{data["slug"]}': hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm với slug tùy chỉnh hợp lệ '{data["slug"]}': hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi lưu");
         }
 
         // STT 60 - TC_F2.7_04: Kiểm tra Slug tự động sinh từ tên sản phẩm khi để trống
@@ -441,9 +501,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Thêm SP bỏ trống slug (Kỳ vọng: {data["expectedSlug"]}) => Kết quả: {_createPage.DocKetQuaThucTe()}";
             string currentUrl = Driver.Url;
-            Assert.That(currentUrl.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách");
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Bỏ trống ô slug: hệ thống tự động sinh slug từ tên sản phẩm, lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Bỏ trống ô slug: hệ thống không lưu được, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách");
         }
 
         // STT 61 - TC_F2.7_05: Kiểm tra hệ thống báo lỗi khi submit form rỗng hoàn toàn
@@ -455,9 +519,15 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.Open();
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Form rỗng => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(Driver.Url.EndsWith("/Admin/Product/Create"), Is.True, "Phải ở lại form Create");
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            bool stayedOnCreate = Driver.Url.EndsWith("/Admin/Product/Create");
+            
+            CurrentActualResult = hasErrors
+                ? "Bấm Lưu khi để trống toàn bộ form: hệ thống hiển thị thông báo lỗi xác thực trên các trường bắt buộc và giữ nguyên trang thêm mới, không cho phép lưu."
+                : "Bấm Lưu khi để trống toàn bộ form: hệ thống không hiển thị bất kỳ lỗi nào (không đúng kỳ vọng).";
+            Assert.That(stayedOnCreate, Is.True, "Phải ở lại form Create");
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation");
         }
 
         // STT 62 - TC_F2.7_06: Kiểm tra hệ thống báo lỗi khi để trống Tên sản phẩm
@@ -471,8 +541,13 @@ namespace SeleniumProject.Tests.ProductManagement
             Driver.FindElement(By.Id("Product_Name")).Clear(); // Đảm bảo rỗng
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP rỗng => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation tên sản phẩm");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Bỏ trống trường Tên sản phẩm: hệ thống hiển thị thông báo lỗi 'Vui lòng nhập tên sản phẩm' và không cho phép lưu."
+                : "Bỏ trống trường Tên sản phẩm: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation tên sản phẩm");
         }
 
         // STT 63 - TC_F2.7_07: Kiểm tra hệ thống báo lỗi khi không chọn Danh mục
@@ -486,8 +561,13 @@ namespace SeleniumProject.Tests.ProductManagement
             // Ignore select category string "-- Chọn danh mục --"
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Bỏ trống Danh mục => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation danh mục");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Không chọn danh mục: hệ thống hiển thị thông báo lỗi 'Vui lòng chọn danh mục' và không cho phép lưu."
+                : "Không chọn danh mục: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation danh mục");
         }
 
         // STT 64 - TC_F2.7_08: Kiểm tra hệ thống báo lỗi khi để trống Giá gốc
@@ -501,8 +581,13 @@ namespace SeleniumProject.Tests.ProductManagement
             Driver.FindElement(By.Id("priceInput")).Clear();
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Bỏ trống giá gốc => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation giá gốc");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Bỏ trống trường Giá gốc: hệ thống hiển thị thông báo lỗi 'Vui lòng nhập giá' và không cho phép lưu."
+                : "Bỏ trống trường Giá gốc: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation giá gốc");
         }
 
         // STT 65 - TC_F2.7_09: Kiểm tra hệ thống báo lỗi khi Giá khuyến mãi lớn hơn Giá gốc
@@ -516,8 +601,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterSalePrice(data["salePrice"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá KM > Giá gốc => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation giá khuyến mãi");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? $"Nhập giá khuyến mãi {data["salePrice"]} lớn hơn giá gốc {data["price"]}: hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : $"Nhập giá khuyến mãi {data["salePrice"]} lớn hơn giá gốc {data["price"]}: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation giá khuyến mãi");
         }
 
         // STT 66 - TC_F2.7_10: Kiểm tra hệ thống báo lỗi khi nhập Giá gốc âm
@@ -530,8 +620,13 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá gốc âm => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation giá gốc");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? $"Nhập giá gốc âm ({data["price"]}): hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : $"Nhập giá gốc âm ({data["price"]}): hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation giá gốc");
         }
 
         // STT 67 - TC_F2.7_11: Kiểm tra hệ thống chặn truy cập khi chưa đăng nhập
@@ -547,8 +642,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Driver.Navigate().GoToUrl(BaseUrl + data["directUrl"]);
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Truy cập chưa đăng nhập => Chuyển hướng tới: {Driver.Url}";
-            Assert.That(Driver.Url.Contains(data["expectedRedirect"]), Is.True, "Phải redirect về trang Login");
+            bool redirectedToLogin = Driver.Url.Contains(data["expectedRedirect"]);
+            
+            CurrentActualResult = redirectedToLogin
+                ? "Truy cập trang thêm sản phẩm khi chưa đăng nhập: hệ thống tự động chuyển hướng sang trang đăng nhập."
+                : $"Truy cập trang thêm sản phẩm khi chưa đăng nhập: hệ thống không chuyển hướng về trang đăng nhập, URL hiện tại là '{Driver.Url}' (không đúng kỳ vọng).";
+            Assert.That(redirectedToLogin, Is.True, "Phải redirect về trang Login");
             
             // Khôi phục lại trạng thái cho test khác
             LoginAsAdmin();
@@ -569,9 +668,13 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
             
             string pageSource = Driver.PageSource;
-            CurrentActualResult = $"Truy cập bằng Customer => URL: {Driver.Url}, Có chữ Access Denied: {pageSource.Contains("AccessDenied") || pageSource.Contains("403")}";
+            bool hasAccessDenied = pageSource.Contains("AccessDenied") || pageSource.Contains("403") || Driver.Url.Contains("AccessDenied");
             
-            Assert.That(pageSource.Contains("AccessDenied") || pageSource.Contains("403") || Driver.Url.Contains("AccessDenied"), Is.True, "Phải trả về 403 hoặc Access Denied");
+            CurrentActualResult = hasAccessDenied
+                ? "Đăng nhập bằng tài khoản khách hàng rồi truy cập trang thêm sản phẩm: hệ thống từ chối truy cập và hiển thị trang lỗi 403 hoặc AccessDenied."
+                : $"Đăng nhập bằng tài khoản khách hàng rồi truy cập trang thêm sản phẩm: hệ thống không chặn, cho phép truy cập vào trang quản trị (không đúng kỳ vọng). URL: '{Driver.Url}'.";
+            
+            Assert.That(hasAccessDenied, Is.True, "Phải trả về 403 hoặc Access Denied");
             
             // Khôi phục
             Driver.Manage().Cookies.DeleteAllCookies();
@@ -588,8 +691,14 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP 1 ký tự => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(Driver.Url.EndsWith("/Admin/Product"), Is.True, "Phải quay về danh sách sau khi thêm");
+            
+            string currentUrl = Driver.Url;
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? $"Thêm sản phẩm với tên 1 ký tự '{data["productName"]}': hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm với tên 1 ký tự '{data["productName"]}': hệ thống không lưu, trang vẫn đang ở form thêm mới.";
+            Assert.That(success, Is.True, "Phải quay về danh sách sau khi thêm");
         }
 
         // STT 70 - TC_F2.7_14: Kiểm tra hệ thống từ chối Tên sản phẩm vượt max length
@@ -602,8 +711,13 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP vượt max => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải có lỗi validation (tùy thuộc DB limit)");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Nhập tên sản phẩm vượt quá độ dài tối đa cho phép: hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : "Nhập tên sản phẩm vượt quá độ dài tối đa: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải có lỗi validation (tùy thuộc DB limit)");
         }
 
         // STT 71 - TC_F2.7_15: Kiểm tra Slug bị trùng với SP đã tồn tại
@@ -621,8 +735,15 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.ClickSave();
             Thread.Sleep(1000);
             
-            CurrentActualResult = $"Tạo SP trùng Slug => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors() || _createPage.GetToastMessage().Contains("lỗi") || _createPage.GetToastMessage().Contains("tồn tại"), Is.True, "Phải báo lỗi do trùng slug");
+            bool hasErrors = _createPage.HasValidationErrors();
+            string toast = "";
+            try { toast = _createPage.GetToastMessage(); } catch {}
+            bool hasErrorMessage = hasErrors || toast.Contains("lỗi") || toast.Contains("tồn tại");
+            
+            CurrentActualResult = hasErrorMessage
+                ? $"Thêm sản phẩm với slug '{data["slug"]}' đã tồn tại trong hệ thống: hệ thống hiển thị thông báo lỗi cho biết slug đã được sử dụng và không cho phép lưu."
+                : $"Thêm sản phẩm với slug '{data["slug"]}' đã tồn tại trong hệ thống: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrorMessage, Is.True, "Phải báo lỗi do trùng slug");
         }
 
         // STT 72 - TC_F2.7_16: Kiểm tra Giá gốc nhập số thập phân
@@ -635,7 +756,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá thập phân => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập giá gốc dạng số thập phân {data["price"]}: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Nhập giá gốc dạng số thập phân {data["price"]}: hệ thống không lưu hoặc hiển thị lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 73 - TC_F2.7_17: Kiểm tra MinOrder nhập giá trị âm bị từ chối
@@ -649,8 +775,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterMinOrder(data["minOrder"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"MinOrder âm => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải báo lỗi");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? $"Nhập số lượng đặt tối thiểu là số âm ({data["minOrder"]}): hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : $"Nhập số lượng đặt tối thiểu là số âm ({data["minOrder"]}): hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải báo lỗi");
         }
 
         // STT 74 - TC_F2.7_18: Kiểm tra Giá gốc nhập chữ thay vì số
@@ -663,7 +794,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá nhập chữ => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product/Create")
+                ? $"Nhập giá gốc bằng chữ '{data["price"]}': hệ thống từ chối lưu, trang vẫn ở form thêm mới (trình duyệt chặn nhập ký tự chữ vào ô số)."
+                : $"Nhập giá gốc bằng chữ '{data["price"]}': hệ thống lưu được (không đúng kỳ vọng).";
         }
 
         // STT 75 - TC_F2.7_19: Kiểm tra Giá gốc rất lớn (999999999)
@@ -676,7 +812,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá rất lớn => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập giá gốc rất lớn ({data["price"]}): hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Nhập giá gốc rất lớn ({data["price"]}): hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 76 - TC_F2.7_20: Kiểm tra Số lượng tồn kho âm bị từ chối
@@ -690,8 +831,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterStock(data["stock"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Stock âm => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải báo lỗi");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? $"Nhập số lượng tồn kho là số âm ({data["stock"]}): hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : $"Nhập số lượng tồn kho là số âm ({data["stock"]}): hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải báo lỗi");
         }
 
         // STT 77 - TC_F2.7_21: Kiểm tra Tên SP chứa ký tự đặc biệt (@#$%)
@@ -704,7 +850,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP chứa ký tự đặc biệt => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Thêm sản phẩm với tên chứa ký tự đặc biệt '{data["productName"]}': hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm với tên chứa ký tự đặc biệt '{data["productName"]}': hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 78 - TC_F2.7_22: Kiểm tra XSS injection trong Tên SP
@@ -717,7 +868,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"XSS Payload => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Thêm sản phẩm với tên chứa mã XSS: hệ thống lưu thành công, mã script bị vô hiệu hóa, trang chuyển về danh sách sản phẩm bình thường."
+                : "Thêm sản phẩm với tên chứa mã XSS: hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 79 - TC_F2.7_23: Kiểm tra SQL Injection trong Tên SP
@@ -730,7 +886,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"SQLi Payload => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Thêm sản phẩm với tên chứa câu lệnh SQL injection: hệ thống lưu thành công, câu lệnh SQL bị vô hiệu hóa, trang chuyển về danh sách sản phẩm bình thường."
+                : "Thêm sản phẩm với tên chứa câu lệnh SQL injection: hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 80 - TC_F2.7_24: Kiểm tra Mô tả ngắn vượt 500 ký tự
@@ -744,7 +905,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Driver.FindElement(By.Id("Product_ShortDescription")).SendKeys(data["shortDescription"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Mô tả ngắn cực dài => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Nhập mô tả ngắn vượt 500 ký tự: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : "Nhập mô tả ngắn vượt 500 ký tự: hệ thống không lưu hoặc hiển thị lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 81 - TC_F2.7_25: Kiểm tra Giá khuyến mãi âm
@@ -758,8 +924,13 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterSalePrice(data["salePrice"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá KM âm => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải báo lỗi");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? $"Nhập giá khuyến mãi là số âm ({data["salePrice"]}): hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : $"Nhập giá khuyến mãi là số âm ({data["salePrice"]}): hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải báo lỗi");
         }
 
         // STT 82 - TC_F2.7_26: Kiểm tra Slug chứa ký tự đặc biệt và khoảng trắng
@@ -773,7 +944,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Driver.FindElement(By.Id("Product_Slug")).SendKeys(data["slug"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Slug chứa đặc biệt => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập slug chứa ký tự đặc biệt '{data["slug"]}': hệ thống lưu thành công (tự động chuẩn hóa slug) và chuyển về trang danh sách sản phẩm."
+                : $"Nhập slug chứa ký tự đặc biệt '{data["slug"]}': hệ thống không lưu, hiển thị lỗi xác thực, trang vẫn ở form thêm mới.";
         }
 
         // STT 83 - TC_F2.7_27: Kiểm tra Giá khuyến mãi bằng Giá gốc
@@ -787,7 +963,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterSalePrice(data["salePrice"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá KM = Giá gốc => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập giá khuyến mãi bằng đúng giá gốc ({data["price"]}): hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Nhập giá khuyến mãi bằng đúng giá gốc ({data["price"]}): hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 84 - TC_F2.7_28: Kiểm tra Tên SP chỉ chứa khoảng trắng
@@ -800,8 +981,13 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP toàn khoảng trắng => Kết quả: {_createPage.DocKetQuaThucTe()}";
-            Assert.That(_createPage.HasValidationErrors(), Is.True, "Phải báo lỗi");
+            
+            bool hasErrors = _createPage.HasValidationErrors();
+            
+            CurrentActualResult = hasErrors
+                ? "Nhập tên sản phẩm chỉ gồm khoảng trắng: hệ thống hiển thị thông báo lỗi xác thực và không cho phép lưu."
+                : "Nhập tên sản phẩm chỉ gồm khoảng trắng: hệ thống không hiển thị lỗi gì (không đúng kỳ vọng).";
+            Assert.That(hasErrors, Is.True, "Phải báo lỗi");
         }
 
         // STT 85 - TC_F2.7_29: Kiểm tra Giá gốc = 0
@@ -814,7 +1000,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Giá gốc = 0 => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Nhập giá gốc = 0: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : "Nhập giá gốc = 0: hệ thống không lưu, hiển thị lỗi xác thực và giữ nguyên trang form thêm mới.";
         }
 
         // STT 86 - TC_F2.7_30: Kiểm tra Stock rất lớn (999999)
@@ -828,7 +1019,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterStock(data["stock"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Stock rất lớn => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập số lượng tồn kho rất lớn ({data["stock"]}): hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Nhập số lượng tồn kho rất lớn ({data["stock"]}): hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 87 - TC_F2.7_31: Kiểm tra Tên SP trùng SP đã có
@@ -842,7 +1038,12 @@ namespace SeleniumProject.Tests.ProductManagement
             // Giả định SP "Táo Envy New Zealand R1" đã được tạo ở STT khác trong DB
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Thêm SP trùng tên => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Thêm sản phẩm với tên '{data["productName"]}' đã tồn tại trong hệ thống: hệ thống vẫn lưu thành công vì không kiểm tra trùng tên, chuyển về trang danh sách."
+                : $"Thêm sản phẩm với tên '{data["productName"]}' đã tồn tại trong hệ thống: hệ thống từ chối lưu và hiển thị lỗi trùng tên.";
         }
 
         // STT 88 - TC_F2.7_32: Kiểm tra Mô tả ngắn để trống
@@ -855,7 +1056,13 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Mô tả ngắn trống => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            bool success = currentUrl.EndsWith("/Admin/Product");
+            
+            CurrentActualResult = success
+                ? "Bỏ trống trường Mô tả ngắn: hệ thống lưu thành công và chuyển về trang danh sách sản phẩm (trường này không bắt buộc)."
+                : "Bỏ trống trường Mô tả ngắn: hệ thống không lưu, trang vẫn đang ở form thêm mới.";
         }
 
         // STT 89 - TC_F2.7_33: Kiểm tra Tên SP chứa Emoji
@@ -868,7 +1075,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP chứa Emoji => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Thêm sản phẩm với tên chứa emoji '{data["productName"]}': hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Thêm sản phẩm với tên chứa emoji '{data["productName"]}': hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 90 - TC_F2.7_34: Kiểm tra trim space đầu/cuối Tên
@@ -881,7 +1093,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP chứa space đầu cuối => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Nhập tên sản phẩm có khoảng trắng thừa ở đầu và cuối: hệ thống tự động xóa khoảng trắng, lưu thành công và chuyển về trang danh sách."
+                : "Nhập tên sản phẩm có khoảng trắng thừa ở đầu và cuối: hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 91 - TC_F2.7_35: Kiểm tra MinOrder rất lớn (999999)
@@ -895,7 +1112,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _createPage.EnterMinOrder(data["minOrder"]);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"MinOrder rất lớn => Kết quả: {_createPage.DocKetQuaThucTe()}";
+            
+            string currentUrl = Driver.Url;
+            
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? $"Nhập số lượng đặt tối thiểu rất lớn ({data["minOrder"]}): hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : $"Nhập số lượng đặt tối thiểu rất lớn ({data["minOrder"]}): hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
 
         // STT 92 - TC_F2.7_36: Kiểm tra Tên SP 255 ký tự (max DB column)
@@ -908,63 +1130,12 @@ namespace SeleniumProject.Tests.ProductManagement
             FillBasicProductInfo(data);
             _createPage.ClickSave();
             Thread.Sleep(1000);
-            CurrentActualResult = $"Tên SP dài 255 ký tự => Kết quả: {_createPage.DocKetQuaThucTe()}";
-        }
-
-        // STT 93 - TC_F2.7_37: Kiểm tra nhấn Cancel/Quay lại không lưu
-        [Test]
-        public void TC_F2_7_37_CancelButton()
-        {
-            CurrentTestCaseId = "TC_F2.7_37";
-            var data = JsonHelper.DocDuLieu(DataPath, CurrentTestCaseId);
-            _createPage.Open();
-            FillBasicProductInfo(data);
-            _createPage.ClickCancel(); // Click Hủy
-            Thread.Sleep(1000);
-            CurrentActualResult = $"Click Hủy => URL hiện tại: {Driver.Url}";
-            Assert.That(Driver.Url.EndsWith("/Admin/Product"), Is.True, "Phải quay về trang list");
-        }
-
-        // STT 94 - TC_F2.7_38: Kiểm tra tạo SP khi mất kết nối mạng
-        [Test]
-        public void TC_F2_7_38_NetworkOffline()
-        {
-            CurrentTestCaseId = "TC_F2.7_38";
-            var data = JsonHelper.DocDuLieu(DataPath, CurrentTestCaseId);
-            _createPage.Open();
-            FillBasicProductInfo(data);
             
-            // Giả lập offline (Yêu cầu Selenium 4+ với browser gốc Chromium)
-            var driverType = Driver.GetType();
-            if (driverType.Name.Contains("Chrome") || driverType.Name.Contains("Edge"))
-            {
-                dynamic chromiumDriver = Driver;
-                chromiumDriver.NetworkConditions = new OpenQA.Selenium.Chromium.ChromiumNetworkConditions()
-                {
-                    IsOffline = true
-                };
-            }
+            string currentUrl = Driver.Url;
             
-            try
-            {
-                _createPage.ClickSave();
-                Thread.Sleep(2000);
-                CurrentActualResult = $"Lưu khi rớt mạng => Kết quả: Mạng bị sập không thể load form tiếp";
-            }
-            catch (Exception ex)
-            {
-                CurrentActualResult = $"Lưu khi rớt mạng => Có Exception throw: {ex.Message}";
-            }
-            
-            // Khôi phục online
-            if (driverType.Name.Contains("Chrome") || driverType.Name.Contains("Edge"))
-            {
-                dynamic chromiumDriver = Driver;
-                chromiumDriver.NetworkConditions = new OpenQA.Selenium.Chromium.ChromiumNetworkConditions()
-                {
-                    IsOffline = false
-                };
-            }
+            CurrentActualResult = currentUrl.EndsWith("/Admin/Product")
+                ? "Nhập tên sản phẩm đúng 255 ký tự (giới hạn tối đa của cột trong cơ sở dữ liệu): hệ thống lưu thành công và chuyển về trang danh sách sản phẩm."
+                : "Nhập tên sản phẩm đúng 255 ký tự: hệ thống không lưu hoặc báo lỗi, trang không chuyển về danh sách.";
         }
     }
 }

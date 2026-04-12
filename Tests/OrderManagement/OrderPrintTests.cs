@@ -48,7 +48,7 @@ namespace SeleniumProject.Tests.OrderManagement
             bool btnEnabled = _orderDetailPage.IsPrintButtonEnabled();
 
             string printBtnText = data.GetValueOrDefault("printButtonText", "In đơn hàng");
-            CurrentActualResult = $"Nút '{printBtnText}' - Tồn tại: {btnExists} | Hiển thị: {btnDisplayed} | Click được: {btnEnabled}";
+            CurrentActualResult = $"Nút '{printBtnText}' tồn tại: {btnExists}, hiển thị: {btnDisplayed}, có thể click: {btnEnabled}.";
 
             Assert.That(btnExists, Is.True,
                 $"[TC_F10.32_01] Không tìm thấy nút '{printBtnText}' trên trang chi tiết đơn hàng");
@@ -83,7 +83,9 @@ namespace SeleniumProject.Tests.OrderManagement
             // Chỉ kiểm tra URL không thay đổi
             string urlAfter = Driver.Url;
 
-            CurrentActualResult = $"URL trước: {urlBefore} | URL sau click In: {urlAfter} | URL không đổi: {urlBefore == urlAfter}";
+            CurrentActualResult = urlBefore == urlAfter
+                ? $"Sau khi click nút In đơn hàng, URL trang không thay đổi (vẫn là {urlAfter})."
+                : $"Sau khi click nút In đơn hàng, URL đã thay đổi từ {urlBefore} sang {urlAfter} (không đúng kỳ vọng).";
 
             Assert.That(urlAfter, Is.EqualTo(urlBefore),
                 $"[TC_F10.32_02] URL trang đã thay đổi sau khi click In đơn hàng: {urlAfter}");

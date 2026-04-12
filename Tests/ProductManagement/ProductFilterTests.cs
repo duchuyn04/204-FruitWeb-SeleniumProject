@@ -36,8 +36,9 @@ namespace SeleniumProject.Tests.ProductManagement
 
             int soLuong = _productListPage.GetProductRowCount();
             bool coThongBao = _productListPage.IsEmptyMessageDisplayed();
+            string expectedMsg = data.ContainsKey("expectedMessage") ? data["expectedMessage"] : "";
 
-            CurrentActualResult = $"Số SP: {soLuong} | Thông báo trống: {coThongBao}";
+            CurrentActualResult = $"Tìm kiếm từ khoá không tồn tại '{data["searchKeyword"]}': số sản phẩm trả về là {soLuong}. Thông báo rỗng hiển thị: {coThongBao}. Nội dung kỳ vọng: '{expectedMsg}'.";
 
             Assert.That(soLuong, Is.EqualTo(0),
                 "[TC_F2.4_01] Phải hiển thị 0 kết quả khi tìm SP không tồn tại");
@@ -54,9 +55,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm bằng chuỗi XSS '{data["searchKeyword"]}': h\u1ec7 th\u1ed1ng tr\u1ea3 v\u1ec1 {soLuong} k\u1ebft qu\u1ea3.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_02] Trang không được crash khi nhập XSS");
         }
 
@@ -71,11 +75,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
+            bool trangKhoe = _productListPage.IsPageHealthy();
             string url = _productListPage.GetCurrentUrl();
 
-            CurrentActualResult = $"Trang hoạt động: {_productListPage.IsPageHealthy()} | URL: {url}";
+            CurrentActualResult = $"Tìm kiếm bằng câu lệnh SQL Injection '{data["searchKeyword"]}': h\u1ec7 th\u1ed1ng kh\u00f4ng b\u1ecb crash.";
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_03] Trang không được crash khi nhập SQL Injection");
         }
 
@@ -90,9 +95,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm chuỗi 254 ký tự (max-1): h\u1ec7 th\u1ed1ng tr\u1ea3 v\u1ec1 {soLuong} k\u1ebft qu\u1ea3.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_04] Trang phải xử lý bình thường với 254 ký tự");
         }
 
@@ -107,9 +115,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm chuỗi 256 ký tự (max+1): h\u1ec7 th\u1ed1ng tr\u1ea3 v\u1ec1 {soLuong} k\u1ebft qu\u1ea3.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_05] Trang phải xử lý bình thường với 256 ký tự");
         }
 
@@ -124,9 +135,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm bằng emoji '{data["searchKeyword"]}': h\u1ec7 th\u1ed1ng tr\u1ea3 v\u1ec1 {soLuong} k\u1ebft qu\u1ea3.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_06] Trang không được crash khi tìm kiếm emoji");
         }
 
@@ -141,9 +155,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm chuỗi HTML entities '{data["searchKeyword"]}': h\u1ec7 th\u1ed1ng tr\u1ea3 v\u1ec1 {soLuong} k\u1ebft qu\u1ea3.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_07] Trang không được crash khi tìm HTML entities");
         }
 
@@ -167,10 +184,13 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(2000);
 
             bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]);
+            bool trangKhoe = _productListPage.IsPageHealthy();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = timThay
+                ? $"Gõ nhanh liên tục từng ký tự từ khoá '{data["searchKeyword"]}': k\u1ebft qu\u1ea3 cu\u1ed1i c\u00f9ng hiển thị đúng sản phẩm '{data["expectedProductName"]}'."
+                : $"Gõ nhanh liên tục từng ký tự từ khoá '{data["searchKeyword"]}': kết quả không hiển thị sản phẩm '{data["expectedProductName"]}' (không đúng kỳ vọng).";
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_08] Trang phải hoạt động bình thường sau khi gõ nhanh");
             Assert.That(timThay, Is.True,
                 $"[TC_F2.4_08] Kết quả cuối cùng phải hiển thị đúng SP '{data["expectedProductName"]}'");
@@ -192,9 +212,13 @@ namespace SeleniumProject.Tests.ProductManagement
             searchInput.SendKeys(Keys.Enter);
             Thread.Sleep(1500);
 
-            CurrentActualResult = $"Trang hoạt động: {_productListPage.IsPageHealthy()}";
+            bool trangKhoe = _productListPage.IsPageHealthy();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = trangKhoe
+                ? $"Nhập từ khoá '{data["searchKeyword"]}' rồi nhấn Enter: danh s\u00e1ch k\u1ebft qu\u1ea3 hi\u1ec3n th\u1ecb b\u00ecnh th\u01b0\u1eddng, kh\u00f4ng reload b\u1ea5t ng\u1edd."
+                : $"Nhập từ khoá '{data["searchKeyword"]}' rồi nhấn Enter: trang bị lỗi hoặc reload không đúng (không đúng kỳ vọng).";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.4_09] Trang không được crash hoặc reload bất ngờ khi nhấn Enter");
         }
 
@@ -215,7 +239,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             int soLuong = _productListPage.GetProductRowCount();
 
-            CurrentActualResult = $"Số SP: {soLuong} (mong đợi 0)";
+            CurrentActualResult = $"Tìm kiếm sản phẩm không tồn tại '{data["searchKeyword"]}' kết hợp lọc danh mục '{data["categoryFilter"]}' và sắp xếp '{data["sortOption"]}': số sản phẩm trả về là {soLuong}, kỳ vọng 0.";
 
             Assert.That(soLuong, Is.EqualTo(0),
                 "[TC_F2.4_10] Phải hiển thị 0 kết quả khi SP không tồn tại dù có filter+sort");
@@ -227,3 +251,4 @@ namespace SeleniumProject.Tests.ProductManagement
         }
     }
 }
+

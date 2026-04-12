@@ -32,18 +32,36 @@ namespace SeleniumProject.Tests.ProductManagement
             CurrentTestCaseId = "TC_F2.2_01";
             var data = DocDuLieu("TC_F2.2_01");
 
+            // 1. Mở trang danh sách và lấy tổng số sản phẩm ban đầu từ header
+            _productListPage.Open();
+            Thread.Sleep(1000);
+            int tongSoBanDau = _productListPage.GetDisplayedProductCount();
+
+            // 2. Lấy tên sản phẩm đầu tiên để xóa
+            List<string> danhSachSP = _productListPage.GetProductNames();
+            Assert.That(danhSachSP.Count, Is.GreaterThan(0),
+                "[TC_F2.2_01] Phải có ít nhất 1 sản phẩm để test xóa mềm");
+
+            string tenSPCanXoa = danhSachSP[0];
+
+            // 3. Xóa mềm sản phẩm đó
+            _productListPage.DeleteProductSoft(tenSPCanXoa);
+            Thread.Sleep(1000);
+
+            // 4. Refresh trang và kiểm tra tổng số từ header
             _productListPage.Open();
             Thread.Sleep(1000);
 
-            int soLuong = _productListPage.GetProductRowCount();
-            bool trangHoatDong = _productListPage.IsPageHealthy();
+            int tongSoSauXoa = _productListPage.GetDisplayedProductCount();
+            bool sanPhamConHienThi = _productListPage.IsProductInResults(tenSPCanXoa);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Số lượng sản phẩm trước khi xóa: {tongSoBanDau}. Sau khi xóa mềm sản phẩm '{tenSPCanXoa}' thì số còn lại: {tongSoSauXoa}. Sản phẩm vừa xóa còn xuất hiện trong danh sách: {sanPhamConHienThi}.";
 
-            Assert.That(trangHoatDong, Is.True,
-                "[TC_F2.2_01] Trang danh sách sản phẩm phải hiển thị bình thường");
-            Assert.That(soLuong, Is.GreaterThan(0),
-                "[TC_F2.2_01] Danh sách phải có ít nhất 1 sản phẩm");
+            // Assert
+            Assert.That(tongSoSauXoa, Is.EqualTo(tongSoBanDau - 1),
+                $"[TC_F2.2_01] Tổng số SP phải giảm 1 sau khi xóa mềm (Trước: {tongSoBanDau}, Sau: {tongSoSauXoa})");
+            Assert.That(sanPhamConHienThi, Is.False,
+                $"[TC_F2.2_01] SP '{tenSPCanXoa}' đã xóa mềm không được hiển thị trong danh sách");
         }
 
         // STT 2 - TC_F2.3_01: Tìm kiếm khớp chính xác tên
@@ -58,8 +76,9 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
 
             bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]);
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm chính xác tên '{data["searchKeyword"]}': sản phẩm '{data["expectedProductName"]}' có xuất hiện trong danh sách: {timThay}. Tổng số kết quả trả về: {soLuong}.";
 
             Assert.That(timThay, Is.True,
                 $"[TC_F2.3_01] Phải tìm thấy sản phẩm chứa '{data["expectedProductName"]}'");
@@ -77,11 +96,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
 
             int soLuong = _productListPage.GetProductRowCount();
+            int expectedMin = int.Parse(data["expectedMinCount"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm từ khoá '{data["searchKeyword"]}': số sản phẩm trả về là {soLuong}, kỳ vọng tối thiểu {expectedMin} sản phẩm.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(2),
-                $"[TC_F2.3_02] Phải hiển thị ít nhất 2 sản phẩm chứa '{data["searchKeyword"]}'");
+            Assert.That(soLuong, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_02] Phải hiển thị ít nhất {expectedMin} sản phẩm chứa '{data["searchKeyword"]}'");
         }
 
         // STT 4 - TC_F2.3_03: Để trống ô tìm kiếm - hiển thị toàn bộ
@@ -96,11 +116,12 @@ namespace SeleniumProject.Tests.ProductManagement
 
             int soLuong = _productListPage.GetProductRowCount();
             int headerCount = _productListPage.GetDisplayedProductCount();
+            int expectedMin = int.Parse(data["expectedMinCount"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Để trống ô tìm kiếm: header hiển thị tổng số là {headerCount} sản phẩm, số dòng thực tế trong bảng là {soLuong}, kỳ vọng tối thiểu {expectedMin} sản phẩm.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(4),
-                "[TC_F2.3_03] Phải hiển thị đầy đủ toàn bộ sản phẩm (≥4)");
+            Assert.That(soLuong, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_03] Phải hiển thị đầy đủ toàn bộ sản phẩm (≥{expectedMin})");
         }
 
         // STT 5 - TC_F2.3_04: Tìm kiếm không phân biệt hoa thường
@@ -111,12 +132,12 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_04");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "cam sành"
+            _productListPage.Search(data["searchKeyword"]); // "táo fuji mỹ"
             Thread.Sleep(1000);
 
-            bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]); // "Cam Sành"
+            bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]); // "Táo Fuji Mỹ"
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm bằng chữ thường '{data["searchKeyword"]}': sản phẩm '{data["expectedProductName"]}' có xuất hiện trong danh sách: {timThay}.";
 
             Assert.That(timThay, Is.True,
                 "[TC_F2.3_04] Phải tìm đúng sản phẩm dù nhập chữ thường");
@@ -130,12 +151,12 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_05");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "  Dâu Tây  "
+            _productListPage.Search(data["searchKeyword"]); // "  Sầu riêng  "
             Thread.Sleep(1000);
 
             bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm từ khoá có khoảng trắng ở đầu và cuối '{data["searchKeyword"]}': sản phẩm '{data["expectedProductName"]}' có xuất hiện trong danh sách: {timThay}.";
 
             Assert.That(timThay, Is.True,
                 "[TC_F2.3_05] Phải tìm đúng sản phẩm dù có khoảng trắng thừa");
@@ -149,18 +170,19 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_06");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "B"
+            _productListPage.Search(data["searchKeyword"]); // "T"
             Thread.Sleep(1000);
 
             int soLuong = _productListPage.GetProductRowCount();
             bool trangKhoe = _productListPage.IsPageHealthy();
+            int expectedMin = int.Parse(data["expectedMinCount"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm với 1 ký tự '{data["searchKeyword"]}': hệ thống trả về {soLuong} sản phẩm, kỳ vọng tối thiểu {expectedMin} sản phẩm.";
 
             Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_06] Trang phải hoạt động bình thường khi tìm 1 ký tự");
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(1),
-                "[TC_F2.3_06] Phải trả về ít nhất 1 sản phẩm chứa ký tự 'B'");
+            Assert.That(soLuong, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_06] Phải trả về ít nhất {expectedMin} sản phẩm chứa ký tự '{data["searchKeyword"]}'");
         }
 
         // STT 8 - TC_F2.3_07: Tìm kiếm bằng slug sản phẩm
@@ -171,12 +193,13 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_07");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "cam-sanh-mien-tay"
+            _productListPage.Search(data["searchKeyword"]); // "tao-fuji-my"
             Thread.Sleep(1000);
 
             bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm bằng slug '{data["searchKeyword"]}': hệ thống trả về {soLuong} kết quả.";
 
             Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_07] Trang không được crash khi tìm kiếm bằng slug");
@@ -194,8 +217,9 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
 
             bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm chuỗi 255 ký tự: hệ thống trả về {soLuong} kết quả.";;
 
             Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_08] Trang không được crash khi tìm kiếm chuỗi 255 ký tự");
@@ -211,20 +235,22 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Open();
 
             // Bước 1: Nhập từ khóa
-            _productListPage.Search(data["searchKeyword"]); // "Cam"
+            _productListPage.Search(data["searchKeyword"]); // "Táo"
             Thread.Sleep(1000);
+            int soLuongSauSearch = _productListPage.GetProductRowCount();
 
             // Bước 2: Xóa trắng ô tìm kiếm
             _productListPage.ClearSearch();
             Thread.Sleep(1000);
 
             // Bước 3: Kiểm tra danh sách trở lại đầy đủ
-            int soLuong = _productListPage.GetProductRowCount();
+            int soLuongSauClear = _productListPage.GetProductRowCount();
+            int expectedMin = int.Parse(data["expectedMinCountAfterClear"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}': hiển thị {soLuongSauSearch} sản phẩm. Sau khi xóa trắng ô tìm kiếm: danh sách trợ về hiển thị {soLuongSauClear} sản phẩm, kỳ vọng tối thiểu {expectedMin}.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(4),
-                "[TC_F2.3_09] Danh sách phải trở về trạng thái ban đầu (≥4 SP)");
+            Assert.That(soLuongSauClear, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_09] Danh sách phải trở về trạng thái ban đầu (≥{expectedMin} SP)");
         }
 
         // STT 11 - TC_F2.3_10: URL cập nhật query string khi tìm kiếm
@@ -240,7 +266,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             string url = _productListPage.GetCurrentUrl();
 
-            CurrentActualResult = $"URL sau khi search: {url}";
+            CurrentActualResult = $"URL sau khi tìm kiếm '{data["searchKeyword"]}': {url}";
 
             Assert.That(url, Does.Contain(data["expectedUrlParam"]),
                 $"[TC_F2.3_10] URL phải chứa '{data["expectedUrlParam"]}' sau khi tìm kiếm");
@@ -260,7 +286,7 @@ namespace SeleniumProject.Tests.ProductManagement
             int headerCount = _productListPage.GetDisplayedProductCount();
             int rowCount = _productListPage.GetProductRowCount();
 
-            CurrentActualResult = $"Header count: {headerCount}, Row count: {rowCount}";
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}': bộ đếm trên header hiển thị {headerCount}, số dòng thực tế trong bảng: {rowCount}.";
 
             Assert.That(headerCount, Is.GreaterThanOrEqualTo(0),
                 "[TC_F2.3_11] Bộ đếm header phải cập nhật");
@@ -276,12 +302,13 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_12");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "Dứa Mật"
+            _productListPage.Search(data["searchKeyword"]); // "Mãng cầu xiêm"
             Thread.Sleep(1000);
 
             bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]);
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm tiếng Việt có dấu '{data["searchKeyword"]}': sản phẩm '{data["expectedProductName"]}' có xuất hiện trong kết quả: {timThay}. Tổng số kết quả: {soLuong}.";
 
             Assert.That(timThay, Is.True,
                 $"[TC_F2.3_12] Phải tìm đúng sản phẩm '{data["expectedProductName"]}' với tiếng Việt có dấu");
@@ -299,11 +326,12 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
 
             int soLuong = _productListPage.GetProductRowCount();
+            int expectedMin = int.Parse(data["expectedMinCount"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm chỉ gồm khoảng trắng: danh sách trả về {soLuong} sản phẩm, kỳ vọng tối thiểu {expectedMin}.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(4),
-                "[TC_F2.3_13] Phải hiển thị toàn bộ sản phẩm (≥4) khi chỉ nhập khoảng trắng");
+            Assert.That(soLuong, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_13] Phải hiển thị toàn bộ sản phẩm (≥{expectedMin}) khi chỉ nhập khoảng trắng");
         }
 
         // STT 15 - TC_F2.3_14: Tìm kiếm trực tiếp qua URL query string
@@ -321,7 +349,7 @@ namespace SeleniumProject.Tests.ProductManagement
             bool timThay = _productListPage.IsProductInResults(data["expectedProductName"]);
             string searchValue = _productListPage.GetSearchInputValue();
 
-            CurrentActualResult = $"Search input value: '{searchValue}' | " + _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Giá trị trong ô tìm kiếm được điền sẵn từ URL: '{searchValue}'. " + _productListPage.DocKetQuaThucTe();
 
             Assert.That(timThay, Is.True,
                 $"[TC_F2.3_14] Phải hiển thị sản phẩm '{data["expectedProductName"]}' khi truy cập qua URL");
@@ -358,8 +386,11 @@ namespace SeleniumProject.Tests.ProductManagement
             Thread.Sleep(1000);
 
             bool timThay = _productListPage.IsProductInResults(data["searchKeyword"]);
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = timThay
+                ? $"Tạo sản phẩm mới '{data["newProductName"]}' rồi tìm kiếm '{data["searchKeyword"]}': sản phẩm xuất hiện trong kết quả, tổng số kết quả: {soLuong}."
+                : $"Tạo sản phẩm mới '{data["newProductName"]}' rồi tìm kiếm '{data["searchKeyword"]}': sản phẩm không xuất hiện trong kết quả (không đúng kỳ vọng).";
 
             Assert.That(timThay, Is.True,
                 $"[TC_F2.3_15] Phải tìm thấy SP vừa thêm '{data["searchKeyword"]}'");
@@ -378,7 +409,16 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
+            bool timThayTruocXoa = _productListPage.IsProductInResults(data["searchKeyword"]);
+
             // Bước 2: Xóa SP (click nút Xóa trên dòng đầu tiên nếu tìm thấy)
+            if (!timThayTruocXoa)
+            {
+                CurrentActualResult = $"Không tìm thấy sản phẩm '{data["deleteProductName"]}' trước khi xóa, bỏ qua kiểm thử.";
+                Assert.Pass("[TC_F2.3_16] SP không tồn tại trong hệ thống - bỏ qua test regression");
+                return;
+            }
+
             try
             {
                 IWebElement deleteBtn = Driver.FindElement(
@@ -398,9 +438,8 @@ namespace SeleniumProject.Tests.ProductManagement
             }
             catch
             {
-                // SP không tồn tại - ghi nhận
-                CurrentActualResult = "SP không tồn tại để xóa";
-                Assert.Pass("[TC_F2.3_16] SP không tồn tại trong hệ thống - bỏ qua test regression");
+                CurrentActualResult = $"Không thể xóa sản phẩm '{data["deleteProductName"]}' (không bấm được nút xóa).";
+                Assert.Fail("[TC_F2.3_16] Không thể xóa sản phẩm");
                 return;
             }
 
@@ -412,7 +451,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             bool conTimThay = _productListPage.IsProductInResults(data["searchKeyword"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Trước khi xóa, sản phẩm '{data["deleteProductName"]}' có trong danh sách: {timThayTruocXoa}. Sau khi xóa và tìm kiếm lại, sản phẩm vẫn còn xuất hiện: {conTimThay}.";
 
             Assert.That(conTimThay, Is.False,
                 $"[TC_F2.3_16] Không được tìm thấy SP '{data["searchKeyword"]}' sau khi xóa");
@@ -426,15 +465,16 @@ namespace SeleniumProject.Tests.ProductManagement
             var data = DocDuLieu("TC_F2.3_17");
 
             _productListPage.Open();
-            _productListPage.Search(data["searchKeyword"]); // "Bưởi"
+            _productListPage.Search(data["searchKeyword"]); // "Táo"
             Thread.Sleep(1000);
 
-            _productListPage.SelectCategory(data["categoryFilter"]); // "Trái cây nhập khẩu"
+            _productListPage.SelectCategory(data["categoryFilter"]); // "Táo"
             Thread.Sleep(1000);
 
             List<string> danhSachSP = _productListPage.GetProductNames();
+            int soLuong = danhSachSP.Count;
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}' kết hợp lọc danh mục '{data["categoryFilter"]}': trả về {soLuong} sản phẩm. Các sản phẩm trong kết quả: [{string.Join(", ", danhSachSP.Take(3))}...].";
 
             // Mọi SP trong kết quả đều phải chứa từ khóa
             foreach (string tenSP in danhSachSP)
@@ -460,7 +500,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             List<string> danhSachSP = _productListPage.GetProductNames();
 
-            CurrentActualResult = $"Thứ tự: [{string.Join(", ", danhSachSP)}]";
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}' sau đó sắp xếp thiếu xếp '{data["sortOption"]}': thứ tự sản phẩm trong danh sách: [{string.Join(", ", danhSachSP)}].";
 
             // Kiểm tra thứ tự A-Z
             for (int i = 1; i < danhSachSP.Count; i++)
@@ -483,11 +523,13 @@ namespace SeleniumProject.Tests.ProductManagement
 
             // Không thay đổi gì - giữ nguyên tất cả bộ lọc mặc định
             int soLuong = _productListPage.GetProductRowCount();
+            int tongSo = _productListPage.GetDisplayedProductCount();
+            int expectedMin = int.Parse(data["expectedMinCount"]);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            CurrentActualResult = $"Để mặc định tất cả bộ lọc: header hiển thị tổng {tongSo} sản phẩm, bảng hiển thị thực tế {soLuong} dòng, kỳ vọng tối thiểu {expectedMin}.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(4),
-                "[TC_F2.3_19] Phải hiển thị toàn bộ sản phẩm (≥4) khi giữ nguyên bộ lọc mặc định");
+            Assert.That(soLuong, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_19] Phải hiển thị toàn bộ sản phẩm (≥{expectedMin}) khi giữ nguyên bộ lọc mặc định");
         }
 
         // STT 21 - TC_F2.3_20: Decision Table: Search + Category + Sort giá
@@ -507,7 +549,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             List<string> danhSachSP = _productListPage.GetProductNames();
 
-            CurrentActualResult = $"Kết quả: [{string.Join(", ", danhSachSP)}]";
+            CurrentActualResult = $"Kết hợp tìm kiếm '{data["searchKeyword"]}', lọc danh mục '{data["categoryFilter"]}', sắp xếp '{data["sortOption"]}': danh sách kết quả gồm: [{string.Join(", ", danhSachSP)}].";
 
             Assert.That(danhSachSP.Count, Is.GreaterThan(0),
                 "[TC_F2.3_20] Phải có ít nhất 1 sản phẩm sau khi lọc kết hợp 3 bộ lọc");
@@ -526,14 +568,17 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.SelectSort(data["sortOption"]);
             Thread.Sleep(800);
 
+            string sortTruocClear = _productListPage.GetCurrentSortValue();
+
             _productListPage.ClearSearch();
             Thread.Sleep(1000);
 
-            string currentSort = _productListPage.GetCurrentSortValue();
+            string sortSauClear = _productListPage.GetCurrentSortValue();
+            bool trangKhoe = _productListPage.IsPageHealthy();
 
-            CurrentActualResult = $"Sort hiện tại sau clear search: '{currentSort}'";
+            CurrentActualResult = $"Trước khi xóa tìm kiếm, bộ sắp xếp đang chọn: '{sortTruocClear}'. Sau khi xóa ô tìm kiếm, bộ sắp xếp hiển thị: '{sortSauClear}'.";;
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_21] Trang phải hoạt động bình thường sau clear search");
         }
 
@@ -547,20 +592,25 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Open();
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(800);
+            int soLuongSauSearch = _productListPage.GetProductRowCount();
+
             _productListPage.SelectCategory(data["categoryFilter"]);
             Thread.Sleep(800);
+            int soLuongSauFilter = _productListPage.GetProductRowCount();
+
             _productListPage.SelectSort(data["sortOption"]);
             Thread.Sleep(800);
 
             _productListPage.Open();
             Thread.Sleep(1000);
 
-            int soLuong = _productListPage.GetProductRowCount();
+            int soLuongSauClearAll = _productListPage.GetProductRowCount();
+            int expectedMin = int.Parse(data["expectedMinCountAfterClear"]);
 
-            CurrentActualResult = $"Số SP sau clear all: {soLuong}";
+            CurrentActualResult = $"Tìm kiếm: hiển thị {soLuongSauSearch} sản phẩm. Lọc danh mục: còn lại {soLuongSauFilter} sản phẩm. Xóa tất cả bộ lọc: danh sách trả về {soLuongSauClearAll} sản phẩm, kỳ vọng tối thiểu {expectedMin}.";
 
-            Assert.That(soLuong, Is.GreaterThanOrEqualTo(4),
-                "[TC_F2.3_22] Danh sách phải trở về đầy đủ (≥4) sau khi clear toàn bộ");
+            Assert.That(soLuongSauClearAll, Is.GreaterThanOrEqualTo(expectedMin),
+                $"[TC_F2.3_22] Danh sách phải trở về đầy đủ (≥{expectedMin}) sau khi clear toàn bộ");
         }
 
         // STT 24 - TC_F2.3_23: Tìm kiếm từ khóa ngắn 2-3 ký tự
@@ -574,9 +624,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm từ khoá ngắn '{data["searchKeyword"]}': hệ thống trả về {soLuong} kết quả.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_23] Trang phải hoạt động bình thường khi tìm từ khóa ngắn");
         }
 
@@ -591,9 +644,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm từ khoá 10-20 ký tự '{data["searchKeyword"]}': hệ thống trả về {soLuong} kết quả.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_24] Trang phải xử lý bình thường với từ khóa trung bình");
         }
 
@@ -608,9 +664,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(1000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm chỉ gồm chữ số '{data["searchKeyword"]}': hệ thống trả về {soLuong} kết quả.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_25] Trang phải xử lý bình thường khi tìm kiếm chỉ có số");
         }
 
@@ -626,7 +685,7 @@ namespace SeleniumProject.Tests.ProductManagement
 
             string placeholder = _productListPage.GetSearchPlaceholder();
 
-            CurrentActualResult = $"Placeholder: '{placeholder}'";
+            CurrentActualResult = $"Giá trị placeholder của ô tìm kiếm: '{placeholder}'.";
 
             Assert.That(placeholder, Is.Not.Empty,
                 "[TC_F2.3_26] Placeholder ô tìm kiếm phải có giá trị");
@@ -643,9 +702,12 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.Search(data["searchKeyword"]);
             Thread.Sleep(2000);
 
-            CurrentActualResult = _productListPage.DocKetQuaThucTe();
+            bool trangKhoe = _productListPage.IsPageHealthy();
+            int soLuong = _productListPage.GetDisplayedProductCount();
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}' và chờ tải xong: hệ thống trả về {soLuong} kết quả.";
+
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.3_27] Trang phải hiển thị bình thường sau khi loading hoàn tất");
         }
 

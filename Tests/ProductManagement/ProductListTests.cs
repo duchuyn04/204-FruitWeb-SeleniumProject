@@ -43,10 +43,11 @@ namespace SeleniumProject.Tests.ProductManagement
             _productListPage.SelectCategory(data["categoryFilter2"]);
             Thread.Sleep(1000);
             int soLuong2 = _productListPage.GetProductRowCount();
+            bool trangKhoe = _productListPage.IsPageHealthy();
 
-            CurrentActualResult = $"Category 1: {soLuong1} SP | Category 2: {soLuong2} SP";
+            CurrentActualResult = $"Tìm kiếm '{data["searchKeyword"]}' rồi lọc danh mục '{data["categoryFilter1"]}': có {soLuong1} sản phẩm. Đổi sang danh mục '{data["categoryFilter2"]}': có {soLuong2} sản phẩm. Trang danh s\u00e1ch v\u1eabn hi\u1ec3n th\u1ecb sau khi \u0111\u1ed5i danh m\u1ee5c.";
 
-            Assert.That(_productListPage.IsPageHealthy(), Is.True,
+            Assert.That(trangKhoe, Is.True,
                 "[TC_F2.5_01] Trang phải hoạt động bình thường sau khi đổi category");
         }
 
@@ -67,7 +68,7 @@ namespace SeleniumProject.Tests.ProductManagement
             bool coSidebar = Driver.FindElements(By.CssSelector(".sidebar, nav, .nav")).Count > 0;
             bool coHeader = Driver.FindElements(By.CssSelector("header, .navbar, .top-bar")).Count > 0;
 
-            CurrentActualResult = $"Số SP: {soLuong} | Trang khỏe: {trangKhoe} | Sidebar: {coSidebar} | Header: {coHeader}";
+            CurrentActualResult = $"Tìm kiếm từ khoá không tồn tại '{data["searchKeyword"]}': số sản phẩm trả về là {soLuong}. Giao di\u1ec7n danh s\u00e1ch v\u1eabn hi\u1ec3n th\u1ecb \u0111\u1ea7y \u0111\u1ee7 thanh sidebar v\u00e0 header. Sidebar còn hiển thị: {coSidebar}. Header còn hiển thị: {coHeader}.";
 
             Assert.That(trangKhoe, Is.True,
                 "[TC_F2.5_02] Trang phải hoạt động bình thường khi 0 kết quả");
@@ -88,7 +89,7 @@ namespace SeleniumProject.Tests.ProductManagement
             string categoryVal = _productListPage.GetCurrentCategoryValue();
             string sortVal = _productListPage.GetCurrentSortValue();
 
-            CurrentActualResult = $"Category: '{categoryVal}' | Sort: '{sortVal}'";
+            CurrentActualResult = $"Giá trị mặc định khi mở trang: dropdown Danh mục hiển thị '{categoryVal}' (kỳ vọng '{data["expectedCategory"]}'), dropdown Sắp xếp hiển thị '{sortVal}' (kỳ vọng '{data["expectedSort"]}').";
 
             Assert.That(categoryVal, Is.EqualTo(data["expectedCategory"]),
                 "[TC_F2.5_03] Category mặc định không đúng");
@@ -102,3 +103,4 @@ namespace SeleniumProject.Tests.ProductManagement
         }
     }
 }
+
