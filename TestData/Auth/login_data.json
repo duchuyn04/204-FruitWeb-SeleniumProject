@@ -145,9 +145,9 @@
   {
     "no": 34,
     "testCase": "TC_F1.5_10",
-    "description": "Báo lỗi khi đăng nhập lần 2 với tài khoản bị khóa (mật khẩu khác)",
+    "description": "Báo lỗi khi đăng nhập lần 2 với tài khoản bị khóa (cùng thông tin)",
     "email": "locked.user@fruitables.vn",
-    "password": "WrongPass@2025",
+    "password": "Locked@2025",
     "rememberMe": false,
     "expectedResult": "fail"
   },

@@ -17,7 +17,7 @@ namespace SeleniumProject.Tests.Auth
         [SetUp]
         public void SetUpPages()
         {
-            CurrentSheetName = "TC_Auth";
+            CurrentSheetName = "TC_Authentication";
             _registerPage = new RegisterPage(Driver, BaseUrl);
         }
 

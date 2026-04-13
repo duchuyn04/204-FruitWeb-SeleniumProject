@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Microsoft.Extensions.Configuration;
 
 namespace SeleniumProject.Utilities
 {
@@ -313,42 +314,67 @@ namespace SeleniumProject.Utilities
         }
 
         /// <summary>
-        /// Thêm ảnh screenshot và hyperlink vào cell
+        /// Upload ảnh lên GitHub + Embed ảnh nhỏ vào Excel
+        /// - Ảnh nhỏ hiển thị trong Excel (xem nhanh)
+        /// - Hyperlink → Mở ảnh public trên GitHub (ai cũng xem được)
         /// </summary>
         private void ThemAnhVaHyperlink(XSSFWorkbook workbook, ISheet sheet, IRow row, int rowIndex, ICell cell, string imagePath)
         {
-            // Tăng chiều cao hàng
-            row.HeightInPoints = 100;
+            try
+            {
+                // Bước 1: Upload ảnh lên GitHub
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: true)
+                    .Build();
+                
+                string? githubUrl = GitHubHelper.UploadImage(imagePath, config);
+                
+                // Bước 2: Embed ảnh nhỏ vào Excel
+                row.HeightInPoints = 100;
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                int pictureIdx = workbook.AddPicture(imageBytes, PictureType.PNG);
 
-            // Đọc và thêm ảnh vào workbook
-            byte[] imageBytes = File.ReadAllBytes(imagePath);
-            int pictureIdx = workbook.AddPicture(imageBytes, PictureType.PNG);
+                XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+                ICreationHelper helper = workbook.GetCreationHelper();
+                XSSFClientAnchor anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+                
+                anchor.Col1 = 12;  // Cột M
+                anchor.Row1 = rowIndex;
+                anchor.Col2 = 13;  // Đến cột N
+                anchor.Row2 = rowIndex + 1;
+                anchor.AnchorType = AnchorType.DontMoveAndResize;
+                anchor.Dy1 = 0;
+                anchor.Dy2 = (int)(100 * 9525 * 0.7);
 
-            // Tạo drawing và anchor cho ảnh
-            XSSFDrawing drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-            ICreationHelper helper = workbook.GetCreationHelper();
-            XSSFClientAnchor anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-            
-            anchor.Col1 = 12;  // Cột M
-            anchor.Row1 = rowIndex;
-            anchor.Col2 = 13;  // Đến cột N
-            anchor.Row2 = rowIndex + 1;
-            anchor.AnchorType = AnchorType.DontMoveAndResize;
-            anchor.Dy1 = 0;
-            anchor.Dy2 = (int)(100 * 9525 * 0.7); // 70% chiều cao cho ảnh
+                drawing.CreatePicture(anchor, pictureIdx);
 
-            drawing.CreatePicture(anchor, pictureIdx);
-
-            // Ghi text và hyperlink
-            cell.SetCellType(CellType.String);
-            cell.SetCellValue("Ảnh lỗi");
-
-            XSSFHyperlink hyperlink = new XSSFHyperlink(HyperlinkType.File);
-            hyperlink.Address = imagePath;
-            cell.Hyperlink = hyperlink;
-
-            // Áp dụng style
-            cell.CellStyle = TaoStyleScreenshot(workbook);
+                // Bước 3: Tạo hyperlink
+                if (!string.IsNullOrEmpty(githubUrl))
+                {
+                    // Upload thành công → Tạo hyperlink public
+                    XSSFHyperlink hyperlink = helper.CreateHyperlink(HyperlinkType.Url) as XSSFHyperlink;
+                    hyperlink.Address = githubUrl;
+                    cell.Hyperlink = hyperlink;
+                    cell.SetCellType(CellType.String);
+                    cell.SetCellValue("Ảnh lỗi");
+                }
+                else
+                {
+                    // Upload thất bại → Chỉ hiển thị ảnh embedded
+                    cell.SetCellType(CellType.String);
+                    cell.SetCellValue("Screenshot");
+                }
+                
+                cell.CellStyle = TaoStyleScreenshot(workbook);
+                TestContext.WriteLine($"[EXCEL] ✓ Đã embed ảnh + tạo hyperlink");
+            }
+            catch (Exception ex)
+            {
+                TestContext.WriteLine($"[EXCEL] Lỗi: {ex.Message}");
+                cell.SetCellType(CellType.String);
+                cell.SetCellValue("❌ Error");
+            }
         }
 
         /// <summary>

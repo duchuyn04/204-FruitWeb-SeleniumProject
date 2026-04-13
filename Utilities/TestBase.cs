@@ -225,6 +225,12 @@ namespace SeleniumProject.Utilities
                         .Replace("True", "Có")
                         .Replace("False", "Không");
 
+                    // Log đường dẫn file Excel đang ghi
+                    string absolutePath = Path.IsPathRooted(ReportExcelPath) 
+                        ? ReportExcelPath 
+                        : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ReportExcelPath);
+                    TestContext.WriteLine($"[EXCEL] Đang ghi kết quả vào: {absolutePath}");
+
                     ExcelHelper excel = new ExcelHelper(ReportExcelPath);
 
                     // Ghi vào sheet tương ứng module theo đúng hàng Test Case ID
@@ -236,6 +242,8 @@ namespace SeleniumProject.Utilities
                         duongDanScreenshot: duongDanScreenshot,
                         sheetName:          CurrentSheetName
                     );
+                    
+                    TestContext.WriteLine($"[EXCEL] ✓ Đã ghi xong");
                 }
                 catch (Exception excelEx)
                 {
