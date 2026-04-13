@@ -495,6 +495,7 @@ $RECYCLE.BIN/
 
 # Báo cáo test
 *.xlsx
+!204.xlsx
 
 # Local utility scripts & tools folder
 Tests/Tools/
