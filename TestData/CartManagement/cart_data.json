@@ -1,0 +1,417 @@
+[
+  {
+    "testCase": "TC_CART_F4_1_01",
+    "testCaseId": "TC_F4.1_01",
+    "description": "Kiá»ƒm tra hiá»ƒn thá»‹ danh sÃ¡ch sáº£n pháº©m trong giá» hÃ ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "expectedMinItems": 1
+  },
+  {
+    "testCase": "TC_CART_F4_1_02",
+    "testCaseId": "TC_F4.1_02",
+    "description": "Kiá»ƒm tra tÃ­nh toÃ¡n Subtotal, Shipping, Total",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_2_01",
+    "testCaseId": "TC_F4.2_01",
+    "description": "Kiá»ƒm tra giao diá»‡n khi giá» hÃ ng rá»—ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_CART_F4_2_02",
+    "testCaseId": "TC_F4.2_02",
+    "description": "Kiá»ƒm tra áº©n nÃºt Thanh toÃ¡n khi giá» rá»—ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_CART_F4_3_01",
+    "testCaseId": "TC_F4.3_01",
+    "description": "Kiá»ƒm tra thÃªm 1 sáº£n pháº©m má»›i vÃ o giá» hÃ ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_3_02",
+    "testCaseId": "TC_F4.3_02",
+    "description": "Kiá»ƒm tra giÃ¡ SalePrice Ä‘Æ°á»£c Æ°u tiÃªn khi thÃªm vÃ o giá»",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "cam-sanh-vinh-long"
+  },
+  {
+    "testCase": "TC_CART_F4_3_03",
+    "testCaseId": "TC_F4.3_03",
+    "description": "Kiá»ƒm tra thÃªm sáº£n pháº©m thá»© 2 vÃ o giá» hÃ ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug1": "nho-mau-don-han-quoc",
+    "productSlug2": "cam-sanh-vinh-long"
+  },
+  {
+    "testCase": "TC_CART_F4_4_01",
+    "testCaseId": "TC_F4.4_01",
+    "description": "Kiá»ƒm tra cá»™ng dá»“n SL khi thÃªm sáº£n pháº©m Ä‘Ã£ cÃ³ trong giá»",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_5_03",
+    "testCaseId": "TC_F4.5_03",
+    "description": "Kiá»ƒm tra tÄƒng SL báº±ng nÃºt + (AJAX khÃ´ng reload)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_6_01",
+    "testCaseId": "TC_F4.6_01",
+    "description": "Kiá»ƒm tra giáº£m SL báº±ng nÃºt - (AJAX khÃ´ng reload)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_7_01",
+    "testCaseId": "TC_F4.7_01",
+    "description": "Kiá»ƒm tra khÃ³a nÃºt + khi Ä‘áº¡t Max Stock",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_7_02",
+    "testCaseId": "TC_F4.7_02",
+    "description": "Kiá»ƒm tra Toast cáº£nh bÃ¡o khi vÆ°á»£t tá»“n kho",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_9_01",
+    "testCaseId": "TC_F4.9_01",
+    "description": "Kiá»ƒm tra xÃ³a sáº£n pháº©m qua AJAX (animation má» dáº§n)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_9_02",
+    "testCaseId": "TC_F4.9_02",
+    "description": "Kiá»ƒm tra xÃ³a SP cuá»‘i qua AJAX (auto reload trang)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_03",
+    "testCaseId": "TC_F4.1_03",
+    "description": "Kiá»ƒm tra link tÃªn sáº£n pháº©m dáº«n Ä‘áº¿n trang detail",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_05",
+    "testCaseId": "TC_F4.1_05",
+    "description": "Kiá»ƒm tra hiá»ƒn thá»‹ CÃ²n x sáº£n pháº©m",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_06",
+    "testCaseId": "TC_F4.1_06",
+    "description": "Kiá»ƒm tra Toast notification thÃ nh cÃ´ng khi thÃªm SP",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_2_03",
+    "testCaseId": "TC_F4.2_03",
+    "description": "Kiá»ƒm tra nÃºt THANH TOÃN dáº«n Ä‘áº¿n Checkout",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_2_04",
+    "testCaseId": "TC_F4.2_04",
+    "description": "Kiá»ƒm tra nÃºt Tiáº¿p tá»¥c mua sáº¯m khi cÃ³ SP",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_08",
+    "testCaseId": "TC_F4.1_08",
+    "description": "Kiá»ƒm tra Ä‘á»‹nh dáº¡ng tiá»n tá»‡ Viá»‡t Nam",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_09",
+    "testCaseId": "TC_F4.1_09",
+    "description": "Kiá»ƒm tra hiá»ƒn thá»‹ VAT note",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_4_02",
+    "testCaseId": "TC_F4.4_02",
+    "description": "Cá»™ng dá»“n vá»›i quantity > 1 tá»« trang detail",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_5_01",
+    "testCaseId": "TC_F4.5_01",
+    "description": "Cáº­p nháº­t SL qua API UpdateQuantity",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "newQuantity": "3"
+  },
+  {
+    "testCase": "TC_CART_F4_5_02",
+    "testCaseId": "TC_F4.5_02",
+    "description": "Cáº­p nháº­t SL = 0 qua API (tá»± Ä‘á»™ng xÃ³a)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_5_04",
+    "testCaseId": "TC_F4.5_04",
+    "description": "Giáº£m SL vá» 0 báº±ng nÃºt - (gá»i removeFromCart)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_5_05",
+    "testCaseId": "TC_F4.5_05",
+    "description": "Cáº­p nháº­t SL Ã¢m (-1) qua API",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_6_02",
+    "testCaseId": "TC_F4.6_02",
+    "description": "Shipping cáº­p nháº­t khi Subtotal thay Ä‘á»•i qua nÃºt +/-",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_6_03",
+    "testCaseId": "TC_F4.6_03",
+    "description": "AJAX UpdateQuantity response Ä‘áº§y Ä‘á»§",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_6_04",
+    "testCaseId": "TC_F4.6_04",
+    "description": "NÃºt + má»Ÿ láº¡i khi giáº£m SL tá»« max",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_7_03",
+    "testCaseId": "TC_F4.7_03",
+    "description": "Server-side giá»›i háº¡n SL theo tá»“n kho via API",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_7_04",
+    "testCaseId": "TC_F4.7_04",
+    "description": "SL Ä‘áº·t Ä‘Ãºng báº±ng StockQuantity",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_8_01",
+    "testCaseId": "TC_F4.8_01",
+    "description": "XÃ³a SP khá»i giá» hÃ ng (form submit)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_8_02",
+    "testCaseId": "TC_F4.8_02",
+    "description": "XÃ³a SP cuá»‘i cÃ¹ng â†’ giá» hÃ ng rá»—ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_9_03",
+    "testCaseId": "TC_F4.9_03",
+    "description": "AJAX RemoveFromCart response Ä‘áº§y Ä‘á»§",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_9_04",
+    "testCaseId": "TC_F4.9_04",
+    "description": "Animation má» dáº§n khi xÃ³a SP AJAX",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_12_01",
+    "testCaseId": "TC_F4.12_01",
+    "description": "TÃ­nh phÃ­ ship Ná»™i thÃ nh Zone 1 = 30,000Ä‘",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Quận 1",
+    "expectedShipping": "30,000"
+  },
+  {
+    "testCase": "TC_CART_F4_12_02",
+    "testCaseId": "TC_F4.12_02",
+    "description": "TÃ­nh phÃ­ ship Ngoáº¡i thÃ nh Zone 2 = 40,000Ä‘",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Thủ Đức",
+    "expectedShipping": "40,000"
+  },
+  {
+    "testCase": "TC_CART_F4_12_03",
+    "testCaseId": "TC_F4.12_03",
+    "description": "TÃ­nh phÃ­ ship VÃ¹ng xa Zone 3 = 50,000Ä‘",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Đà Lạt",
+    "expectedShipping": "50,000"
+  },
+  {
+    "testCase": "TC_CART_F4_12_04",
+    "testCaseId": "TC_F4.12_04",
+    "description": "MIá»„N PHÃ ship khi subtotal >= 500,000",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Quận 1"
+  },
+  {
+    "testCase": "TC_CART_F4_12_05",
+    "testCaseId": "TC_F4.12_05",
+    "description": "GIáº¢M phÃ­ ship VÃ¹ng xa >= 500,000",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Đà Lạt"
+  },
+  {
+    "testCase": "TC_CART_F4_12_06",
+    "testCaseId": "TC_F4.12_06",
+    "description": "Message gá»£i Ã½ freeship",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_12_07",
+    "testCaseId": "TC_F4.12_07",
+    "description": "Hiá»ƒn thá»‹ tÃªn vÃ¹ng váº­n chuyá»ƒn",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc",
+    "districtCode": "Quận 1"
+  },
+  {
+    "testCase": "TC_CART_F4_12_08",
+    "testCaseId": "TC_F4.12_08",
+    "description": "PhÃ­ ship khi district rá»—ng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_12_09",
+    "testCaseId": "TC_F4.12_09",
+    "description": "PhÃ­ ship subtotal = 0",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_CART_F4_1_04",
+    "testCaseId": "TC_F4.1_04",
+    "description": "Hiá»ƒn thá»‹ hÃ¬nh áº£nh sáº£n pháº©m (Primary)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_07",
+    "testCaseId": "TC_F4.1_07",
+    "description": "Toast warning khi vÆ°á»£t tá»“n kho (UI)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_10",
+    "testCaseId": "TC_F4.1_10",
+    "description": "Responsive trÃªn mobile",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_11",
+    "testCaseId": "TC_F4.1_11",
+    "description": "SessionId tá»± Ä‘á»™ng táº¡o khi thÃªm SP",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_1_12",
+    "testCaseId": "TC_F4.1_12",
+    "description": "Giá» hÃ ng cÃ¡ch ly giá»¯a cÃ¡c Session",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_3_04",
+    "testCaseId": "TC_F4.3_04",
+    "description": "Guest (chÆ°a Ä‘Äƒng nháº­p) váº«n thÃªm Ä‘Æ°á»£c SP",
+    "productSlug": "nho-mau-don-han-quoc"
+  },
+  {
+    "testCase": "TC_CART_F4_3_05",
+    "testCaseId": "TC_F4.3_05",
+    "description": "ThÃªm SP khÃ´ng tá»“n táº¡i (productId = 999999)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  }
+]
+
