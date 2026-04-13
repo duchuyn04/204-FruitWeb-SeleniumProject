@@ -1,0 +1,454 @@
+[
+  {
+    "testCase": "TC_PROFILE_F6_1_01",
+    "testCaseId": "TC_F6.1_01",
+    "description": "Kiểm tra xem thông tin profile",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_02",
+    "testCaseId": "TC_F6.1_02",
+    "description": "Xem profile khi chưa có Phone",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_03",
+    "testCaseId": "TC_F6.1_03",
+    "description": "Hiển thị avatar mặc định",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_04",
+    "testCaseId": "TC_F6.1_04",
+    "description": "Hiển thị avatar đã upload",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_05",
+    "testCaseId": "TC_F6.1_05",
+    "description": "Truy cập Profile khi chưa đăng nhập"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_06",
+    "testCaseId": "TC_F6.1_06",
+    "description": "Email hiển thị read-only trên form Edit",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_07",
+    "testCaseId": "TC_F6.1_07",
+    "description": "Hiển thị ngày tạo tài khoản",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_1_08",
+    "testCaseId": "TC_F6.1_08",
+    "description": "Truy cập Edit Profile khi chưa đăng nhập"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_01",
+    "testCaseId": "TC_F6.2_01",
+    "description": "Mở form chỉnh sửa Profile",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_02",
+    "testCaseId": "TC_F6.2_02",
+    "description": "Cập nhật Tên thành công",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Nguyễn Văn Test"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_03",
+    "testCaseId": "TC_F6.2_03",
+    "description": "Cập nhật Phone thành công",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_04",
+    "testCaseId": "TC_F6.2_04",
+    "description": "Cập nhật cả Tên và Phone cùng lúc",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "0987654321"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_05",
+    "testCaseId": "TC_F6.2_05",
+    "description": "Để trống Tên (bắt buộc)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_06",
+    "testCaseId": "TC_F6.2_06",
+    "description": "Tên chỉ có khoảng trắng",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "   ",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_07",
+    "testCaseId": "TC_F6.2_07",
+    "description": "Tên vượt quá 200 ký tự",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_08",
+    "testCaseId": "TC_F6.2_08",
+    "description": "Tên đúng 200 ký tự (boundary)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_09",
+    "testCaseId": "TC_F6.2_09",
+    "description": "Phone không hợp lệ (chứa chữ cái)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "abcd123456"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_10",
+    "testCaseId": "TC_F6.2_10",
+    "description": "Phone quá ngắn (< 10 ký tự)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "09012"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_11",
+    "testCaseId": "TC_F6.2_11",
+    "description": "Phone quá dài (> 20 ký tự)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "090123456789012345678"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_12",
+    "testCaseId": "TC_F6.2_12",
+    "description": "Phone đúng 10 ký tự (boundary min)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_13",
+    "testCaseId": "TC_F6.2_13",
+    "description": "Để trống Phone (optional)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": ""
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_14",
+    "testCaseId": "TC_F6.2_14",
+    "description": "Thông báo thành công sau cập nhật",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_15",
+    "testCaseId": "TC_F6.2_15",
+    "description": "AntiForgeryToken trên form Edit",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_16",
+    "testCaseId": "TC_F6.2_16",
+    "description": "Tên có ký tự đặc biệt và Unicode",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Nguyễn Thị Hồng Nhung @#$",
+    "newPhone": "0901234567"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_2_17",
+    "testCaseId": "TC_F6.2_17",
+    "description": "Phone đúng 20 ký tự (boundary max)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newName": "Phan Đình Huy",
+    "newPhone": "01234567890123456789"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_01",
+    "testCaseId": "TC_F6.3_01",
+    "description": "Upload avatar thành công (JPG)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "avatarFile": "test_avatar.jpg"
+  },
+  {
+    "testCase": "TC_PROFILE_S_01",
+    "testCaseId": "TC_S_01",
+    "description": "Upload avatar PNG",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_02",
+    "testCaseId": "TC_F6.3_02",
+    "description": "Upload avatar GIF",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_03",
+    "testCaseId": "TC_F6.3_03",
+    "description": "Upload file không phải ảnh (PDF)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_04",
+    "testCaseId": "TC_F6.3_04",
+    "description": "Upload file không phải ảnh (TXT)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_05",
+    "testCaseId": "TC_F6.3_05",
+    "description": "Upload file vượt quá 2MB",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_06",
+    "testCaseId": "TC_F6.3_06",
+    "description": "Upload file đúng 2MB (boundary)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_07",
+    "testCaseId": "TC_F6.3_07",
+    "description": "Upload avatar thay thế avatar cũ",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_08",
+    "testCaseId": "TC_F6.3_08",
+    "description": "Thông báo lỗi upload avatar",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_3_09",
+    "testCaseId": "TC_F6.3_09",
+    "description": "Upload Avatar khi chưa đăng nhập"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_4_01",
+    "testCaseId": "TC_F6.4_01",
+    "description": "Xóa avatar",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_4_02",
+    "testCaseId": "TC_F6.4_02",
+    "description": "Delete Avatar khi chưa đăng nhập"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_5_01",
+    "testCaseId": "TC_F6.5_01",
+    "description": "Xem danh sách địa chỉ",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_5_02",
+    "testCaseId": "TC_F6.5_02",
+    "description": "Xem danh sách khi chưa có địa chỉ",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_6_01",
+    "testCaseId": "TC_F6.6_01",
+    "description": "Thêm địa chỉ mới thành công",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Nguyễn Văn A",
+    "phone": "0987123456",
+    "province": "Hà Nội",
+    "district": "Nam Từ Liêm",
+    "ward": "Mỹ Đình 1",
+    "street": "123 Đường Trần Duy Hưng"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_6_02",
+    "testCaseId": "TC_F6.6_02",
+    "description": "Form Thêm địa chỉ tự điền thông tin",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_6_03",
+    "testCaseId": "TC_F6.6_03",
+    "description": "Thêm địa chỉ khi check Đặt làm mặc định",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Lê Văn B",
+    "phone": "0912345678",
+    "province": "Hà Nội",
+    "district": "Cầu Giấy",
+    "ward": "Dịch Vọng",
+    "street": "456 Đường Xuân Thủy"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_6_04",
+    "testCaseId": "TC_F6.6_04",
+    "description": "Bỏ trống các trường bắt buộc",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_6_05",
+    "testCaseId": "TC_F6.6_05",
+    "description": "Số điện thoại không hợp lệ (ngắn/sai format)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Test User",
+    "phone": "123",
+    "street": "789 Đường Test",
+    "province": "Hà Nội",
+    "district": "Nam Từ Liêm",
+    "ward": "Mỹ Đình 1"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_7_01",
+    "testCaseId": "TC_F6.7_01",
+    "description": "Sửa địa chỉ thành công",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "newStreet": "999 Đường Mới Cập Nhật"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_7_02",
+    "testCaseId": "TC_F6.7_02",
+    "description": "Sửa địa chỉ của User khác (Security)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_8_01",
+    "testCaseId": "TC_F6.8_01",
+    "description": "Xóa địa chỉ qua form POST",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_8_02",
+    "testCaseId": "TC_F6.8_02",
+    "description": "Xóa địa chỉ qua AJAX (DeleteAjax)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_8_03",
+    "testCaseId": "TC_F6.8_03",
+    "description": "Xóa địa chỉ của User khác (Security)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_01",
+    "testCaseId": "TC_F6.9_01",
+    "description": "Set Default bằng AJAX",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_02",
+    "testCaseId": "TC_F6.9_02",
+    "description": "Thao tác Address khi chưa đăng nhập"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_03",
+    "testCaseId": "TC_F6.9_03",
+    "description": "Tính rủi ro XSS (StreetAddress)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Test XSS",
+    "phone": "0901234567",
+    "xssPayload": "<script>alert('XSS')</script>",
+    "province": "Hà Nội",
+    "district": "Nam Từ Liêm",
+    "ward": "Mỹ Đình 1"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_04",
+    "testCaseId": "TC_F6.9_04",
+    "description": "Phone boundary 11 số",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Test Phone 11",
+    "phone": "09012345678",
+    "street": "123 Đường Test",
+    "province": "Hà Nội",
+    "district": "Nam Từ Liêm",
+    "ward": "Mỹ Đình 1"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_05",
+    "testCaseId": "TC_F6.9_05",
+    "description": "Province/District/Ward Code để trống",
+    "email": "customer@gmail.com",
+    "password": "Customer@123",
+    "fullName": "Test Empty Dropdown",
+    "phone": "0901234567",
+    "street": "123 Đường Test"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_06",
+    "testCaseId": "TC_F6.9_06",
+    "description": "Form Set Default không phải AJAX",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_07",
+    "testCaseId": "TC_F6.9_07",
+    "description": "Create Address nhưng không hợp lệ (ModelState.IsValid = false)",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  },
+  {
+    "testCase": "TC_PROFILE_F6_9_08",
+    "testCaseId": "TC_F6.9_08",
+    "description": "Xóa địa chỉ duy nhất đang là mặc định",
+    "email": "customer@gmail.com",
+    "password": "Customer@123"
+  }
+]
